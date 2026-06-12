@@ -1,3421 +1,1035 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة ALCPT الذكية - الكود الكامل</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', 'Roboto', sans-serif; background: linear-gradient(to bottom right, #0f1722, #1e2942, #0f1722); color: #333; line-height: 1.6; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        header { background: linear-gradient(to right, #0f1722, #1e2942); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header h1 { font-size: 2.5em; margin-bottom: 10px; color: #ead304; }
-        header p { font-size: 1.1em; color: #ccc; }
-        .file-section { background: white; border: 2px solid #ead304; border-radius: 8px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .file-header { background: #1e2942; color: #ead304; padding: 15px; font-weight: bold; font-size: 1.1em; border-bottom: 2px solid #ead304; display: flex; justify-content: space-between; align-items: center; }
-        .copy-btn { background: #ead304; color: #0f1722; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .copy-btn:hover { background: #d4a500; }
-        .file-content { padding: 20px; background: #f8f9fa; }
-        pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace; font-size: 0.9em; line-height: 1.5; overflow-x: auto; max-height: 600px; overflow-y: auto; }
-        .toc { background: white; border: 2px solid #ead304; border-radius: 8px; padding: 20px; margin-bottom: 30px; }
-        .toc h2 { color: #1e2942; margin-bottom: 15px; }
-        .toc ul { list-style: none; }
-        .toc li { padding: 8px 0; border-bottom: 1px solid #eee; }
-        .toc a { color: #ead304; text-decoration: none; font-weight: bold; }
-        .toc a:hover { text-decoration: underline; }
-        footer { background: #1e2942; color: white; text-align: center; padding: 20px; margin-top: 30px; border-radius: 8px; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: white; border-left: 4px solid #ead304; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .stat-card h3 { color: #1e2942; font-size: 0.9em; margin-bottom: 5px; }
-        .stat-card .number { color: #ead304; font-size: 2em; font-weight: bold; }
-    </style>
-    <script>
-        function copyCode(id) {
-            const codeBlock = document.getElementById(id);
-            const text = codeBlock.textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('تم نسخ الكود بنجاح!');
-            });
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة تعلم - Learn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --navy: #0a1628;
+      --navy-light: #1a2744;
+      --navy-mid: #243352;
+      --navy-soft: #2d3f5e;
+      --gold: #c8a415;
+      --gold-light: #e8d44d;
+      --gold-dark: #9a7d0f;
+      --gold-glow: rgba(200, 164, 21, 0.12);
+      --surface: #f4f6fa;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --success: #059669;
+      --success-bg: #d1fae5;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --warning: #d97706;
+      --warning-bg: #fef3c7;
+      --info: #0284c7;
+      --info-bg: #dbeafe;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --shadow: 0 2px 12px rgba(10, 22, 40, 0.06);
+      --shadow-md: 0 8px 30px rgba(10, 22, 40, 0.1);
+      --shadow-lg: 0 20px 60px rgba(10, 22, 40, 0.15);
+      --ease: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--navy) 0%, #0f1f3d 50%, var(--navy-light) 100%);
+      position: relative;
+      padding: 20px;
+    }
+
+    .login-screen::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(200,164,21,0.08), transparent 70%);
+      top: -150px;
+      right: -150px;
+      border-radius: 50%;
+    }
+
+    .login-screen::after {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(200,164,21,0.05), transparent 70%);
+      bottom: -100px;
+      left: -100px;
+      border-radius: 50%;
+    }
+
+    .login-top-actions {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .login-top-actions .btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      backdrop-filter: blur(10px);
+    }
+    
+    .login-top-actions .btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .login-card {
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: cardAppear 0.6s var(--ease);
+    }
+
+    @keyframes cardAppear {
+      from { opacity: 0; transform: translateY(30px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .login-logo {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 1.8rem;
+      color: var(--gold);
+      box-shadow: 0 8px 24px rgba(10, 22, 40, 0.3);
+    }
+
+    .login-title { font-size: 1.5rem; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+    .login-subtitle { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 32px; }
+
+    .role-selector { display: flex; justify-content: center; margin-bottom: 28px; }
+    .role-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      background: var(--navy);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(10, 22, 40, 0.2);
+    }
+
+    .back-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.3s;
+    }
+    .back-btn:hover { color: var(--navy); }
+
+    .form-group { margin-bottom: 18px; text-align: right; }
+    .form-label { display: block; font-weight: 700; font-size: 0.85rem; color: var(--navy); margin-bottom: 7px; }
+    .form-control {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 11px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      transition: all 0.3s var(--ease);
+      background: #f8fafc;
+      color: var(--text);
+    }
+    .form-control:focus { outline: none; border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px var(--gold-glow); }
+    .form-control::placeholder { color: #94a3b8; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 28px; border-radius: 11px; font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; transition: all 0.3s var(--ease); border: none; font-family: inherit; white-space: nowrap;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); box-shadow: 0 4px 15px rgba(200, 164, 21, 0.25); }
+    .btn-primary:hover { box-shadow: 0 8px 25px rgba(200, 164, 21, 0.35); transform: translateY(-1px); }
+    .btn-secondary { background: var(--navy); color: #fff; }
+    .btn-secondary:hover { background: var(--navy-light); }
+    .btn-outline { background: transparent; border: 2px solid #e2e8f0; color: var(--text); }
+    .btn-outline:hover { border-color: var(--navy); background: #f8fafc; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-sm { padding: 9px 16px; font-size: 0.8rem; border-radius: 8px; }
+    .btn-block { width: 100%; }
+
+    .app-layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 260px; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
+      position: fixed; right: 0; top: 0; height: 100vh; z-index: 100; display: flex; flex-direction: column;
+      border-left: 1px solid rgba(255,255,255,0.04); transition: all 0.4s var(--ease);
+    }
+    .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .sidebar-brand { display: flex; align-items: center; gap: 12px; }
+    .sidebar-brand-icon {
+      width: 40px; height: 40px; background: var(--gold-glow); border: 2px solid var(--gold); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.1rem;
+    }
+    .sidebar-brand-text h2 { color: #fff; font-size: 1.05rem; font-weight: 800; line-height: 1.2; }
+    .sidebar-brand-text span { color: var(--gold); font-size: 0.7rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+    .sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+    .nav-section-title { color: rgba(255,255,255,0.3); font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 12px 14px 8px; margin-top: 8px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 11px; padding: 12px 14px; border-radius: 10px;
+      color: rgba(255,255,255,0.55); cursor: pointer; transition: all 0.3s var(--ease); margin-bottom: 3px; font-weight: 600; font-size: 0.88rem; position: relative;
+    }
+    .nav-item::before {
+      content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%) scaleY(0);
+      width: 3px; height: 60%; background: var(--gold); border-radius: 0 3px 3px 0; transition: all 0.3s var(--ease);
+    }
+    .nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.04); }
+    .nav-item.active { color: var(--gold); background: var(--gold-glow); }
+    .nav-item.active::before { transform: translateY(-50%) scaleY(1); }
+    .nav-item i { width: 20px; text-align: center; font-size: 1rem; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .user-card { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: var(--gold-glow); border: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: center; color: var(--gold); font-weight: 800; font-size: 0.85rem;
+    }
+    .user-card-info span { display: block; }
+    .user-card-info .user-name { color: #fff; font-weight: 700; font-size: 0.85rem; }
+    .user-card-info .user-role { color: var(--gold); font-size: 0.72rem; font-weight: 600; }
+
+    .main-area { flex: 1; margin-right: 260px; padding: 28px; min-height: 100vh; transition: all 0.4s var(--ease); }
+    .page-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 15px; }
+    .page-title { font-size: 1.6rem; font-weight: 800; color: var(--navy); }
+    .page-desc { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.04); transition: all 0.3s var(--ease); overflow: hidden; }
+    .card:hover { box-shadow: var(--shadow-md); }
+    .card-header { padding: 16px 22px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+    .card-header h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+    .card-body { padding: 22px; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-box { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.03); position: relative; overflow: hidden; transition: all 0.3s var(--ease); }
+    .stat-box::after { content: ''; position: absolute; bottom: 0; right: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); opacity: 0; transition: opacity 0.3s; }
+    .stat-box:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .stat-box:hover::after { opacity: 1; }
+    .stat-box .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 14px; }
+    .stat-box .stat-num { font-size: 1.9rem; font-weight: 900; color: var(--navy); line-height: 1; margin-bottom: 4px; }
+    .stat-box .stat-text { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
+
+    .table-wrap { overflow-x: auto; }
+    .data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    .data-table thead th { background: var(--navy); color: #fff; padding: 13px 16px; font-weight: 700; font-size: 0.82rem; text-align: right; white-space: nowrap; }
+    .data-table thead th:first-child { border-radius: 0 10px 0 0; }
+    .data-table thead th:last-child { border-radius: 10px 0 0 0; }
+    .data-table tbody td { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; font-size: 0.87rem; vertical-align: middle; }
+    .data-table tbody tr { transition: background 0.2s; }
+    .data-table tbody tr:hover { background: #f8fafc; }
+
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+    .badge-success { background: var(--success-bg); color: #065f46; }
+    .badge-danger { background: var(--danger-bg); color: #991b1b; }
+    .badge-warning { background: var(--warning-bg); color: #92400e; }
+    .badge-info { background: var(--info-bg); color: #1e40af; }
+    .badge-navy { background: rgba(10,22,40,0.08); color: var(--navy); }
+
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10, 22, 40, 0.5); backdrop-filter: blur(3px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.show { display: flex; }
+    .modal-box { background: #fff; border-radius: 20px; padding: 32px; width: 100%; max-width: 500px; box-shadow: var(--shadow-lg); animation: modalIn 0.4s var(--ease); max-height: 90vh; overflow-y: auto; }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: none; } }
+    .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--navy); margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
+    .modal-title i { color: var(--gold); }
+
+    .toast-wrap { position: fixed; top: 24px; left: 24px; z-index: 3000; display: flex; flex-direction: column; gap: 10px; }
+    .toast-msg { padding: 14px 22px; border-radius: 11px; color: #fff; font-weight: 600; font-size: 0.88rem; box-shadow: var(--shadow-md); animation: toastIn 0.4s var(--ease); display: flex; align-items: center; gap: 10px; }
+    .toast-msg.success { background: var(--success); }
+    .toast-msg.error { background: var(--danger); }
+    .toast-msg.warning { background: var(--warning); }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: none; } }
+
+    .exam-wrapper { max-width: 780px; margin: 0 auto; }
+    .exam-header { background: var(--navy); color: #fff; padding: 18px 28px; border-radius: var(--radius) var(--radius) 0 0; display: flex; justify-content: space-between; align-items: center; }
+    .exam-timer-box { background: var(--danger); padding: 7px 18px; border-radius: 24px; font-weight: 800; font-size: 1.2rem; letter-spacing: 1.5px; }
+    .exam-body { background: #fff; padding: 28px; border: 1px solid #e2e8f0; border-top: none; }
+    .exam-footer { background: #f8fafc; padding: 18px 28px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 var(--radius) var(--radius); display: flex; justify-content: space-between; align-items: center; }
+    .q-text { font-size: 1.05rem; font-weight: 600; color: var(--navy); margin-bottom: 22px; direction: ltr; text-align: left; line-height: 1.9; }
+    .opt-item { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 11px; margin-bottom: 10px; cursor: pointer; transition: all 0.25s var(--ease); direction: ltr; text-align: left; }
+    .opt-item:hover { border-color: var(--gold); background: var(--gold-glow); }
+    .opt-item.picked { border-color: var(--gold); background: var(--gold-glow); }
+    .opt-letter { width: 30px; height: 30px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; color: var(--navy); flex-shrink: 0; }
+    .q-nav-grid { display: flex; flex-wrap: wrap; gap: 6px; padding: 16px 28px; background: #fff; border: 1px solid #e2e8f0; border-top: none; }
+    .q-dot { width: 32px; height: 32px; border-radius: 7px; border: 2px solid #e2e8f0; background: #fff; cursor: pointer; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .q-dot.done { background: var(--gold-glow); border-color: var(--gold); color: var(--gold); }
+    .q-dot.now { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    .chart-box { position: relative; height: 280px; width: 100%; }
+    .ring-wrap { width: 110px; height: 110px; position: relative; margin: 0 auto; }
+    .ring-wrap svg { transform: rotate(-90deg); }
+    .ring-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 900; color: var(--navy); }
+
+    @media (max-width: 992px) {
+      .sidebar { width: 64px; }
+      .sidebar .nav-item span, .sidebar-brand-text, .nav-section-title, .user-card-info, .sidebar-footer .btn span { display: none; }
+      .sidebar-header { padding: 16px 12px; }
+      .sidebar-brand-icon { margin: 0 auto; }
+      .nav-item { justify-content: center; padding: 12px; }
+      .user-card { justify-content: center; }
+      .main-area { margin-right: 64px; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main-area { margin-right: 0; padding: 16px; padding-bottom: 80px; }
+      .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .page-top { flex-direction: column; }
+      .mobile-bar { display: flex !important; }
+    }
+
+    .mobile-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--navy); padding: 8px 0; z-index: 100; justify-content: space-around; border-top: 2px solid rgba(200,164,21,0.3); }
+    .mob-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: rgba(255,255,255,0.4); font-size: 0.65rem; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: all 0.2s; font-weight: 600; }
+    .mob-item.active { color: var(--gold); }
+    .mob-item i { font-size: 1.1rem; }
+
+    .hidden { display: none !important; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+    .student-stat-card { text-align: center; padding: 24px; }
+    .student-stat-card .big-num { font-size: 2.5rem; font-weight: 900; color: var(--navy); line-height: 1; }
+    .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); }
+    .empty-state i { font-size: 3rem; color: #cbd5e1; margin-bottom: 15px; }
+    .empty-state p { font-size: 0.9rem; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎓 منصة ALCPT الذكية</h1>
-            <p>منصة تدريب لغوي عسكرية متكاملة - الكود الكامل</p>
-            <p style="margin-top: 10px; font-size: 0.9em;">قاعدة الملك فهد الجوية - RSAF</p>
-        </header>
-        
-        <div class="stats">
-            <div class="stat-card">
-                <h3>جداول قاعدة البيانات</h3>
-                <div class="number">12</div>
-            </div>
-            <div class="stat-card">
-                <h3>الصفحات الرئيسية</h3>
-                <div class="number">6</div>
-            </div>
-            <div class="stat-card">
-                <h3>مكونات UI</h3>
-                <div class="number">30+</div>
-            </div>
-            <div class="stat-card">
-                <h3>أسطر البرمجية</h3>
-                <div class="number">5000+</div>
-            </div>
-        </div>
-        
-        <div class="toc">
-            <h2>📑 فهرس الملفات</h2>
-            <ul>
-<li><a href="#drizzle-schema-ts">1. قاعدة البيانات</a></li>
-<li><a href="#server-db-ts">2. دوال قاعدة البيانات</a></li>
-<li><a href="#server-routers-ts">3. API Routers</a></li>
-<li><a href="#client-src-App-tsx">4. التطبيق الرئيسي</a></li>
-<li><a href="#client-src-pages-Home-tsx">5. صفحة Home</a></li>
-<li><a href="#client-src-pages-Login-tsx">6. صفحة Login</a></li>
-<li><a href="#client-src-pages-StudentDashboard-tsx">7. لوحة الطالب</a></li>
-<li><a href="#client-src-pages-TeacherDashboard-tsx">8. لوحة المدرب</a></li>
-<li><a href="#client-src-pages-AdminDashboard-tsx">9. لوحة الإدارة</a></li>
-<li><a href="#client-src-pages-ExamPage-tsx">10. صفحة الاختبار</a></li>
-<li><a href="#client-src-index-css">11. التنسيقات</a></li>
-<li><a href="#package-json">12. المكتبات والإعدادات</a></li>
 
-            </ul>
-        </div>
-
-        <div class="file-section" id="drizzle-schema-ts">
-            <div class="file-header">
-                <span>قاعدة البيانات - drizzle/schema.ts</span>
-                <button class="copy-btn" onclick="copyCode('drizzle-schema-ts-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="drizzle-schema-ts-code">import {
-  int,
-  mysqlEnum,
-  mysqlTable,
-  text,
-  timestamp,
-  varchar,
-  decimal,
-  boolean,
-  json,
-  index,
-  unique,
-} from "drizzle-orm/mysql-core";
-
-/**
- * ALCPT Smart Platform - Complete Database Schema
- * All tables use camelCase to match generated types
- */
-
-// ============================================================================
-// CORE USERS & AUTHENTICATION
-// ============================================================================
-
-export const users = mysqlTable(
-  "users",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    openId: varchar("openId", { length: 64 }).notNull().unique(),
-    name: text("name"),
-    email: varchar("email", { length: 320 }),
-    loginMethod: varchar("loginMethod", { length: 64 }),
-    role: mysqlEnum("role", ["admin", "teacher", "student"]).default("student").notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-    lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
-  },
-  (table) => ({
-    roleIdx: index("role_idx").on(table.role),
-    openIdIdx: index("openId_idx").on(table.openId),
-  })
-);
-
-export type User = typeof users.$inferSelect;
-export type InsertUser = typeof users.$inferInsert;
-
-// ============================================================================
-// TRAINING CLASSES & SECTIONS
-// ============================================================================
-
-export const classes = mysqlTable(
-  "classes",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    name: varchar("name", { length: 255 }).notNull(),
-    code: varchar("code", { length: 50 }).notNull().unique(),
-    description: text("description"),
-    teacherId: int("teacherId").notNull(),
-    targetScore: int("targetScore").default(65),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-  },
-  (table) => ({
-    teacherIdx: index("teacher_idx").on(table.teacherId),
-  })
-);
-
-export type Class = typeof classes.$inferSelect;
-export type InsertClass = typeof classes.$inferInsert;
-
-// ============================================================================
-// STUDENTS
-// ============================================================================
-
-export const students = mysqlTable(
-  "students",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    userId: int("userId").notNull().unique(),
-    militaryId: varchar("militaryId", { length: 50 }).notNull().unique(),
-    fullName: varchar("fullName", { length: 255 }).notNull(),
-    classId: int("classId").notNull(),
-    currentScore: decimal("currentScore", { precision: 5, scale: 2 }).default("0"),
-    predictedScore: decimal("predictedScore", { precision: 5, scale: 2 }).default("0"),
-    targetScore: int("targetScore").default(65),
-    weakestSkill: varchar("weakestSkill", { length: 50 }),
-    strongestSkill: varchar("strongestSkill", { length: 50 }),
-    totalExamsTaken: int("totalExamsTaken").default(0),
-    averageScore: decimal("averageScore", { precision: 5, scale: 2 }).default("0"),
-    highestScore: decimal("highestScore", { precision: 5, scale: 2 }).default("0"),
-    lowestScore: decimal("lowestScore", { precision: 5, scale: 2 }).default("0"),
-    isAtRisk: boolean("isAtRisk").default(false),
-    points: int("points").default(0),
-    badges: json("badges").default([]),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-  },
-  (table) => ({
-    userIdx: index("user_idx").on(table.userId),
-    classIdx: index("class_idx").on(table.classId),
-    militaryIdIdx: index("militaryId_idx").on(table.militaryId),
-  })
-);
-
-export type Student = typeof students.$inferSelect;
-export type InsertStudent = typeof students.$inferInsert;
-
-// ============================================================================
-// QUESTIONS BANK
-// ============================================================================
-
-export const questions = mysqlTable(
-  "questions",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    questionText: text("questionText").notNull(),
-    optionA: text("optionA").notNull(),
-    optionB: text("optionB").notNull(),
-    optionC: text("optionC").notNull(),
-    optionD: text("optionD").notNull(),
-    correctAnswer: varchar("correctAnswer", { length: 1 }).notNull(), // A, B, C, D
-    skill: mysqlEnum("skill", ["Grammar", "Listening", "Vocabulary", "Reading"]).notNull(),
-    difficulty: mysqlEnum("difficulty", ["Easy", "Medium", "Hard"]).notNull(),
-    createdBy: int("createdBy").notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-  },
-  (table) => ({
-    skillIdx: index("skill_idx").on(table.skill),
-    difficultyIdx: index("difficulty_idx").on(table.difficulty),
-    createdByIdx: index("createdBy_idx").on(table.createdBy),
-  })
-);
-
-export type Question = typeof questions.$inferSelect;
-export type InsertQuestion = typeof questions.$inferInsert;
-
-// ============================================================================
-// EXAMS
-// ============================================================================
-
-export const exams = mysqlTable(
-  "exams",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    title: varchar("title", { length: 255 }).notNull(),
-    type: mysqlEnum("type", ["Diagnostic", "QuickQuiz", "MockExam", "FullTest"]).notNull(),
-    description: text("description"),
-    duration: int("duration").notNull(), // in minutes
-    totalQuestions: int("totalQuestions").notNull(),
-    passingScore: int("passingScore").default(65),
-    createdBy: int("createdBy").notNull(),
-    classId: int("classId"),
-    questions: json("questions"), // Array of question IDs
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-  },
-  (table) => ({
-    typeIdx: index("type_idx").on(table.type),
-    createdByIdx: index("createdBy_idx").on(table.createdBy),
-    classIdx: index("classId_idx").on(table.classId),
-  })
-);
-
-export type Exam = typeof exams.$inferSelect;
-export type InsertExam = typeof exams.$inferInsert;
-
-// ============================================================================
-// EXAM RESULTS & ATTEMPTS
-// ============================================================================
-
-export const examResults = mysqlTable(
-  "examResults",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    studentId: int("studentId").notNull(),
-    examId: int("examId").notNull(),
-    score: decimal("score", { precision: 5, scale: 2 }).notNull(),
-    grammarScore: decimal("grammarScore", { precision: 5, scale: 2 }).default("0"),
-    listeningScore: decimal("listeningScore", { precision: 5, scale: 2 }).default("0"),
-    vocabularyScore: decimal("vocabularyScore", { precision: 5, scale: 2 }).default("0"),
-    readingScore: decimal("readingScore", { precision: 5, scale: 2 }).default("0"),
-    totalQuestions: int("totalQuestions").notNull(),
-    correctAnswers: int("correctAnswers").notNull(),
-    wrongAnswers: int("wrongAnswers").notNull(),
-    skippedQuestions: int("skippedQuestions").default(0),
-    timeTaken: int("timeTaken"), // in seconds
-    answers: json("answers"), // Array of {questionId, selectedAnswer, isCorrect}
-    isPassed: boolean("isPassed").default(false),
-    attemptNumber: int("attemptNumber").default(1),
-    completedAt: timestamp("completedAt").notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-  },
-  (table) => ({
-    studentIdx: index("student_idx").on(table.studentId),
-    examIdx: index("exam_idx").on(table.examId),
-    completedAtIdx: index("completedAt_idx").on(table.completedAt),
-  })
-);
-
-export type ExamResult = typeof examResults.$inferSelect;
-export type InsertExamResult = typeof examResults.$inferInsert;
-
-// ============================================================================
-// ERROR BANK & MISTAKE TRACKING
-// ============================================================================
-
-export const errorBank = mysqlTable(
-  "errorBank",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    studentId: int("studentId").notNull(),
-    questionId: int("questionId").notNull(),
-    skill: mysqlEnum("skill", ["Grammar", "Listening", "Vocabulary", "Reading"]).notNull(),
-    wrongCount: int("wrongCount").default(1),
-    attempts: int("attempts").default(1),
-    lastAttemptAt: timestamp("lastAttemptAt").notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-  },
-  (table) => ({
-    studentIdx: index("student_idx").on(table.studentId),
-    questionIdx: index("question_idx").on(table.questionId),
-    skillIdx: index("skill_idx").on(table.skill),
-  })
-);
-
-export type ErrorBankEntry = typeof errorBank.$inferSelect;
-export type InsertErrorBankEntry = typeof errorBank.$inferInsert;
-
-// ============================================================================
-// KPI & ANALYTICS
-// ============================================================================
-
-export const kpiMetrics = mysqlTable(
-  "kpiMetrics",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    classId: int("classId"),
-    totalStudents: int("totalStudents").default(0),
-    averageScore: decimal("averageScore", { precision: 5, scale: 2 }).default("0"),
-    successRate: decimal("successRate", { precision: 5, scale: 2 }).default("0"), // percentage
-    completionRate: decimal("completionRate", { precision: 5, scale: 2 }).default("0"), // percentage
-    weakestSkill: varchar("weakestSkill", { length: 50 }),
-    strongestSkill: varchar("strongestSkill", { length: 50 }),
-    atRiskStudents: int("atRiskStudents").default(0),
-    missionReadinessIndex: decimal("missionReadinessIndex", { precision: 5, scale: 2 }).default("0"),
-    lastUpdated: timestamp("lastUpdated").defaultNow().onUpdateNow().notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-  },
-  (table) => ({
-    classIdx: index("classId_idx").on(table.classId),
-  })
-);
-
-export type KPIMetric = typeof kpiMetrics.$inferSelect;
-export type InsertKPIMetric = typeof kpiMetrics.$inferInsert;
-
-// ============================================================================
-// MOST MISSED QUESTIONS TRACKING
-// ============================================================================
-
-export const mostMissedQuestions = mysqlTable(
-  "mostMissedQuestions",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    questionId: int("questionId").notNull().unique(),
-    totalAttempts: int("totalAttempts").default(0),
-    wrongAttempts: int("wrongAttempts").default(0),
-    errorRate: decimal("errorRate", { precision: 5, scale: 2 }).default("0"), // percentage
-    skill: mysqlEnum("skill", ["Grammar", "Listening", "Vocabulary", "Reading"]).notNull(),
-    difficulty: mysqlEnum("difficulty", ["Easy", "Medium", "Hard"]).notNull(),
-    lastUpdated: timestamp("lastUpdated").defaultNow().onUpdateNow().notNull(),
-  },
-  (table) => ({
-    questionIdx: index("question_idx").on(table.questionId),
-    skillIdx: index("skill_idx").on(table.skill),
-  })
-);
-
-export type MostMissedQuestion = typeof mostMissedQuestions.$inferSelect;
-export type InsertMostMissedQuestion = typeof mostMissedQuestions.$inferInsert;
-
-// ============================================================================
-// SKILL PERFORMANCE TRACKING
-// ============================================================================
-
-export const skillPerformance = mysqlTable(
-  "skillPerformance",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    studentId: int("studentId").notNull(),
-    skill: mysqlEnum("skill", ["Grammar", "Listening", "Vocabulary", "Reading"]).notNull(),
-    averageScore: decimal("averageScore", { precision: 5, scale: 2 }).default("0"),
-    totalQuestions: int("totalQuestions").default(0),
-    correctAnswers: int("correctAnswers").default(0),
-    wrongAnswers: int("wrongAnswers").default(0),
-    lastUpdated: timestamp("lastUpdated").defaultNow().onUpdateNow().notNull(),
-  },
-  (table) => ({
-    studentIdx: index("student_idx").on(table.studentId),
-    skillIdx: index("skill_idx").on(table.skill),
-  })
-);
-
-export type SkillPerformance = typeof skillPerformance.$inferSelect;
-export type InsertSkillPerformance = typeof skillPerformance.$inferInsert;
-
-// ============================================================================
-// STUDENT PERFORMANCE HISTORY (for charts & trends)
-// ============================================================================
-
-export const performanceHistory = mysqlTable(
-  "performanceHistory",
-  {
-    id: int("id").autoincrement().primaryKey(),
-    studentId: int("studentId").notNull(),
-    examId: int("examId").notNull(),
-    score: decimal("score", { precision: 5, scale: 2 }).notNull(),
-    grammarScore: decimal("grammarScore", { precision: 5, scale: 2 }).default("0"),
-    listeningScore: decimal("listeningScore", { precision: 5, scale: 2 }).default("0"),
-    vocabularyScore: decimal("vocabularyScore", { precision: 5, scale: 2 }).default("0"),
-    readingScore: decimal("readingScore", { precision: 5, scale: 2 }).default("0"),
-    completedAt: timestamp("completedAt").notNull(),
-  },
-  (table) => ({
-    studentIdx: index("student_idx").on(table.studentId),
-    completedAtIdx: index("completedAt_idx").on(table.completedAt),
-  })
-);
-
-export type PerformanceHistory = typeof performanceHistory.$inferSelect;
-export type InsertPerformanceHistory = typeof performanceHistory.$inferInsert;
-
-// ============================================================================
-// EXPORT ALL TYPES
-// ============================================================================
-
-export type {
-  User,
-  InsertUser,
-  Class,
-  InsertClass,
-  Student,
-  InsertStudent,
-  Question,
-  InsertQuestion,
-  Exam,
-  InsertExam,
-  ExamResult,
-  InsertExamResult,
-  ErrorBankEntry,
-  InsertErrorBankEntry,
-  KPIMetric,
-  InsertKPIMetric,
-  MostMissedQuestion,
-  InsertMostMissedQuestion,
-  SkillPerformance,
-  InsertSkillPerformance,
-  PerformanceHistory,
-  InsertPerformanceHistory,
-};
-</pre>
-            </div>
-        </div>
-
-        <div class="file-section" id="server-db-ts">
-            <div class="file-header">
-                <span>دوال قاعدة البيانات - server/db.ts</span>
-                <button class="copy-btn" onclick="copyCode('server-db-ts-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="server-db-ts-code">import { eq, and, desc, sql } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
-import {
-  InsertUser,
-  users,
-  students,
-  classes,
-  questions,
-  exams,
-  examResults,
-  errorBank,
-  kpiMetrics,
-  skillPerformance,
-  performanceHistory,
-  mostMissedQuestions,
-} from "../drizzle/schema";
-import { ENV } from "./_core/env";
-
-let _db: ReturnType<typeof drizzle> | null = null;
-
-// Lazily create the drizzle instance so local tooling can run without a DB.
-export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {
-    try {
-      _db = drizzle(process.env.DATABASE_URL);
-    } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
-      _db = null;
-    }
-  }
-  return _db;
-}
-
-// ============================================================================
-// USER MANAGEMENT
-// ============================================================================
-
-export async function upsertUser(user: InsertUser): Promise<void> {
-  if (!user.openId) {
-    throw new Error("User openId is required for upsert");
-  }
-
-  const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot upsert user: database not available");
-    return;
-  }
-
-  try {
-    const values: InsertUser = {
-      openId: user.openId,
-    };
-    const updateSet: Record<string, unknown> = {};
-
-    const textFields = ["name", "email", "loginMethod"] as const;
-    type TextField = (typeof textFields)[number];
-
-    const assignNullable = (field: TextField) => {
-      const value = user[field];
-      if (value === undefined) return;
-      const normalized = value ?? null;
-      values[field] = normalized;
-      updateSet[field] = normalized;
-    };
-
-    textFields.forEach(assignNullable);
-
-    if (user.lastSignedIn !== undefined) {
-      values.lastSignedIn = user.lastSignedIn;
-      updateSet.lastSignedIn = user.lastSignedIn;
-    }
-    if (user.role !== undefined) {
-      values.role = user.role;
-      updateSet.role = user.role;
-    } else if (user.openId === ENV.ownerOpenId) {
-      values.role = "admin";
-      updateSet.role = "admin";
-    }
-
-    if (!values.lastSignedIn) {
-      values.lastSignedIn = new Date();
-    }
-
-    if (Object.keys(updateSet).length === 0) {
-      updateSet.lastSignedIn = new Date();
-    }
-
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
-      set: updateSet,
-    });
-  } catch (error) {
-    console.error("[Database] Failed to upsert user:", error);
-    throw error;
-  }
-}
-
-export async function getUserByOpenId(openId: string) {
-  const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot get user: database not available");
-    return undefined;
-  }
-
-  const result = await db
-    .select()
-    .from(users)
-    .where(eq(users.openId, openId))
-    .limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
-}
-
-export async function getUserById(id: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-
-  const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
-}
-
-// ============================================================================
-// STUDENT MANAGEMENT
-// ============================================================================
-
-export async function createStudent(data: {
-  userId: number;
-  militaryId: string;
-  fullName: string;
-  classId: number;
-  targetScore?: number;
-}) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-
-  const result = await db.insert(students).values({
-    userId: data.userId,
-    militaryId: data.militaryId,
-    fullName: data.fullName,
-    classId: data.classId,
-    targetScore: data.targetScore || 65,
-  });
-
-  return result;
-}
-
-export async function getStudentByUserId(userId: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-
-  const result = await db
-    .select()
-    .from(students)
-    .where(eq(students.userId, userId))
-    .limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
-}
-
-export async function getStudentByMilitaryId(militaryId: string) {
-  const db = await getDb();
-  if (!db) return undefined;
-
-  const result = await db
-    .select()
-    .from(students)
-    .where(eq(students.militaryId, militaryId))
-    .limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
-}
-
-export async function getStudentsByClassId(classId: number) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db.select().from(students).where(eq(students.classId, classId));
-}
-
-export async function updateStudentScore(
-  studentId: number,
-  score: number,
-  predictedScore?: number
-) {
-  const db = await getDb();
-  if (!db) return;
-
-  const updateData: any = {
-    currentScore: score,
-    updatedAt: new Date(),
-  };
-
-  if (predictedScore !== undefined) {
-    updateData.predictedScore = predictedScore;
-  }
-
-  await db
-    .update(students)
-    .set(updateData)
-    .where(eq(students.id, studentId));
-}
-
-// ============================================================================
-// CLASS MANAGEMENT
-// ============================================================================
-
-export async function createClass(data: {
-  name: string;
-  code: string;
-  teacherId: number;
-  description?: string;
-  targetScore?: number;
-}) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-
-  return await db.insert(classes).values({
-    name: data.name,
-    code: data.code,
-    teacherId: data.teacherId,
-    description: data.description,
-    targetScore: data.targetScore || 65,
-  });
-}
-
-export async function getClassesByTeacherId(teacherId: number) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db.select().from(classes).where(eq(classes.teacherId, teacherId));
-}
-
-export async function getClassById(classId: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-
-  const result = await db
-    .select()
-    .from(classes)
-    .where(eq(classes.id, classId))
-    .limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
-}
-
-// ============================================================================
-// QUESTIONS MANAGEMENT
-// ============================================================================
-
-export async function addQuestion(data: {
-  questionText: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  correctAnswer: string;
-  skill: "Grammar" | "Listening" | "Vocabulary" | "Reading";
-  difficulty: "Easy" | "Medium" | "Hard";
-  createdBy: number;
-}) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-
-  return await db.insert(questions).values(data);
-}
-
-export async function getQuestionsBySkill(
-  skill: "Grammar" | "Listening" | "Vocabulary" | "Reading"
-) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db.select().from(questions).where(eq(questions.skill, skill));
-}
-
-export async function getRandomQuestions(
-  limit: number,
-  skill?: "Grammar" | "Listening" | "Vocabulary" | "Reading"
-) {
-  const db = await getDb();
-  if (!db) return [];
-
-  let query = db.select().from(questions);
-
-  if (skill) {
-    query = query.where(eq(questions.skill, skill)) as any;
-  }
-
-  return await query.orderBy(sql`RAND()`).limit(limit);
-}
-
-export async function getQuestionById(questionId: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-
-  const result = await db
-    .select()
-    .from(questions)
-    .where(eq(questions.id, questionId))
-    .limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
-}
-
-// ============================================================================
-// EXAMS MANAGEMENT
-// ============================================================================
-
-export async function createExam(data: {
-  title: string;
-  type: "Diagnostic" | "QuickQuiz" | "MockExam" | "FullTest";
-  duration: number;
-  totalQuestions: number;
-  createdBy: number;
-  classId?: number;
-  description?: string;
-  passingScore?: number;
-  questions?: number[];
-}) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-
-  return await db.insert(exams).values({
-    title: data.title,
-    type: data.type,
-    duration: data.duration,
-    totalQuestions: data.totalQuestions,
-    createdBy: data.createdBy,
-    classId: data.classId,
-    description: data.description,
-    passingScore: data.passingScore || 65,
-    questions: data.questions ? JSON.stringify(data.questions) : null,
-  });
-}
-
-export async function getExamById(examId: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-
-  const result = await db
-    .select()
-    .from(exams)
-    .where(eq(exams.id, examId))
-    .limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
-}
-
-export async function getExamsByType(
-  type: "Diagnostic" | "QuickQuiz" | "MockExam" | "FullTest"
-) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db.select().from(exams).where(eq(exams.type, type));
-}
-
-// ============================================================================
-// EXAM RESULTS
-// ============================================================================
-
-export async function saveExamResult(data: {
-  studentId: number;
-  examId: number;
-  score: number;
-  grammarScore?: number;
-  listeningScore?: number;
-  vocabularyScore?: number;
-  readingScore?: number;
-  totalQuestions: number;
-  correctAnswers: number;
-  wrongAnswers: number;
-  skippedQuestions?: number;
-  timeTaken?: number;
-  answers?: any[];
-  isPassed: boolean;
-  attemptNumber?: number;
-  completedAt: Date;
-}) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-
-  const values: any = {
-    studentId: data.studentId,
-    examId: data.examId,
-    score: data.score.toString(),
-    grammarScore: (data.grammarScore || 0).toString(),
-    listeningScore: (data.listeningScore || 0).toString(),
-    vocabularyScore: (data.vocabularyScore || 0).toString(),
-    readingScore: (data.readingScore || 0).toString(),
-    totalQuestions: data.totalQuestions,
-    correctAnswers: data.correctAnswers,
-    wrongAnswers: data.wrongAnswers,
-    skippedQuestions: data.skippedQuestions || 0,
-    timeTaken: data.timeTaken,
-    answers: data.answers ? JSON.stringify(data.answers) : null,
-    isPassed: data.isPassed,
-    attemptNumber: data.attemptNumber || 1,
-    completedAt: data.completedAt,
-  };
-
-  const result = await db.insert(examResults).values(values);
-
-  return result;
-}
-
-export async function getStudentExamResults(studentId: number) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db
-    .select()
-    .from(examResults)
-    .where(eq(examResults.studentId, studentId))
-    .orderBy(desc(examResults.completedAt));
-}
-
-export async function getStudentExamAttempts(studentId: number, examId: number) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db
-    .select()
-    .from(examResults)
-    .where(
-      and(
-        eq(examResults.studentId, studentId),
-        eq(examResults.examId, examId)
-      )
-    )
-    .orderBy(desc(examResults.completedAt));
-}
-
-// ============================================================================
-// ERROR BANK & TRACKING
-// ============================================================================
-
-export async function recordError(data: {
-  studentId: number;
-  questionId: number;
-  skill: "Grammar" | "Listening" | "Vocabulary" | "Reading";
-}) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-
-  const existing = await db
-    .select()
-    .from(errorBank)
-    .where(
-      and(
-        eq(errorBank.studentId, data.studentId),
-        eq(errorBank.questionId, data.questionId)
-      )
-    )
-    .limit(1);
-
-  if (existing.length > 0) {
-    // Update existing error record
-    await db
-      .update(errorBank)
-      .set({
-        wrongCount: (existing[0].wrongCount || 0) + 1,
-        attempts: (existing[0].attempts || 0) + 1,
-        lastAttemptAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .where(eq(errorBank.id, existing[0].id));
-  } else {
-    // Create new error record
-    await db.insert(errorBank).values({
-      studentId: data.studentId,
-      questionId: data.questionId,
-      skill: data.skill,
-      wrongCount: 1,
-      attempts: 1,
-      lastAttemptAt: new Date(),
-    });
-  }
-}
-
-export async function getStudentErrors(studentId: number) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db
-    .select()
-    .from(errorBank)
-    .where(eq(errorBank.studentId, studentId))
-    .orderBy(desc(errorBank.wrongCount));
-}
-
-// ============================================================================
-// KPI & ANALYTICS
-// ============================================================================
-
-export async function updateKPIMetrics(classId: number) {
-  const db = await getDb();
-  if (!db) return;
-
-  const classStudents = await db
-    .select()
-    .from(students)
-    .where(eq(students.classId, classId));
-
-  if (classStudents.length === 0) return;
-
-  const totalStudents = classStudents.length;
-  const averageScore =
-    classStudents.reduce((sum, s) => sum + Number(s.currentScore || 0), 0) /
-    totalStudents;
-
-  const passedCount = classStudents.filter(
-    (s) => Number(s.currentScore || 0) >= 65
-  ).length;
-  const successRate = (passedCount / totalStudents) * 100;
-
-  const atRiskCount = classStudents.filter((s) => s.isAtRisk).length;
-
-  // Calculate Mission Readiness Index
-  const completionRate =
-    classStudents.filter((s) => (s.totalExamsTaken || 0) > 0).length / totalStudents;
-  const missionReadinessIndex =
-    (successRate * 0.4 + averageScore * 0.3 + completionRate * 100 * 0.3) / 100;
-
-  // Find weakest and strongest skills
-  const skillPerformances = await db.select().from(skillPerformance);
-  const avgBySkill: Record<string, number> = {};
-
-  for (const sp of skillPerformances) {
-    if (!avgBySkill[sp.skill]) {
-      avgBySkill[sp.skill] = 0;
-    }
-    avgBySkill[sp.skill] += Number(sp.averageScore || 0);
-  }
-
-  const weakestSkill = Object.entries(avgBySkill).sort(
-    (a, b) => a[1] - b[1]
-  )[0]?.[0];
-  const strongestSkill = Object.entries(avgBySkill).sort(
-    (a, b) => b[1] - a[1]
-  )[0]?.[0];
-
-  const existing = await db
-    .select()
-    .from(kpiMetrics)
-    .where(eq(kpiMetrics.classId, classId))
-    .limit(1);
-
-  if (existing.length > 0) {
-    await db
-      .update(kpiMetrics)
-      .set({
-        totalStudents,
-        averageScore: averageScore.toString(),
-        successRate: successRate.toString(),
-        completionRate: (completionRate * 100).toString(),
-        weakestSkill,
-        strongestSkill,
-        atRiskStudents: atRiskCount,
-        missionReadinessIndex: missionReadinessIndex.toString(),
-        lastUpdated: new Date(),
-      })
-      .where(eq(kpiMetrics.id, existing[0].id));
-  } else {
-    const kpiValues: any = {
-      classId,
-      totalStudents,
-      averageScore: averageScore.toString(),
-      successRate: successRate.toString(),
-      completionRate: (completionRate * 100).toString(),
-      weakestSkill,
-      strongestSkill,
-      atRiskStudents: atRiskCount,
-      missionReadinessIndex: missionReadinessIndex.toString(),
-    };
-    await db.insert(kpiMetrics).values(kpiValues);
-  }
-}
-
-export async function getKPIMetrics(classId: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-
-  const result = await db
-    .select()
-    .from(kpiMetrics)
-    .where(eq(kpiMetrics.classId, classId))
-    .limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
-}
-
-export async function getMostMissedQuestions(limit: number = 10) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db
-    .select()
-    .from(mostMissedQuestions)
-    .orderBy(desc(mostMissedQuestions.errorRate))
-    .limit(limit);
-}
-
-// ============================================================================
-// PERFORMANCE HISTORY
-// ============================================================================
-
-export async function addPerformanceHistory(data: {
-  studentId: number;
-  examId: number;
-  score: number;
-  grammarScore?: number;
-  listeningScore?: number;
-  vocabularyScore?: number;
-  readingScore?: number;
-  completedAt: Date;
-}) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-
-  const values: any = {
-    studentId: data.studentId,
-    examId: data.examId,
-    score: data.score.toString(),
-    grammarScore: (data.grammarScore || 0).toString(),
-    listeningScore: (data.listeningScore || 0).toString(),
-    vocabularyScore: (data.vocabularyScore || 0).toString(),
-    readingScore: (data.readingScore || 0).toString(),
-    completedAt: data.completedAt,
-  };
-
-  return await db.insert(performanceHistory).values(values);
-}
-
-export async function getStudentPerformanceHistory(studentId: number) {
-  const db = await getDb();
-  if (!db) return [];
-
-  return await db
-    .select()
-    .from(performanceHistory)
-    .where(eq(performanceHistory.studentId, studentId))
-    .orderBy(desc(performanceHistory.completedAt));
-}
-</pre>
-            </div>
-        </div>
-
-        <div class="file-section" id="server-routers-ts">
-            <div class="file-header">
-                <span>API Routers - server/routers.ts</span>
-                <button class="copy-btn" onclick="copyCode('server-routers-ts-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="server-routers-ts-code">import { TRPCError } from "@trpc/server";
-import { z } from "zod";
-import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { systemRouter } from "./_core/systemRouter";
-import { COOKIE_NAME } from "@shared/const";
-import { getSessionCookieOptions } from "./_core/cookies";
-import * as db from "./db";
-
-// ============================================================================
-// ROLE-BASED PROCEDURES
-// ============================================================================
-
-const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
-  if (ctx.user?.role !== "admin") {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "Admin access required",
-    });
-  }
-  return next({ ctx });
-});
-
-const teacherProcedure = protectedProcedure.use(async ({ ctx, next }) => {
-  if (ctx.user?.role !== "teacher" && ctx.user?.role !== "admin") {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "Teacher access required",
-    });
-  }
-  return next({ ctx });
-});
-
-const studentProcedure = protectedProcedure.use(async ({ ctx, next }) => {
-  if (ctx.user?.role !== "student" && ctx.user?.role !== "admin") {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "Student access required",
-    });
-  }
-  return next({ ctx });
-});
-
-// ============================================================================
-// AUTHENTICATION ROUTER
-// ============================================================================
-
-const authRouter = router({
-  me: publicProcedure.query((opts) => opts.ctx.user),
-  logout: publicProcedure.mutation(({ ctx }) => {
-    const cookieOptions = getSessionCookieOptions(ctx.req);
-    ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
-    return { success: true } as const;
-  }),
-});
-
-// ============================================================================
-// STUDENTS ROUTER
-// ============================================================================
-
-const studentsRouter = router({
-  // Get current student profile
-  getProfile: studentProcedure.query(async ({ ctx }) => {
-    const student = await db.getStudentByUserId(ctx.user!.id);
-    if (!student) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Student profile not found",
-      });
-    }
-    return student;
-  }),
-
-  // Get student by military ID (for login)
-  getByMilitaryId: publicProcedure
-    .input(z.object({ militaryId: z.string() }))
-    .query(async ({ input }) => {
-      return await db.getStudentByMilitaryId(input.militaryId);
-    }),
-
-  // Get student exam results
-  getExamResults: studentProcedure.query(async ({ ctx }) => {
-    const student = await db.getStudentByUserId(ctx.user!.id);
-    if (!student) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Student profile not found",
-      });
-    }
-    return await db.getStudentExamResults(student.id);
-  }),
-
-  // Get student performance history
-  getPerformanceHistory: studentProcedure.query(async ({ ctx }) => {
-    const student = await db.getStudentByUserId(ctx.user!.id);
-    if (!student) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Student profile not found",
-      });
-    }
-    return await db.getStudentPerformanceHistory(student.id);
-  }),
-
-  // Get student errors
-  getErrors: studentProcedure.query(async ({ ctx }) => {
-    const student = await db.getStudentByUserId(ctx.user!.id);
-    if (!student) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Student profile not found",
-      });
-    }
-    return await db.getStudentErrors(student.id);
-  }),
-});
-
-// ============================================================================
-// QUESTIONS ROUTER
-// ============================================================================
-
-const questionsRouter = router({
-  // Get random questions for exam
-  getRandomQuestions: publicProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(100),
-        skill: z
-          .enum(["Grammar", "Listening", "Vocabulary", "Reading"])
-          .optional(),
-      })
-    )
-    .query(async ({ input }) => {
-      return await db.getRandomQuestions(input.limit, input.skill);
-    }),
-
-  // Get questions by skill
-  getBySkill: publicProcedure
-    .input(
-      z.object({
-        skill: z.enum(["Grammar", "Listening", "Vocabulary", "Reading"]),
-      })
-    )
-    .query(async ({ input }) => {
-      return await db.getQuestionsBySkill(input.skill);
-    }),
-
-  // Add question (teacher only)
-  add: teacherProcedure
-    .input(
-      z.object({
-        questionText: z.string(),
-        optionA: z.string(),
-        optionB: z.string(),
-        optionC: z.string(),
-        optionD: z.string(),
-        correctAnswer: z.enum(["A", "B", "C", "D"]),
-        skill: z.enum(["Grammar", "Listening", "Vocabulary", "Reading"]),
-        difficulty: z.enum(["Easy", "Medium", "Hard"]),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await db.addQuestion({
-        ...input,
-        createdBy: ctx.user!.id,
-      });
-    }),
-
-  // Bulk import questions (teacher only)
-  bulkImport: teacherProcedure
-    .input(
-      z.object({
-        questions: z.array(
-          z.object({
-            questionText: z.string(),
-            optionA: z.string(),
-            optionB: z.string(),
-            optionC: z.string(),
-            optionD: z.string(),
-            correctAnswer: z.enum(["A", "B", "C", "D"]),
-            skill: z.enum(["Grammar", "Listening", "Vocabulary", "Reading"]),
-            difficulty: z.enum(["Easy", "Medium", "Hard"]),
-          })
-        ),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const results = [];
-      for (const q of input.questions) {
-        const result = await db.addQuestion({
-          ...q,
-          createdBy: ctx.user!.id,
-        });
-        results.push(result);
-      }
-      return { imported: results.length };
-    }),
-});
-
-// ============================================================================
-// EXAMS ROUTER
-// ============================================================================
-
-const examsRouter = router({
-  // Create exam (teacher only)
-  create: teacherProcedure
-    .input(
-      z.object({
-        title: z.string(),
-        type: z.enum(["Diagnostic", "QuickQuiz", "MockExam", "FullTest"]),
-        duration: z.number().min(1),
-        totalQuestions: z.number().min(1),
-        classId: z.number().optional(),
-        description: z.string().optional(),
-        passingScore: z.number().min(0).max(100).optional(),
-        questionIds: z.array(z.number()).optional(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await db.createExam({
-        ...input,
-        createdBy: ctx.user!.id,
-        questions: input.questionIds,
-      });
-    }),
-
-  // Get exam by ID
-  getById: publicProcedure
-    .input(z.object({ examId: z.number() }))
-    .query(async ({ input }) => {
-      return await db.getExamById(input.examId);
-    }),
-
-  // Get exams by type
-  getByType: publicProcedure
-    .input(
-      z.object({
-        type: z.enum(["Diagnostic", "QuickQuiz", "MockExam", "FullTest"]),
-      })
-    )
-    .query(async ({ input }) => {
-      return await db.getExamsByType(input.type);
-    }),
-});
-
-// ============================================================================
-// EXAM RESULTS ROUTER
-// ============================================================================
-
-const examResultsRouter = router({
-  // Save exam result (student submits exam)
-  save: studentProcedure
-    .input(
-      z.object({
-        examId: z.number(),
-        score: z.number().min(0).max(100),
-        grammarScore: z.number().min(0).max(100).optional(),
-        listeningScore: z.number().min(0).max(100).optional(),
-        vocabularyScore: z.number().min(0).max(100).optional(),
-        readingScore: z.number().min(0).max(100).optional(),
-        totalQuestions: z.number(),
-        correctAnswers: z.number(),
-        wrongAnswers: z.number(),
-        skippedQuestions: z.number().optional(),
-        timeTaken: z.number().optional(),
-        answers: z.array(z.any()).optional(),
-        isPassed: z.boolean(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const student = await db.getStudentByUserId(ctx.user!.id);
-      if (!student) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Student profile not found",
-        });
-      }
-
-      const result = await db.saveExamResult({
-        studentId: student.id,
-        examId: input.examId,
-        score: input.score,
-        grammarScore: input.grammarScore,
-        listeningScore: input.listeningScore,
-        vocabularyScore: input.vocabularyScore,
-        readingScore: input.readingScore,
-        totalQuestions: input.totalQuestions,
-        correctAnswers: input.correctAnswers,
-        wrongAnswers: input.wrongAnswers,
-        skippedQuestions: input.skippedQuestions,
-        timeTaken: input.timeTaken,
-        answers: input.answers,
-        isPassed: input.isPassed,
-        completedAt: new Date(),
-      });
-
-      // Update student scores
-      const avgScore = input.score;
-      await db.updateStudentScore(student.id, avgScore);
-
-      // Add to performance history
-      await db.addPerformanceHistory({
-        studentId: student.id,
-        examId: input.examId,
-        score: input.score,
-        grammarScore: input.grammarScore,
-        listeningScore: input.listeningScore,
-        vocabularyScore: input.vocabularyScore,
-        readingScore: input.readingScore,
-        completedAt: new Date(),
-      });
-
-      return result;
-    }),
-
-  // Get student exam attempts
-  getAttempts: studentProcedure
-    .input(
-      z.object({
-        examId: z.number(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const student = await db.getStudentByUserId(ctx.user!.id);
-      if (!student) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Student profile not found",
-        });
-      }
-      return await db.getStudentExamAttempts(student.id, input.examId);
-    }),
-});
-
-// ============================================================================
-// CLASSES ROUTER
-// ============================================================================
-
-const classesRouter = router({
-  // Create class (admin/teacher)
-  create: teacherProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        code: z.string(),
-        description: z.string().optional(),
-        targetScore: z.number().min(0).max(100).optional(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await db.createClass({
-        ...input,
-        teacherId: ctx.user!.id,
-      });
-    }),
-
-  // Get teacher's classes
-  getMyClasses: teacherProcedure.query(async ({ ctx }) => {
-    return await db.getClassesByTeacherId(ctx.user!.id);
-  }),
-
-  // Get class by ID
-  getById: publicProcedure
-    .input(z.object({ classId: z.number() }))
-    .query(async ({ input }) => {
-      return await db.getClassById(input.classId);
-    }),
-
-  // Get class students
-  getStudents: teacherProcedure
-    .input(z.object({ classId: z.number() }))
-    .query(async ({ input }) => {
-      return await db.getStudentsByClassId(input.classId);
-    }),
-});
-
-// ============================================================================
-// KPI & ANALYTICS ROUTER
-// ============================================================================
-
-const analyticsRouter = router({
-  // Get KPI metrics for class
-  getKPIMetrics: teacherProcedure
-    .input(z.object({ classId: z.number() }))
-    .query(async ({ input }) => {
-      return await db.getKPIMetrics(input.classId);
-    }),
-
-  // Update KPI metrics (can be called by system)
-  updateKPIMetrics: teacherProcedure
-    .input(z.object({ classId: z.number() }))
-    .mutation(async ({ input }) => {
-      await db.updateKPIMetrics(input.classId);
-      return await db.getKPIMetrics(input.classId);
-    }),
-
-  // Get most missed questions
-  getMostMissedQuestions: publicProcedure
-    .input(z.object({ limit: z.number().min(1).max(50).optional() }))
-    .query(async ({ input }) => {
-      return await db.getMostMissedQuestions(input.limit || 10);
-    }),
-});
-
-// ============================================================================
-// ADMIN ROUTER
-// ============================================================================
-
-const adminRouter = router({
-  // Promote user to teacher
-  promoteToTeacher: adminProcedure
-    .input(z.object({ userId: z.number() }))
-    .mutation(async ({ input }) => {
-      // This would require updating user role in database
-      // Implementation depends on your user management system
-      return { success: true };
-    }),
-
-  // Get all users (admin only)
-  getAllUsers: adminProcedure.query(async () => {
-    // Implementation would fetch all users
-    return [];
-  }),
-});
-
-// ============================================================================
-// MAIN APP ROUTER
-// ============================================================================
-
-export const appRouter = router({
-  system: systemRouter,
-  auth: authRouter,
-  students: studentsRouter,
-  questions: questionsRouter,
-  exams: examsRouter,
-  examResults: examResultsRouter,
-  classes: classesRouter,
-  analytics: analyticsRouter,
-  admin: adminRouter,
-});
-
-export type AppRouter = typeof appRouter;
-</pre>
-            </div>
-        </div>
-
-        <div class="file-section" id="client-src-App-tsx">
-            <div class="file-header">
-                <span>التطبيق الرئيسي - client/src/App.tsx</span>
-                <button class="copy-btn" onclick="copyCode('client-src-App-tsx-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="client-src-App-tsx-code">import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import StudentDashboard from "./pages/StudentDashboard";
-import TeacherDashboard from "./pages/TeacherDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
-import ExamPage from "./pages/ExamPage";
-import { useAuth } from "./_core/hooks/useAuth";
-import { Spinner } from "./components/ui/spinner";
-
-function ProtectedRoute({
-  component: Component,
-  requiredRole,
-}: {
-  component: React.ComponentType<any>;
-  requiredRole?: "student" | "teacher" | "admin";
-}) {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner />
+<div class="toast-wrap" id="toastWrap"></div>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-top-actions">
+    <button class="btn btn-sm" onclick="switchLoginRole('admin')"><i class="fa-solid fa-shield-halved"></i> دخول الإدارة</button>
+    <button class="btn btn-sm" onclick="switchLoginRole('teacher')"><i class="fa-solid fa-chalkboard-user"></i> دخول المعلم</button>
+  </div>
+
+  <div class="login-card">
+    <div class="login-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+    <h2 class="login-title" id="loginMainTitle">منصة تعلم</h2>
+    <p class="login-subtitle">Learn Platform - نظام التدريب اللغوي المتقدم</p>
+
+    <div id="loginFormStudent">
+      <div class="role-selector">
+        <button class="role-btn"><i class="fa-solid fa-user-graduate"></i> تسجيل دخول المتدرب</button>
       </div>
-    );
-  }
-
-  if (!user) {
-    return <Login />;
-  }
-
-  if (requiredRole && user.role !== requiredRole && user.role !== "admin") {
-    return <NotFound />;
-  }
-
-  return <Component />;
-}
-
-function Router() {
-  return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/login"} component={Login} />
-      <Route
-        path={"/student"}
-        component={() => (
-          <ProtectedRoute component={StudentDashboard} requiredRole="student" />
-        )}
-      />
-      <Route
-        path={"/student/exam"}
-        component={() => (
-          <ProtectedRoute component={ExamPage} requiredRole="student" />
-        )}
-      />
-      <Route
-        path={"/teacher"}
-        component={() => (
-          <ProtectedRoute component={TeacherDashboard} requiredRole="teacher" />
-        )}
-      />
-      <Route
-        path={"/admin"}
-        component={() => (
-          <ProtectedRoute component={AdminDashboard} requiredRole="admin" />
-        )}
-      />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
-
-function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider defaultTheme="light">
-        <TooltipProvider>
-          <Toaster />
-          <div dir="rtl" lang="ar" className="min-h-screen">
-            <Router />
-          </div>
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-
-export default App;
-</pre>
-            </div>
-        </div>
-
-        <div class="file-section" id="client-src-pages-Home-tsx">
-            <div class="file-header">
-                <span>صفحة Home - client/src/pages/Home.tsx</span>
-                <button class="copy-btn" onclick="copyCode('client-src-pages-Home-tsx-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="client-src-pages-Home-tsx-code">import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getLoginUrl } from "@/const";
-import { useLocation } from "wouter";
-import { useEffect } from "react";
-
-export default function Home() {
-  const { user, loading } = useAuth();
-  const [, navigate] = useLocation();
-
-  useEffect(() => {
-    if (user && !loading) {
-      if (user.role === "student") {
-        navigate("/student");
-      } else if (user.role === "teacher") {
-        navigate("/teacher");
-      } else if (user.role === "admin") {
-        navigate("/admin");
-      }
-    }
-  }, [user, loading, navigate]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+      <div class="form-group">
+        <label class="form-label">الرقم العسكري</label>
+        <input type="text" class="form-control" id="loginMilId" placeholder="أدخل الرقم العسكري">
       </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Navigation */}
-      <nav className="border-b border-slate-700 bg-slate-800/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-yellow-500"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" />
-              </svg>
-            </div>
-            <h1 className="text-xl font-bold text-white">منصة ALCPT الذكية</h1>
-          </div>
-          {!user && (
-            <a href={getLoginUrl()}>
-              <Button className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold">
-                تسجيل الدخول
-              </Button>
-            </a>
-          )}
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-white mb-4">
-            منصة تدريب لغوي عسكرية متكاملة
-          </h2>
-          <p className="text-xl text-slate-300 mb-8">
-            نظام ذكي لتقييم وتطوير مهارات اللغة الإنجليزية ALCPT
-          </p>
-          {!user && (
-            <a href={getLoginUrl()}>
-              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold">
-                ابدأ الآن
-              </Button>
-            </a>
-          )}
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <Card className="border-slate-700 bg-slate-800/50 backdrop-blur">
-            <CardHeader>
-              <div className="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                </svg>
-              </div>
-              <CardTitle className="text-white">اختبارات ذكية</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-300">
-                اختبارات تكيفية وتشخيصية ومحاكاة واختبارات سريعة مع تصحيح فوري
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-slate-700 bg-slate-800/50 backdrop-blur">
-            <CardHeader>
-              <div className="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" />
-                </svg>
-              </div>
-              <CardTitle className="text-white">تتبع الأداء</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-300">
-                تحليل شامل للأداء مع رسوم بيانية وتقارير مفصلة لكل مهارة
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-slate-700 bg-slate-800/50 backdrop-blur">
-            <CardHeader>
-              <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" />
-                </svg>
-              </div>
-              <CardTitle className="text-white">مؤشرات الأداء</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-300">
-                مؤشر جاهزية المهمة والتنبؤات الذكية لنتائج ALCPT
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Roles Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="border-slate-700 bg-slate-800 hover:border-yellow-500/50 transition-colors">
-            <CardHeader>
-              <CardTitle className="text-white">للمتدربين</CardTitle>
-              <CardDescription>
-                تابع تقدمك وحسّن مهاراتك
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2 text-sm text-slate-300">
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> اختبارات متعددة
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> تتبع الأداء
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> نقاط القوة والضعف
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> توصيات شخصية
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="border-slate-700 bg-slate-800 hover:border-yellow-500/50 transition-colors">
-            <CardHeader>
-              <CardTitle className="text-white">للمدربين</CardTitle>
-              <CardDescription>
-                أدر الشعب والمتدربين
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2 text-sm text-slate-300">
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> إدارة الشعب
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> رفع الأسئلة
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> تقارير PDF
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> تحليلات متقدمة
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="border-slate-700 bg-slate-800 hover:border-yellow-500/50 transition-colors">
-            <CardHeader>
-              <CardTitle className="text-white">للإدارة</CardTitle>
-              <CardDescription>
-                مراقبة شاملة للمنصة
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2 text-sm text-slate-300">
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> إدارة المستخدمين
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> إحصائيات عامة
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> تقارير شاملة
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-yellow-500">✓</span> إدارة الصلاحيات
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="border-t border-slate-700 bg-slate-800/50 backdrop-blur mt-20">
-        <div className="max-w-7xl mx-auto px-6 py-8 text-center text-slate-400">
-          <p>© 2026 منصة ALCPT الذكية - قاعدة الملك فهد الجوية</p>
-        </div>
-      </div>
+      <button class="btn btn-primary btn-block" onclick="doStudentLogin()"><i class="fa-solid fa-right-to-bracket"></i> دخول</button>
     </div>
-  );
-}
-</pre>
-            </div>
-        </div>
 
-        <div class="file-section" id="client-src-pages-Login-tsx">
-            <div class="file-header">
-                <span>صفحة Login - client/src/pages/Login.tsx</span>
-                <button class="copy-btn" onclick="copyCode('client-src-pages-Login-tsx-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="client-src-pages-Login-tsx-code">import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import { getLoginUrl } from "@/const";
-import { useLocation } from "wouter";
-import { useEffect } from "react";
-
-export default function Login() {
-  const { user, loading } = useAuth();
-  const [, navigate] = useLocation();
-
-  useEffect(() => {
-    if (user) {
-      // Redirect based on role
-      if (user.role === "student") {
-        navigate("/student");
-      } else if (user.role === "teacher") {
-        navigate("/teacher");
-      } else if (user.role === "admin") {
-        navigate("/admin");
-      }
-    }
-  }, [user, navigate]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        <Spinner />
+    <div id="loginFormAdmin" class="hidden">
+      <button class="back-btn" onclick="switchLoginRole('student')"><i class="fa-solid fa-arrow-right"></i> عودة للمتدرب</button>
+      <div class="form-group">
+        <label class="form-label">اسم المستخدم</label>
+        <input type="text" class="form-control" id="loginUsername" placeholder="أدخل اسم المستخدم">
       </div>
-    );
-  }
-
-  if (user) {
-    return null;
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo & Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-yellow-500/20 mb-4">
-            <svg
-              className="w-8 h-8 text-yellow-500"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" />
-            </svg>
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">منصة ALCPT الذكية</h1>
-          <p className="text-slate-400">قاعدة الملك فهد الجوية</p>
-        </div>
-
-        {/* Login Card */}
-        <Card className="border-slate-700 bg-slate-800">
-          <CardHeader className="space-y-2 text-center">
-            <CardTitle className="text-2xl text-white">تسجيل الدخول</CardTitle>
-            <CardDescription className="text-slate-400">
-              استخدم حسابك للدخول إلى المنصة
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Login Button */}
-            <a href={getLoginUrl()}>
-              <Button
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold h-12 text-lg"
-              >
-                <svg
-                  className="w-5 h-5 ml-2"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 22c-5.523 0-10-4.477-10-10s4.477-10 10-10 10 4.477 10 10-4.477 10-10 10zm3.5-10c0 1.933-1.567 3.5-3.5 3.5s-3.5-1.567-3.5-3.5 1.567-3.5 3.5-3.5 3.5 1.567 3.5 3.5z" />
-                </svg>
-                دخول عبر Manus
-              </Button>
-            </a>
-
-            {/* Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-600"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-slate-800 text-slate-400">أو</span>
-              </div>
-            </div>
-
-            {/* Demo Info */}
-            <div className="bg-slate-700/50 rounded-lg p-4 space-y-2">
-              <p className="text-sm font-semibold text-white">بيانات تجريبية:</p>
-              <div className="space-y-1 text-xs text-slate-300">
-                <p>
-                  <span className="font-semibold">متدرب:</span> الرقم العسكري: 123456
-                </p>
-                <p>
-                  <span className="font-semibold">مدرب:</span> الرقم العسكري: 654321
-                </p>
-                <p>
-                  <span className="font-semibold">مدير:</span> الرقم العسكري: 999999
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Footer */}
-        <div className="mt-8 text-center text-slate-400 text-sm">
-          <p>© 2026 منصة ALCPT الذكية - جميع الحقوق محفوظة</p>
-        </div>
+      <div class="form-group">
+        <label class="form-label">كلمة المرور</label>
+        <input type="password" class="form-control" id="loginPassword" placeholder="أدخل كلمة المرور">
       </div>
+      <button class="btn btn-primary btn-block" onclick="doLogin()"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</button>
     </div>
-  );
+
+    <div id="loginError" class="hidden" style="margin-top:16px; padding:12px; background:var(--danger-bg); border-radius:9px; color:#991b1b; font-size:0.83rem; text-align:center;">
+      <i class="fa-solid fa-circle-exclamation"></i> <span id="loginErrorText">بيانات الدخول غير صحيحة</span>
+    </div>
+  </div>
+</div>
+
+<div id="appMain" class="hidden">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="sidebar-brand-text">
+            <h2>تعلم</h2>
+            <span>Learn Platform</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="user-avatar" id="sideAvatar">م</div>
+          <div class="user-card-info">
+            <span class="user-name" id="sideName">المستخدم</span>
+            <span class="user-role" id="sideRole">مدير</span>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-block" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6); border:1px solid rgba(255,255,255,0.08);" onclick="doLogout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>تسجيل الخروج</span>
+        </button>
+      </div>
+    </aside>
+    <main class="main-area" id="mainArea"></main>
+  </div>
+</div>
+<div class="mobile-bar" id="mobileBar"></div>
+
+<div class="modal-overlay" id="modalAddTeacher">
+  <div class="modal-box">
+    <div class="modal-title"><i class="fa-solid fa-user-plus"></i> إضافة معلم جديد</div>
+    <div class="form-group"><label class="form-label">الاسم الكامل</label><input type="text" class="form-control" id="tName"></div>
+    <div class="form-group"><label class="form-label">الرقم الوظيفي</label><input type="text" class="form-control" id="tEmpId"></div>
+    <div class="form-group"><label class="form-label">النوع</label><select class="form-control" id="tType"><option value="عسكري">عسكري</option><option value="مدني">مدني</option></select></div>
+    <div class="form-group"><label class="form-label">رقم الجوال</label><input type="text" class="form-control" id="tPhone"></div>
+    <div class="form-group"><label class="form-label">اسم المستخدم</label><input type="text" class="form-control" id="tUsername"></div>
+    <div class="form-group"><label class="form-label">كلمة المرور</label><input type="password" class="form-control" id="tPassword"></div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="saveTeacher()"><i class="fa-solid fa-check"></i> حفظ</button>
+      <button class="btn btn-outline" onclick="closeModal('modalAddTeacher')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalAddAdmin">
+  <div class="modal-box">
+    <div class="modal-title"><i class="fa-solid fa-shield-halved"></i> إضافة مستخدم إدارة</div>
+    <div class="form-group"><label class="form-label">الاسم</label><input type="text" class="form-control" id="aName"></div>
+    <div class="form-group"><label class="form-label">اسم المستخدم</label><input type="text" class="form-control" id="aUsername"></div>
+    <div class="form-group"><label class="form-label">كلمة المرور</label><input type="password" class="form-control" id="aPassword"></div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="saveAdmin()"><i class="fa-solid fa-check"></i> حفظ</button>
+      <button class="btn btn-outline" onclick="closeModal('modalAddAdmin')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalChangePass">
+  <div class="modal-box">
+    <div class="modal-title"><i class="fa-solid fa-key"></i> تغيير كلمة المرور</div>
+    <div class="form-group"><label class="form-label">كلمة المرور الحالية</label><input type="password" class="form-control" id="cpOld"></div>
+    <div class="form-group"><label class="form-label">كلمة المرور الجديدة</label><input type="password" class="form-control" id="cpNew"></div>
+    <div class="form-group"><label class="form-label">تأكيد كلمة المرور الجديدة</label><input type="password" class="form-control" id="cpConfirm"></div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="changePassword()"><i class="fa-solid fa-check"></i> تغيير</button>
+      <button class="btn btn-outline" onclick="closeModal('modalChangePass')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalAddStudent">
+  <div class="modal-box">
+    <div class="modal-title"><i class="fa-solid fa-user-graduate"></i> إضافة متدرب</div>
+    <div class="form-group"><label class="form-label">الرقم العسكري</label><input type="text" class="form-control" id="sNewMilId"></div>
+    <div class="form-group"><label class="form-label">الاسم الكامل</label><input type="text" class="form-control" id="sNewName"></div>
+    <div class="form-group"><label class="form-label">الدرجة الحالية</label><input type="number" class="form-control" id="sNewScore" min="0" max="100"></div>
+    <div class="form-group"><label class="form-label">الدرجة المستهدفة</label><input type="number" class="form-control" id="sNewTarget" min="0" max="100" value="60"></div>
+    <div class="form-group"><label class="form-label">نقطة الضعف</label><select class="form-control" id="sNewWeak"><option>Grammar</option><option>Listening</option><option>Vocabulary</option><option>Reading</option></select></div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="saveStudent()"><i class="fa-solid fa-check"></i> حفظ</button>
+      <button class="btn btn-outline" onclick="closeModal('modalAddStudent')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalAddQuestion">
+  <div class="modal-box" style="max-width: 600px;">
+    <div class="modal-title"><i class="fa-solid fa-circle-question"></i> إضافة سؤال</div>
+    <div class="form-group"><label class="form-label">نص السؤال (English)</label><textarea class="form-control" id="qText" rows="2" style="direction:ltr; text-align:left;"></textarea></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div class="form-group"><label class="form-label">A</label><input type="text" class="form-control" id="qA" style="direction:ltr;"></div>
+      <div class="form-group"><label class="form-label">B</label><input type="text" class="form-control" id="qB" style="direction:ltr;"></div>
+      <div class="form-group"><label class="form-label">C</label><input type="text" class="form-control" id="qC" style="direction:ltr;"></div>
+      <div class="form-group"><label class="form-label">D</label><input type="text" class="form-control" id="qD" style="direction:ltr;"></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+      <div class="form-group"><label class="form-label">الإجابة</label><select class="form-control" id="qCorrect"><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="form-group"><label class="form-label">المهارة</label><select class="form-control" id="qSkill"><option>Grammar</option><option>Listening</option><option>Vocabulary</option><option>Reading</option></select></div>
+      <div class="form-group"><label class="form-label">المستوى</label><select class="form-control" id="qDiff"><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">شرح الإجابة (اختياري / Explanation)</label>
+      <textarea class="form-control" id="qExp" rows="2" placeholder="أضف شرحاً يوضح سبب الإختيار الصحيح..."></textarea>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="saveQuestion()"><i class="fa-solid fa-check"></i> حفظ</button>
+      <button class="btn btn-outline" onclick="closeModal('modalAddQuestion')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyCl2fsg_54wwc79LQtEGkQfMRLaTBC8Czk",
+  authDomain: "waleed2-fb7de.firebaseapp.com",
+  databaseURL: "https://waleed2-fb7de-default-rtdb.firebaseio.com",
+  projectId: "waleed2-fb7de",
+  storageBucket: "waleed2-fb7de.firebasestorage.app",
+  messagingSenderId: "251657793166",
+  appId: "1:251657793166:web:930d1274313b5fc4d1e3df"
+});
+const db = firebase.database();
+
+let currentUser = null;
+let loginRole = 'student';
+let students = [];
+let questions = [];
+let results = [];
+let teachers = [];
+let admins = [];
+let examQs = [];
+let examIdx = 0;
+let examAnswers = {};
+let examTimer = null;
+
+function initDefaultAdmin() {
+  db.ref('learn_admins/admin').once('value', snap => {
+    if (!snap.exists()) db.ref('learn_admins/admin').set({ username: 'admin', password: '123', name: 'المدير العام', createdAt: Date.now() });
+  });
 }
-</pre>
-            </div>
-        </div>
+initDefaultAdmin();
 
-        <div class="file-section" id="client-src-pages-StudentDashboard-tsx">
-            <div class="file-header">
-                <span>لوحة الطالب - client/src/pages/StudentDashboard.tsx</span>
-                <button class="copy-btn" onclick="copyCode('client-src-pages-StudentDashboard-tsx-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="client-src-pages-StudentDashboard-tsx-code">import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { trpc } from "@/lib/trpc";
-import { useLocation } from "wouter";
-import { Spinner } from "@/components/ui/spinner";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from "recharts";
+function loadAllData() {
+  db.ref('learn_students').on('value', s => { students = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
+  db.ref('learn_questions').on('value', s => { questions = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
+  db.ref('learn_results').on('value', s => { results = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
+  db.ref('learn_teachers').on('value', s => { teachers = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
+  db.ref('learn_admins').on('value', s => { admins = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
+}
 
-export default function StudentDashboard() {
-  const { user, logout } = useAuth();
-  const [, navigate] = useLocation();
+function switchLoginRole(role) {
+  loginRole = role;
+  const title = document.getElementById('loginMainTitle');
+  if(role === 'admin') title.innerHTML = 'دخول الإدارة';
+  else if(role === 'teacher') title.innerHTML = 'دخول المعلم';
+  else title.innerHTML = 'منصة تعلم';
+  document.getElementById('loginFormAdmin').classList.toggle('hidden', role === 'student');
+  document.getElementById('loginFormStudent').classList.toggle('hidden', role !== 'student');
+  document.getElementById('loginError').classList.add('hidden');
+}
 
-  // Fetch student profile
-  const { data: profile, isLoading: profileLoading } = trpc.students.getProfile.useQuery();
+function doLogin() {
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  if (!username || !password) { showLoginError('الرجاء تعبئة جميع الحقول'); return; }
+  const ref = loginRole === 'admin' ? 'learn_admins' : 'learn_teachers';
+  db.ref(ref).once('value', snap => {
+    const data = snap.val();
+    if (!data) { showLoginError('بيانات الدخول غير صحيحة'); return; }
+    const found = Object.values(data).find(u => u.username === username && u.password === password);
+    if (found) { currentUser = { ...found, role: loginRole }; enterApp(); } 
+    else { showLoginError('اسم المستخدم أو كلمة المرور غير صحيحة'); }
+  });
+}
 
-  // Fetch exam results
-  const { data: examResults = [], isLoading: resultsLoading } = trpc.students.getExamResults.useQuery();
+function doStudentLogin() {
+  const milId = document.getElementById('loginMilId').value.trim();
+  if (!milId) { showLoginError('الرجاء إدخال الرقم العسكري'); return; }
+  db.ref('learn_students').once('value', snap => {
+    const data = snap.val();
+    if (!data) { showLoginError('الرقم العسكري غير مسجل'); return; }
+    const entry = Object.entries(data).find(([k,v]) => v.milId === milId);
+    if (entry) { currentUser = { id: entry[0], ...entry[1], role: 'student' }; enterApp(); } 
+    else { showLoginError('الرقم العسكري غير مسجل في النظام'); }
+  });
+}
 
-  // Fetch performance history
-  const { data: performanceHistory = [], isLoading: historyLoading } = trpc.students.getPerformanceHistory.useQuery();
+function showLoginError(msg) {
+  document.getElementById('loginErrorText').textContent = msg;
+  document.getElementById('loginError').classList.remove('hidden');
+  setTimeout(() => document.getElementById('loginError').classList.add('hidden'), 4000);
+}
 
-  // Fetch student errors
-  const { data: errors = [], isLoading: errorsLoading } = trpc.students.getErrors.useQuery();
+function enterApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appMain').classList.remove('hidden');
+  document.getElementById('sideName').textContent = currentUser.name || currentUser.username;
+  document.getElementById('sideRole').textContent = currentUser.role === 'admin' ? 'إدارة' : currentUser.role === 'teacher' ? 'المعلم' : 'متدرب';
+  document.getElementById('sideAvatar').textContent = (currentUser.name || currentUser.username || 'م').charAt(0);
+  buildSidebar();
+  loadAllData();
+  goTo(currentUser.role === 'student' ? 'myDash' : 'dashboard');
+}
 
-  const isLoading = profileLoading || resultsLoading || historyLoading || errorsLoading;
+function doLogout() {
+  currentUser = null;
+  document.getElementById('appMain').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginMilId').value = '';
+  switchLoginRole('student');
+}
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner />
-      </div>
-    );
+function buildSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  const mob = document.getElementById('mobileBar');
+  let items = [];
+  if (currentUser.role === 'admin') {
+    items = [
+      { id:'dashboard', icon:'fa-grid-2', label:'لوحة التحكم' },
+      { id:'users', icon:'fa-users-gear', label:'المستخدمين', section:'الإدارة' },
+      { id:'students', icon:'fa-user-graduate', label:'المتدربين' },
+      { id:'questions', icon:'fa-database', label:'بنك الأسئلة', section:'التعليم' },
+      { id:'exams', icon:'fa-pen-to-square', label:'الاختبارات' },
+      { id:'kpi', icon:'fa-chart-line', label:'مؤشرات الأداء', section:'التحليلات' },
+      { id:'reports', icon:'fa-file-pdf', label:'التقارير' },
+      { id:'import', icon:'fa-file-excel', label:'استيراد وتصدير', section:'أدوات' },
+      { id:'settings', icon:'fa-gear', label:'الإعدادات' },
+    ];
+  } else if (currentUser.role === 'teacher') {
+    items = [
+      { id:'dashboard', icon:'fa-grid-2', label:'لوحة التحكم' },
+      { id:'students', icon:'fa-user-graduate', label:'المتدربين', section:'التعليم' },
+      { id:'questions', icon:'fa-database', label:'بنك الأسئلة' },
+      { id:'exams', icon:'fa-pen-to-square', label:'الاختبارات' },
+      { id:'kpi', icon:'fa-chart-line', label:'مؤشرات الأداء', section:'التحليلات' },
+      { id:'reports', icon:'fa-file-pdf', label:'التقارير' }
+    ];
+  } else {
+    items = [
+      { id:'myDash', icon:'fa-grid-2', label:'لوحتي' },
+      { id:'myExam', icon:'fa-pen-to-square', label:'الاختبارات' },
+      { id:'myResults', icon:'fa-chart-simple', label:'نتائجي' },
+    ];
   }
+  let html = '';
+  items.forEach((item, i) => {
+    if (item.section) html += `<div class="nav-section-title">${item.section}</div>`;
+    html += `<div class="nav-item ${i===0?'active':''}" data-page="${item.id}" onclick="goTo('${item.id}')"><i class="fa-solid ${item.icon}"></i><span>${item.label}</span></div>`;
+  });
+  nav.innerHTML = html;
+  const mobItems = items.filter((_,i) => i < 5);
+  mob.innerHTML = mobItems.map((item,i) => `<div class="mob-item ${i===0?'active':''}" data-page="${item.id}" onclick="goTo('${item.id}')"><i class="fa-solid ${item.icon}"></i><span>${item.label}</span></div>`).join('');
+}
 
-  if (!profile) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">لم يتم العثور على ملف المتدرب</p>
-          <Button onClick={() => logout()}>تسجيل الخروج</Button>
-        </div>
-      </div>
-    );
-  }
+function goTo(page) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mob-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll(`[data-page="${page}"]`).forEach(n => n.classList.add('active'));
+  renderPage(page);
+}
 
-  // Calculate statistics
-  const averageScore = examResults.length > 0
-    ? (examResults.reduce((sum, r) => sum + Number(r.score), 0) / examResults.length).toFixed(2)
-    : "0";
+function renderPage(page) {
+  const main = document.getElementById('mainArea');
+  const renderers = { dashboard: renderDashboard, users: renderUsers, students: renderStudents, questions: renderQuestions, exams: renderExams, kpi: renderKPI, reports: renderReports, import: renderImport, settings: renderSettings, myDash: renderStudentDash, myExam: renderStudentExam, myResults: renderStudentResults };
+  if (renderers[page]) renderers[page](main);
+}
+function refreshUI() { const active = document.querySelector('.nav-item.active'); if (active) renderPage(active.dataset.page); }
 
-  const highestScore = examResults.length > 0
-    ? Math.max(...examResults.map((r) => Number(r.score)))
-    : 0;
+// ===== التعديل 1: إضافة عمود الشرح لملف العينة =====
+function exportTemplate() {
+  const ws_data = [
+    ["Question", "A", "B", "C", "D", "Correct Answer", "Skill", "Difficulty", "Explanation"],
+    ["The pilot _____ the aircraft.", "flies", "flew", "flying", "will fly", "A", "Grammar", "Medium", "The subject 'pilot' is singular, so we use 'flies' in present simple."]
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(ws_data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Template");
+  XLSX.writeFile(wb, "Learn_Questions_Template.xlsx");
+}
 
-  const lowestScore = examResults.length > 0
-    ? Math.min(...examResults.map((r) => Number(r.score)))
-    : 0;
+function renderDashboard(el) {
+  const total = students.length;
+  const avg = total > 0 ? Math.round(students.reduce((a,s) => a + (s.mockScore||0), 0) / total) : 0;
+  const passed = students.filter(s => (s.mockScore||0) >= (s.target||60)).length;
+  const passRate = total > 0 ? Math.round(passed/total*100) : 0;
+  const mri = Math.round((passRate + avg) / 2);
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">لوحة التحكم</h1><p class="page-desc">نظرة عامة على أداء المتدربين</p></div><button class="btn btn-primary" onclick="goTo('exams')"><i class="fa-solid fa-play"></i> بدء اختبار جديد</button></div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-icon" style="background:var(--info-bg); color:var(--info);"><i class="fa-solid fa-users"></i></div><div class="stat-num">${total}</div><div class="stat-text">إجمالي المتدربين</div></div>
+      <div class="stat-box"><div class="stat-icon" style="background:var(--success-bg); color:var(--success);"><i class="fa-solid fa-chart-simple"></i></div><div class="stat-num">${avg}</div><div class="stat-text">متوسط الدرجات</div></div>
+      <div class="stat-box"><div class="stat-icon" style="background:var(--warning-bg); color:var(--warning);"><i class="fa-solid fa-bullseye"></i></div><div class="stat-num">${passRate}%</div><div class="stat-text">نسبة النجاح</div></div>
+      <div class="stat-box"><div class="stat-icon" style="background:rgba(200,164,21,0.1); color:var(--gold);"><i class="fa-solid fa-shield-halved"></i></div><div class="stat-num">${mri}</div><div class="stat-text">مؤشر الجاهزية (MRI)</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card"><div class="card-header"><h3><i class="fa-solid fa-chart-area"></i> تطور الأداء</h3></div><div class="card-body"><div class="chart-box"><canvas id="chartPerf"></canvas></div></div></div>
+      <div class="card"><div class="card-header"><h3><i class="fa-solid fa-chart-pie"></i> توزيع نقاط الضعف</h3></div><div class="card-body"><div class="chart-box"><canvas id="chartSkills"></canvas></div></div></div>
+    </div>
+  `;
+  setTimeout(() => { initPerfChart(); initSkillChart(); }, 100);
+}
 
-  const passedCount = examResults.filter((r) => r.isPassed).length;
-  const successRate = examResults.length > 0
-    ? ((passedCount / examResults.length) * 100).toFixed(1)
-    : "0";
+function initPerfChart() {
+  const ctx = document.getElementById('chartPerf'); if (!ctx) return;
+  const labels = students.slice(-12).map(s => s.name || 'متدرب');
+  const data = students.slice(-12).map(s => s.mockScore || 0);
+  new Chart(ctx, { type: 'line', data: { labels, datasets: [{ label: 'الدرجة', data, borderColor: '#c8a415', backgroundColor: 'rgba(200,164,21,0.08)', fill: true, tension: 0.4, pointBackgroundColor: '#c8a415', pointRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } } });
+}
+function initSkillChart() {
+  const ctx = document.getElementById('chartSkills'); if (!ctx) return;
+  const sk = { Grammar:0, Listening:0, Vocabulary:0, Reading:0 };
+  students.forEach(s => { if (s.weakness && sk[s.weakness] !== undefined) sk[s.weakness]++; });
+  new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(sk), datasets: [{ data: Object.values(sk), backgroundColor: ['#c8a415','#0284c7','#059669','#dc2626'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } } });
+}
 
-  // Prepare chart data
-  const chartData = performanceHistory
-    .slice()
-    .reverse()
-    .map((ph) => ({
-      date: new Date(ph.completedAt).toLocaleDateString("ar-SA"),
-      score: Number(ph.score),
-      grammar: Number(ph.grammarScore),
-      listening: Number(ph.listeningScore),
-      vocabulary: Number(ph.vocabularyScore),
-      reading: Number(ph.readingScore),
+function renderUsers(el) {
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">إدارة المستخدمين</h1><p class="page-desc">إدارة حسابات المعلمين والإدارة</p></div><div style="display:flex; gap:10px;"><button class="btn btn-primary" onclick="openModal('modalAddTeacher')"><i class="fa-solid fa-user-plus"></i> إضافة معلم</button><button class="btn btn-secondary" onclick="openModal('modalAddAdmin')"><i class="fa-solid fa-shield-halved"></i> إضافة إدارة</button></div></div>
+    <div class="card" style="margin-bottom:20px;"><div class="card-header"><h3><i class="fa-solid fa-chalkboard-user"></i> المعلمون (${teachers.length})</h3></div><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>الاسم</th><th>الرقم الوظيفي</th><th>النوع</th><th>الجوال</th><th>اسم المستخدم</th><th>إجراءات</th></tr></thead><tbody>${teachers.length === 0 ? '<tr><td colspan="6" class="empty-state"><i class="fa-solid fa-inbox"></i><p>لا يوجد معلمون</p></td></tr>' : teachers.map(t => `<tr><td><strong>${t.name}</strong></td><td>${t.empId || '-'}</td><td><span class="badge ${t.type==='عسكري'?'badge-navy':'badge-info'}">${t.type || '-'}</span></td><td>${t.phone || '-'}</td><td><code>${t.username}</code></td><td><button class="btn btn-sm btn-danger" onclick="deleteTeacher('${t.id}')"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('')}</tbody></table></div></div>
+    <div class="card"><div class="card-header"><h3><i class="fa-solid fa-shield-halved"></i> حسابات الإدارة (${admins.length})</h3></div><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>الاسم</th><th>اسم المستخدم</th><th>إجراءات</th></tr></thead><tbody>${admins.map(a => `<tr><td><strong>${a.name || a.username}</strong></td><td><code>${a.username}</code></td><td>${a.username !== 'admin' ? `<button class="btn btn-sm btn-danger" onclick="deleteAdmin('${a.id}')"><i class="fa-solid fa-trash"></i></button>` : '<span class="badge badge-navy">رئيسي</span>'}</td></tr>`).join('')}</tbody></table></div></div>
+  `;
+}
+
+function renderStudents(el) {
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">المتدربين</h1><p class="page-desc">إدارة بيانات المتدربين ومتابعة أدائهم</p></div><button class="btn btn-primary" onclick="openModal('modalAddStudent')"><i class="fa-solid fa-plus"></i> إضافة متدرب</button></div>
+    <div class="card"><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>الرقم العسكري</th><th>الاسم</th><th>الدرجة</th><th>الهدف</th><th>نقطة الضعف</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${students.length === 0 ? '<tr><td colspan="7"><div class="empty-state"><i class="fa-solid fa-inbox"></i><p>لا يوجد متدربين</p></div></td></tr>' : students.map(s => { const pass = (s.mockScore||0) >= (s.target||60); return `<tr><td><strong>${s.milId}</strong></td><td>${s.name}</td><td><strong style="color:${pass?'var(--success)':'var(--danger)'}">${s.mockScore||0}</strong></td><td>${s.target||60}</td><td><span class="badge badge-info">${s.weakness||'-'}</span></td><td><span class="badge ${pass?'badge-success':'badge-danger'}">${pass?'ناجح':'يحتاج دعم'}</span></td><td><button class="btn btn-sm btn-danger" onclick="deleteStudent('${s.id}')"><i class="fa-solid fa-trash"></i></button></td></tr>`; }).join('')}</tbody></table></div></div>
+  `;
+}
+
+function renderQuestions(el) {
+  const sk = { Grammar:0, Listening:0, Vocabulary:0, Reading:0 };
+  questions.forEach(q => { const s = q.skill||q.Skill; if (sk[s]!==undefined) sk[s]++; });
+  const isAdmin = currentUser.role === 'admin';
+  const actionsHtml = isAdmin ? `<div style="display:flex; gap:10px;"><button class="btn btn-primary" onclick="openModal('modalAddQuestion')"><i class="fa-solid fa-plus"></i> إضافة سؤال</button><button class="btn btn-secondary" onclick="goTo('import')"><i class="fa-solid fa-file-excel"></i> استيراد</button><button class="btn btn-outline" onclick="exportTemplate()"><i class="fa-solid fa-download"></i> تصدير عينة</button></div>` : '';
+  const thDelete = isAdmin ? `<th>حذف</th>` : '';
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">بنك الأسئلة</h1><p class="page-desc">إدارة الأسئلة حسب المهارة والمستوى (${questions.length} سؤال)</p></div>${actionsHtml}</div>
+    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);"><div class="stat-box" style="text-align:center;"><div class="stat-num">${sk.Grammar}</div><div class="stat-text">Grammar</div></div><div class="stat-box" style="text-align:center;"><div class="stat-num">${sk.Listening}</div><div class="stat-text">Listening</div></div><div class="stat-box" style="text-align:center;"><div class="stat-num">${sk.Vocabulary}</div><div class="stat-text">Vocabulary</div></div><div class="stat-box" style="text-align:center;"><div class="stat-num">${sk.Reading}</div><div class="stat-text">Reading</div></div></div>
+    <div class="card"><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>#</th><th>السؤال</th><th>المهارة</th><th>المستوى</th><th>الإجابة</th>${thDelete}</tr></thead><tbody>${questions.length===0 ? `<tr><td colspan="${isAdmin?6:5}"><div class="empty-state"><i class="fa-solid fa-database"></i><p>بنك الأسئلة فارغ</p></div></td></tr>` : questions.slice(0,50).map((q,i) => `<tr><td>${i+1}</td><td style="direction:ltr; text-align:left; max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${q.questionText||q.Question||''}</td><td><span class="badge badge-info">${q.skill||q.Skill||''}</span></td><td><span class="badge badge-warning">${q.difficulty||q.Difficulty||''}</span></td><td><strong>${q.correctAnswer||q['Correct Answer']||''}</strong></td>${isAdmin ? `<td><button class="btn btn-sm btn-danger" onclick="deleteQuestion('${q.id}')"><i class="fa-solid fa-trash"></i></button></td>` : ''}</tr>`).join('')}</tbody></table></div></div>
+  `;
+}
+
+function renderExams(el) {
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">الاختبارات</h1><p class="page-desc">إنشاء وإدارة اختبارات ALCPT</p></div></div>
+    <div class="card" style="text-align:center; padding:60px 30px;">
+      <i class="fa-solid fa-clipboard-check" style="font-size:3.5rem; color:var(--gold); margin-bottom:20px;"></i>
+      <h3 style="font-weight:800; color:var(--navy); margin-bottom:8px;">اختبار ALCPT محاكاة</h3>
+      <p style="color:var(--text-muted); margin-bottom:28px;">اختبار تكيفي يقيس المهارات اللغوية الأربع</p>
+      <div style="display:flex; gap:30px; justify-content:center; margin-bottom:30px;"><div><strong style="font-size:1.4rem; color:var(--navy);">${Math.min(50, questions.length)}</strong><br><small style="color:var(--text-muted);">سؤال</small></div><div><strong style="font-size:1.4rem; color:var(--navy);">30</strong><br><small style="color:var(--text-muted);">دقيقة</small></div><div><strong style="font-size:1.4rem; color:var(--navy);">100</strong><br><small style="color:var(--text-muted);">درجة</small></div></div>
+      <button class="btn btn-primary" style="font-size:1rem; padding:14px 36px;" onclick="beginExam()"><i class="fa-solid fa-play"></i> بدء الاختبار</button>
+    </div>
+    <div id="examArea"></div>
+  `;
+}
+
+function renderKPI(el) {
+  const total = students.length; const avg = total > 0 ? Math.round(students.reduce((a,s) => a+(s.mockScore||0), 0)/total) : 0; const passed = students.filter(s => (s.mockScore||0) >= (s.target||60)).length; const passRate = total > 0 ? Math.round(passed/total*100) : 0; const mri = Math.round((passRate + avg) / 2);
+  const atRisk = students.filter(s => (s.mockScore||0) < (s.target||60) * 0.7);
+  const sk = { Grammar:0, Listening:0, Vocabulary:0, Reading:0 }; students.forEach(s => { if (s.weakness && sk[s.weakness]!==undefined) sk[s.weakness]++; });
+  const weakest = Object.entries(sk).sort((a,b)=>b[1]-a[1])[0];
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">مؤشرات الأداء (KPI)</h1><p class="page-desc">تحليل شامل للجاهزية اللغوية</p></div></div>
+    <div class="stats-row" style="grid-template-columns: repeat(3, 1fr);"><div class="stat-box" style="text-align:center;"><div class="ring-wrap"><svg width="110" height="110"><circle cx="55" cy="55" r="48" fill="none" stroke="#e2e8f0" stroke-width="7"/><circle cx="55" cy="55" r="48" fill="none" stroke="var(--gold)" stroke-width="7" stroke-dasharray="301" stroke-dashoffset="${301 - (301*mri/100)}" stroke-linecap="round"/></svg><div class="ring-val">${mri}</div></div><div class="stat-text" style="margin-top:12px; font-weight:700;">Mission Readiness Index</div></div><div class="stat-box"><div class="stat-icon" style="background:var(--danger-bg); color:var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="stat-num">${atRisk.length}</div><div class="stat-text">طلاب معرضون للفشل</div></div><div class="stat-box"><div class="stat-icon" style="background:var(--info-bg); color:var(--info);"><i class="fa-solid fa-brain"></i></div><div class="stat-num" style="font-size:1.3rem;">${weakest ? weakest[0] : '-'}</div><div class="stat-text">أضعف المهارات</div></div></div>
+    <div class="grid-2">
+      <div class="card"><div class="card-header"><h3><i class="fa-solid fa-triangle-exclamation"></i> الطلاب المعرضون للفشل</h3></div><div class="card-body">${atRisk.length === 0 ? '<div class="empty-state"><i class="fa-solid fa-check-circle"></i><p>لا يوجد طلاب معرضون للفشل</p></div>' : atRisk.map(s => `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:var(--danger-bg); border-radius:8px; margin-bottom:8px;"><div><strong>${s.name}</strong> <span style="color:#999; font-size:0.8rem;">(${s.milId})</span></div><span class="badge badge-danger">${s.mockScore||0} / ${s.target||60}</span></div>`).join('')}</div></div>
+      <div class="card"><div class="card-header"><h3><i class="fa-solid fa-chart-bar"></i> توزيع نقاط الضعف</h3></div><div class="card-body"><div class="chart-box"><canvas id="chartKPI"></canvas></div></div></div>
+    </div>
+  `;
+  setTimeout(() => { const ctx = document.getElementById('chartKPI'); if (ctx) new Chart(ctx, { type: 'bar', data: { labels: Object.keys(sk), datasets: [{ data: Object.values(sk), backgroundColor: ['#c8a415','#0284c7','#059669','#dc2626'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } }); }, 100);
+}
+
+function renderReports(el) {
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">التقارير</h1><p class="page-desc">إنشاء تقارير PDF احترافية</p></div></div>
+    <div class="card"><div class="card-header"><h3><i class="fa-solid fa-file-pdf"></i> إنشاء تقرير</h3></div><div class="card-body"><div class="form-group"><label class="form-label">اختر المتدرب</label><select class="form-control" id="rptSelect"><option value="">-- اختر --</option>${students.map(s=>`<option value="${s.id}">${s.name} (${s.milId})</option>`).join('')}</select></div><button class="btn btn-primary" onclick="genReport()"><i class="fa-solid fa-file-pdf"></i> إنشاء التقرير</button></div></div>
+    <div id="rptOutput" style="margin-top:20px;"></div>
+  `;
+}
+
+function genReport() {
+  const id = document.getElementById('rptSelect').value; if (!id) { toast('اختر متدرب أولاً', 'warning'); return; } const s = students.find(x => x.id === id); if (!s) return; const pass = (s.mockScore||0) >= (s.target||60);
+  document.getElementById('rptOutput').innerHTML = `
+    <div class="card"><div class="card-body" id="printArea" style="direction:rtl;">
+      <div style="text-align:center; border-bottom:3px solid var(--gold); padding-bottom:20px; margin-bottom:20px;"><h2 style="color:var(--navy); font-weight:900;">تقرير الأداء اللغوي - منصة تعلم</h2><p style="color:var(--text-muted);">ALCPT Performance Report</p></div>
+      <table style="width:100%; border-collapse:collapse; margin-bottom:20px;"><tr><td style="padding:12px; font-weight:700; background:#f8fafc; width:140px; border:1px solid #e2e8f0;">الاسم</td><td style="padding:12px; border:1px solid #e2e8f0;">${s.name}</td></tr><tr><td style="padding:12px; font-weight:700; background:#f8fafc; border:1px solid #e2e8f0;">الرقم العسكري</td><td style="padding:12px; border:1px solid #e2e8f0;">${s.milId}</td></tr><tr><td style="padding:12px; font-weight:700; background:#f8fafc; border:1px solid #e2e8f0;">الدرجة</td><td style="padding:12px; border:1px solid #e2e8f0;"><strong style="font-size:1.4rem; color:${pass?'var(--success)':'var(--danger)'};">${s.mockScore||0}</strong> / 100</td></tr><tr><td style="padding:12px; font-weight:700; background:#f8fafc; border:1px solid #e2e8f0;">الهدف</td><td style="padding:12px; border:1px solid #e2e8f0;">${s.target||60}</td></tr><tr><td style="padding:12px; font-weight:700; background:#f8fafc; border:1px solid #e2e8f0;">الحالة</td><td style="padding:12px; border:1px solid #e2e8f0;">${pass?'ناجح ✓':'يحتاج دعم ✗'}</td></tr><tr><td style="padding:12px; font-weight:700; background:#f8fafc; border:1px solid #e2e8f0;">نقطة الضعف</td><td style="padding:12px; border:1px solid #e2e8f0;">${s.weakness||'-'}</td></tr></table>
+      <div style="padding:16px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0;"><strong>التوصيات:</strong><p style="margin-top:8px; color:var(--text-muted);">يُنصح بالتركيز على مهارة <strong>${s.weakness||'Grammar'}</strong> مع زيادة ساعات التدريب. ${!pass ? 'المتدرب يحتاج خطة دعم مكثفة للوصول للدرجة المستهدفة.' : 'أداء المتدرب جيد ويُنصح بالاستمرار.'}</p></div>
+      <div style="text-align:center; margin-top:20px;"><button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة / حفظ PDF</button></div>
+    </div></div>
+  `;
+}
+
+function renderImport(el) {
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">استيراد وتصدير البيانات</h1><p class="page-desc">رفع وتنزيل ملفات Excel لأسئلة المنصة</p></div><button class="btn btn-outline" onclick="exportTemplate()"><i class="fa-solid fa-download"></i> تصدير عينة Excel</button></div>
+    <div class="card"><div class="card-header"><h3><i class="fa-solid fa-file-excel"></i> رفع ملف Excel</h3></div><div class="card-body"><div id="dropArea" style="border:3px dashed #cbd5e1; border-radius:16px; padding:50px; text-align:center; cursor:pointer; transition:all 0.3s;" onclick="document.getElementById('xlFile').click()"><i class="fa-solid fa-cloud-arrow-up" style="font-size:3rem; color:var(--gold); margin-bottom:12px;"></i><h4 style="color:var(--navy); margin-bottom:6px;">اسحب الملف هنا أو انقر للاختيار</h4><p style="color:var(--text-muted); font-size:0.83rem;">يدعم .xlsx و .xls</p><input type="file" id="xlFile" accept=".xlsx,.xls" style="display:none;" onchange="readExcel(event)"></div><div id="xlPreview" class="hidden" style="margin-top:20px;"></div></div></div>
+    <div class="card" style="margin-top:20px;"><div class="card-header"><h3>تنسيق الملف المطلوب</h3></div><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>العمود</th><th>الوصف</th><th>مثال</th></tr></thead><tbody><tr><td><strong>Question</strong></td><td>نص السؤال</td><td>The pilot _____ the aircraft.</td></tr><tr><td><strong>A, B, C, D</strong></td><td>الخيارات</td><td>flies, flew, flying, will fly</td></tr><tr><td><strong>Correct Answer</strong></td><td>الإجابة الصحيحة</td><td>A</td></tr><tr><td><strong>Skill</strong></td><td>المهارة</td><td>Grammar</td></tr><tr><td><strong>Difficulty</strong></td><td>المستوى</td><td>Medium</td></tr><tr><td><strong>Explanation</strong></td><td>الشرح (اختياري)</td><td>The subject is singular...</td></tr></tbody></table></div></div>
+  `;
+  setTimeout(setupDrop, 100);
+}
+
+let xlData = [];
+// ===== التعديل 2: قراءة عمود الشرح من الإكسل =====
+function readExcel(e) {
+  const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
+  reader.onload = function(ev) {
+    const wb = XLSX.read(ev.target.result, { type: 'binary' });
+    const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+    xlData = data.map(r => ({
+      questionText: r['Question']||r['question']||'',
+      optionA: r['A']||r['Option A']||'',
+      optionB: r['B']||r['Option B']||'',
+      optionC: r['C']||r['Option C']||'',
+      optionD: r['D']||r['Option D']||'',
+      correctAnswer: r['Correct Answer']||r['Answer']||'',
+      skill: r['Skill']||r['skill']||'Grammar',
+      difficulty: r['Difficulty']||r['difficulty']||'Medium',
+      explanation: r['Explanation']||r['explanation']||r['شرح']||''
     }));
-
-  // Get top errors
-  const topErrors = errors.slice(0, 5);
-
-  return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">لوحة المتدرب</h1>
-            <p className="text-slate-300 mt-1">مرحباً بك، {profile.fullName}</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <p className="text-sm text-slate-400">الرقم العسكري</p>
-              <p className="text-xl font-bold">{profile.militaryId}</p>
-            </div>
-            <Button
-              variant="outline"
-              className="border-white text-white hover:bg-white/10"
-              onClick={() => logout()}
-            >
-              تسجيل الخروج
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="border-l-4 border-l-yellow-500">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-slate-600">متوسط الدرجات</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-yellow-600">{averageScore}</div>
-              <p className="text-xs text-slate-500 mt-1">من أصل 100</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-green-500">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-slate-600">أعلى درجة</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-green-600">{highestScore}</div>
-              <p className="text-xs text-slate-500 mt-1">في الاختبارات</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-red-500">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-slate-600">أقل درجة</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-red-600">{lowestScore}</div>
-              <p className="text-xs text-slate-500 mt-1">في الاختبارات</p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-blue-500">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-slate-600">نسبة النجاح</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-blue-600">{successRate}%</div>
-              <p className="text-xs text-slate-500 mt-1">{passedCount} من {examResults.length}</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Tabs */}
-        <Tabs defaultValue="performance" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="performance">الأداء</TabsTrigger>
-            <TabsTrigger value="results">النتائج</TabsTrigger>
-            <TabsTrigger value="errors">الأخطاء المتكررة</TabsTrigger>
-          </TabsList>
-
-          {/* Performance Tab */}
-          <TabsContent value="performance" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>تطور الأداء عبر الزمن</CardTitle>
-                <CardDescription>رسم بياني يوضح تطور درجاتك في الاختبارات المختلفة</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {chartData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={400}>
-                    <LineChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line type="monotone" dataKey="score" stroke="#f59e0b" name="الدرجة الكلية" />
-                      <Line type="monotone" dataKey="grammar" stroke="#3b82f6" name="القواعد" />
-                      <Line type="monotone" dataKey="listening" stroke="#10b981" name="الاستماع" />
-                      <Line type="monotone" dataKey="vocabulary" stroke="#8b5cf6" name="المفردات" />
-                      <Line type="monotone" dataKey="reading" stroke="#ef4444" name="القراءة" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <div className="flex items-center justify-center h-64 bg-slate-50 rounded-lg">
-                    <p className="text-slate-500">لا توجد بيانات لعرضها</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Results Tab */}
-          <TabsContent value="results" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>نتائج الاختبارات</CardTitle>
-                <CardDescription>جميع محاولاتك في الاختبارات</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {examResults.length > 0 ? (
-                  <div className="space-y-3">
-                    {examResults.map((result, idx) => (
-                      <div key={result.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50">
-                        <div>
-                          <p className="font-semibold">الاختبار #{examResults.length - idx}</p>
-                          <p className="text-sm text-slate-500">
-                            {new Date(result.completedAt).toLocaleDateString("ar-SA")}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className={`text-2xl font-bold ${result.isPassed ? "text-green-600" : "text-red-600"}`}>
-                            {result.score}
-                          </p>
-                          <p className="text-sm text-slate-500">
-                            {result.correctAnswers}/{result.totalQuestions}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center h-64 bg-slate-50 rounded-lg">
-                    <p className="text-slate-500">لم تأخذ أي اختبارات بعد</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Errors Tab */}
-          <TabsContent value="errors" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>الأخطاء المتكررة</CardTitle>
-                <CardDescription>الأسئلة التي أخطأت فيها أكثر من مرة</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {topErrors.length > 0 ? (
-                  <div className="space-y-3">
-                    {topErrors.map((error) => (
-                      <div key={error.id} className="flex items-center justify-between p-4 border rounded-lg bg-red-50">
-                        <div>
-                          <p className="font-semibold">السؤال #{error.questionId}</p>
-                          <p className="text-sm text-slate-600">{error.skill}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-lg font-bold text-red-600">{error.wrongCount}</p>
-                          <p className="text-xs text-slate-500">أخطاء من {error.attempts} محاولة</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center h-64 bg-slate-50 rounded-lg">
-                    <p className="text-slate-500">لا توجد أخطاء متكررة</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* Action Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Button
-            size="lg"
-            className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold"
-            onClick={() => navigate("/student/exam")}
-          >
-            بدء اختبار جديد
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-slate-300"
-            onClick={() => navigate("/student/vocabulary")}
-          >
-            تدريب المفردات
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
+    const prev = document.getElementById('xlPreview'); prev.classList.remove('hidden');
+    prev.innerHTML = `<h4 style="font-weight:700; margin-bottom:12px;">معاينة (${xlData.length} سؤال)</h4><div class="table-wrap" style="max-height:300px; overflow-y:auto;"><table class="data-table"><thead><tr><th>السؤال</th><th>A</th><th>B</th><th>C</th><th>D</th><th>الإجابة</th><th>الشرح</th></tr></thead><tbody>${xlData.slice(0,15).map(q=>`<tr><td style="direction:ltr;text-align:left;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${q.questionText}</td><td style="direction:ltr;">${q.optionA}</td><td style="direction:ltr;">${q.optionB}</td><td style="direction:ltr;">${q.optionC}</td><td style="direction:ltr;">${q.optionD}</td><td><strong>${q.correctAnswer}</strong></td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${q.explanation}</td></tr>`).join('')}</tbody></table></div><button class="btn btn-primary" style="margin-top:14px;" onclick="doImport()"><i class="fa-solid fa-check"></i> تأكيد الاستيراد (${xlData.length} سؤال)</button>`;
+    toast(`تم قراءة ${xlData.length} سؤال`, 'success');
+  };
+  reader.readAsBinaryString(file);
 }
-</pre>
-            </div>
-        </div>
 
-        <div class="file-section" id="client-src-pages-TeacherDashboard-tsx">
-            <div class="file-header">
-                <span>لوحة المدرب - client/src/pages/TeacherDashboard.tsx</span>
-                <button class="copy-btn" onclick="copyCode('client-src-pages-TeacherDashboard-tsx-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="client-src-pages-TeacherDashboard-tsx-code">import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { trpc } from "@/lib/trpc";
-import { useLocation } from "wouter";
-import { Spinner } from "@/components/ui/spinner";
-import { useState } from "react";
-import { toast } from "sonner";
-import * as XLSX from "xlsx";
+function doImport() {
+  if (!xlData.length) return; const updates = {};
+  xlData.forEach(q => { updates[db.ref('learn_questions').push().key] = { ...q, createdAt: Date.now() }; });
+  db.ref('learn_questions').update(updates).then(() => { toast(`تم استيراد ${xlData.length} سؤال بنجاح!`, 'success'); xlData = []; goTo('questions'); });
+}
 
-export default function TeacherDashboard() {
-  const { user, logout } = useAuth();
-  const [, navigate] = useLocation();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isImporting, setIsImporting] = useState(false);
+function setupDrop() {
+  const area = document.getElementById('dropArea'); if (!area) return;
+  area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor='var(--gold)'; area.style.background='var(--gold-glow)'; });
+  area.addEventListener('dragleave', () => { area.style.borderColor='#cbd5e1'; area.style.background=''; });
+  area.addEventListener('drop', e => { e.preventDefault(); area.style.borderColor='#cbd5e1'; area.style.background=''; const f = e.dataTransfer.files[0]; if (f) { const dt = new DataTransfer(); dt.items.add(f); document.getElementById('xlFile').files = dt.files; readExcel({target:document.getElementById('xlFile')}); } });
+}
 
-  // Fetch teacher's classes
-  const { data: classes = [], isLoading: classesLoading, refetch: refetchClasses } = trpc.classes.getMyClasses.useQuery();
+function renderSettings(el) { el.innerHTML = `<div class="page-top"><div><h1 class="page-title">الإعدادات</h1><p class="page-desc">إعدادات الحساب والنظام</p></div></div><div class="card"><div class="card-header"><h3><i class="fa-solid fa-key"></i> تغيير كلمة المرور</h3></div><div class="card-body"><p style="color:var(--text-muted); margin-bottom:16px;">يمكنك تغيير كلمة المرور الخاصة بحسابك</p><button class="btn btn-primary" onclick="openModal('modalChangePass')"><i class="fa-solid fa-key"></i> تغيير كلمة المرور</button></div></div>`; }
 
-  // Import questions mutation
-  const importQuestionsMutation = trpc.questions.bulkImport.useMutation({
-    onSuccess: (data) => {
-      toast.success(`تم استيراد ${data.imported} سؤال بنجاح`);
-      setSelectedFile(null);
-      setIsImporting(false);
-    },
-    onError: (error) => {
-      toast.error(`خطأ: ${error.message}`);
-      setIsImporting(false);
-    },
-  });
+function renderStudentDash(el) {
+  const s = currentUser; const pass = (s.mockScore||0) >= (s.target||60); const myResults = results.filter(r => r.studentId === s.milId);
+  el.innerHTML = `<div class="page-top"><div><h1 class="page-title">مرحباً ${s.name}</h1><p class="page-desc">لوحة متابعة أدائك اللغوي</p></div></div><div class="stats-row"><div class="stat-box student-stat-card"><div class="big-num" style="color:${pass?'var(--success)':'var(--danger)'};">${s.mockScore||0}</div><div class="stat-text">درجتك الحالية</div></div><div class="stat-box student-stat-card"><div class="big-num">${s.target||60}</div><div class="stat-text">الدرجة المستهدفة</div></div><div class="stat-box student-stat-card"><div class="big-num">${myResults.length}</div><div class="stat-text">الاختبارات المكتملة</div></div><div class="stat-box student-stat-card"><div class="big-num" style="font-size:1.3rem;">${s.weakness||'-'}</div><div class="stat-text">نقطة الضعف</div></div></div><div class="card"><div class="card-header"><h3><i class="fa-solid fa-chart-line"></i> تطور أدائك</h3></div><div class="card-body"><div class="chart-box"><canvas id="chartMyPerf"></canvas></div></div></div>`;
+  setTimeout(() => { const ctx = document.getElementById('chartMyPerf'); if (!ctx) return; const scores = myResults.map(r => r.score); const labels = myResults.map((_,i) => `اختبار ${i+1}`); new Chart(ctx, { type:'line', data:{ labels: labels.length?labels:['لا توجد بيانات'], datasets:[{ label:'الدرجة', data:scores.length?scores:[0], borderColor:'#c8a415', backgroundColor:'rgba(200,164,21,0.08)', fill:true, tension:0.4, pointRadius:5, pointBackgroundColor:'#c8a415' }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, max:100}} } }); }, 100);
+}
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+function renderStudentExam(el) { el.innerHTML = `<div class="page-top"><div><h1 class="page-title">الاختبارات</h1><p class="page-desc">أداء اختبار ALCPT محاكاة</p></div></div><div class="card" style="text-align:center; padding:50px;"><i class="fa-solid fa-clipboard-check" style="font-size:3rem; color:var(--gold); margin-bottom:16px;"></i><h3 style="font-weight:800; color:var(--navy); margin-bottom:8px;">اختبار ALCPT</h3><p style="color:var(--text-muted); margin-bottom:24px;">${Math.min(50,questions.length)} سؤال - 30 دقيقة</p><button class="btn btn-primary" style="padding:14px 36px;" onclick="beginExam()"><i class="fa-solid fa-play"></i> بدء الاختبار</button></div><div id="examArea"></div>`; }
 
-    setSelectedFile(file);
-  };
+function renderStudentResults(el) {
+  const myRes = results.filter(r => r.studentId === currentUser.milId);
+  el.innerHTML = `<div class="page-top"><div><h1 class="page-title">نتائجي</h1><p class="page-desc">سجل جميع الاختبارات السابقة</p></div></div><div class="card"><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>#</th><th>الدرجة</th><th>الصحيح</th><th>الإجمالي</th><th>التاريخ</th><th>الحالة</th></tr></thead><tbody>${myRes.length===0 ? '<tr><td colspan="6"><div class="empty-state"><i class="fa-solid fa-inbox"></i><p>لم تؤدِ أي اختبار بعد</p></div></td></tr>' : myRes.map((r,i) => `<tr><td>${i+1}</td><td><strong style="color:${r.score>=60?'var(--success)':'var(--danger)'};">${r.score}%</strong></td><td>${r.correct}</td><td>${r.total}</td><td>${new Date(r.timestamp).toLocaleDateString('ar')}</td><td><span class="badge ${r.score>=60?'badge-success':'badge-danger'}">${r.score>=60?'ناجح':'راسب'}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+}
 
-  const handleImportQuestions = async () => {
-    if (!selectedFile) {
-      toast.error("يرجى اختيار ملف Excel");
-      return;
-    }
+// ===== EXAM ENGINE =====
+function beginExam() {
+  if (questions.length < 5) { toast('بنك الأسئلة يحتاج 5 أسئلة على الأقل', 'warning'); return; }
+  examQs = [...questions].sort(() => 0.5 - Math.random()).slice(0, Math.min(50, questions.length));
+  examIdx = 0; examAnswers = {};
+  const area = document.getElementById('examArea');
+  area.innerHTML = `
+    <div class="exam-wrapper" style="margin-top:20px;">
+      <div class="exam-header"><div><strong>اختبار ALCPT</strong><div style="font-size:0.78rem; opacity:0.7; margin-top:3px;">السؤال <span id="eqNum">1</span> من ${examQs.length}</div></div><div class="exam-timer-box" id="eTimer">30:00</div></div>
+      <div style="padding:0 28px; background:#fff; border:1px solid #e2e8f0; border-top:none;"><div style="height:5px; background:#e2e8f0; border-radius:3px; margin:12px 0;"><div id="eBar" style="height:100%; background:var(--gold); border-radius:3px; width:2%; transition:width 0.4s;"></div></div></div>
+      <div class="exam-body" id="eBody"></div>
+      <div class="q-nav-grid" id="eNav"></div>
+      <div class="exam-footer"><button class="btn btn-outline btn-sm" onclick="examPrev()"><i class="fa-solid fa-arrow-right"></i> السابق</button><button class="btn btn-primary btn-sm" id="eNextBtn" onclick="examNext()">التالي <i class="fa-solid fa-arrow-left"></i></button></div>
+    </div>
+  `;
+  if (area.previousElementSibling) area.previousElementSibling.style.display = 'none';
+  showExamQ(); buildExamNav(); startExamTimer(30*60);
+}
 
-    setIsImporting(true);
+function showExamQ() {
+  const q = examQs[examIdx];
+  document.getElementById('eqNum').textContent = examIdx+1;
+  document.getElementById('eBar').style.width = ((examIdx+1)/examQs.length*100)+'%';
+  const opts = [ {l:'A', t:q.optionA||q.A||''}, {l:'B', t:q.optionB||q.B||''}, {l:'C', t:q.optionC||q.C||''}, {l:'D', t:q.optionD||q.D||''} ];
+  document.getElementById('eBody').innerHTML = `<div style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; background:var(--gold-glow); color:var(--gold); border-radius:50%; font-weight:800; margin-bottom:14px;">${examIdx+1}</div><div class="q-text">${q.questionText||q.Question||''}</div>${opts.map(o => `<div class="opt-item ${examAnswers[examIdx]===o.l?'picked':''}" onclick="pickAnswer('${o.l}')"><div class="opt-letter">${o.l}</div><span>${o.t}</span></div>`).join('')}`;
+  document.getElementById('eNextBtn').innerHTML = examIdx===examQs.length-1 ? '<i class="fa-solid fa-flag-checkered"></i> إنهاء' : 'التالي <i class="fa-solid fa-arrow-left"></i>';
+  buildExamNav();
+}
 
-    try {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const data = e.target?.result;
-        const workbook = XLSX.read(data, { type: "binary" });
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+function pickAnswer(l) { examAnswers[examIdx] = l; showExamQ(); }
+function examNext() { if (examIdx === examQs.length-1) endExam(); else { examIdx++; showExamQ(); } }
+function examPrev() { if (examIdx > 0) { examIdx--; showExamQ(); } }
+function buildExamNav() { document.getElementById('eNav').innerHTML = examQs.map((_,i) => { let c = ''; if (i===examIdx) c='now'; else if (examAnswers[i]) c='done'; return `<button class="q-dot ${c}" onclick="examIdx=${i}; showExamQ();">${i+1}</button>`; }).join(''); }
+function startExamTimer(sec) { let rem = sec; examTimer = setInterval(() => { rem--; const m = Math.floor(rem/60), s = rem%60; const el = document.getElementById('eTimer'); if (el) el.textContent = `${m}:${s<10?'0':''}${s}`; if (rem <= 0) { clearInterval(examTimer); endExam(); } }, 1000); }
 
-        // Validate and transform data
-        const questions = jsonData.map((row: any) => ({
-          questionText: row.Question || "",
-          optionA: row["Option A"] || "",
-          optionB: row["Option B"] || "",
-          optionC: row["Option C"] || "",
-          optionD: row["Option D"] || "",
-          correctAnswer: row["Correct Answer"]?.toUpperCase() || "A",
-          skill: row.Skill || "Grammar",
-          difficulty: row.Difficulty || "Medium",
-        }));
+// ===== التعديل 3: تعديل شاشة نهاية الاختبار وإضافة زر المراجعة =====
+function endExam() {
+  clearInterval(examTimer);
+  let correct = 0;
+  examQs.forEach((q,i) => { if (examAnswers[i] === (q.correctAnswer||q['Correct Answer'])) correct++; });
+  const score = Math.round(correct/examQs.length*100);
+  const pass = score >= 60;
 
-        if (questions.length === 0) {
-          toast.error("الملف فارغ أو صيغة غير صحيحة");
-          setIsImporting(false);
-          return;
-        }
-
-        // Call mutation
-        await importQuestionsMutation.mutateAsync({ questions });
-      };
-      reader.readAsBinaryString(selectedFile);
-    } catch (error) {
-      toast.error("خطأ في قراءة الملف");
-      setIsImporting(false);
-    }
-  };
-
-  if (classesLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner />
-      </div>
-    );
+  db.ref('learn_results').push({ studentId: currentUser.milId||currentUser.username, studentName: currentUser.name||'', score, correct, total: examQs.length, timestamp: Date.now() });
+  if (currentUser.role === 'student' && currentUser.id) {
+    db.ref('learn_students/' + currentUser.id + '/mockScore').set(score);
+    currentUser.mockScore = score;
   }
 
-  return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">لوحة المدرب</h1>
-            <p className="text-slate-300 mt-1">مرحباً بك، {user?.name}</p>
-          </div>
-          <Button
-            variant="outline"
-            className="border-white text-white hover:bg-white/10"
-            onClick={() => logout()}
-          >
-            تسجيل الخروج
-          </Button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
-        {/* Tabs */}
-        <Tabs defaultValue="classes" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="classes">الشعب</TabsTrigger>
-            <TabsTrigger value="questions">بنك الأسئلة</TabsTrigger>
-            <TabsTrigger value="analytics">التحليلات</TabsTrigger>
-          </TabsList>
-
-          {/* Classes Tab */}
-          <TabsContent value="classes" className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">شعبي</h2>
-              <Button
-                className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold"
-                onClick={() => navigate("/teacher/create-class")}
-              >
-                + إنشاء شعبة جديدة
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {classes.map((cls) => (
-                <Card key={cls.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{cls.name}</CardTitle>
-                    <CardDescription>{cls.code}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <p className="text-sm text-slate-600">الوصف</p>
-                      <p className="text-sm">{cls.description || "بدون وصف"}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-600">درجة النجاح المستهدفة</p>
-                      <p className="text-lg font-bold">{cls.targetScore}</p>
-                    </div>
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      onClick={() => navigate(`/teacher/class/${cls.id}`)}
-                    >
-                      عرض التفاصيل
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {classes.length === 0 && (
-              <div className="flex items-center justify-center h-64 bg-slate-100 rounded-lg">
-                <div className="text-center">
-                  <p className="text-slate-600 mb-4">لا توجد شعب حالياً</p>
-                  <Button
-                    className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold"
-                    onClick={() => navigate("/teacher/create-class")}
-                  >
-                    إنشاء شعبة جديدة
-                  </Button>
-                </div>
-              </div>
-            )}
-          </TabsContent>
-
-          {/* Questions Tab */}
-          <TabsContent value="questions" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>استيراد الأسئلة من ملف Excel</CardTitle>
-                <CardDescription>
-                  يجب أن يحتوي الملف على الأعمدة التالية: Question, Option A, Option B, Option C, Option D, Correct Answer, Skill, Difficulty
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center">
-                  <input
-                    type="file"
-                    accept=".xlsx,.xls"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="file-input"
-                  />
-                  <label htmlFor="file-input" className="cursor-pointer">
-                    <div className="space-y-2">
-                      <svg
-                        className="w-12 h-12 mx-auto text-slate-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
-                      <p className="text-slate-700 font-semibold">
-                        {selectedFile ? selectedFile.name : "اختر ملف Excel أو اسحبه هنا"}
-                      </p>
-                      <p className="text-sm text-slate-500">xlsx أو xls</p>
-                    </div>
-                  </label>
-                </div>
-
-                {selectedFile && (
-                  <Button
-                    className="w-full bg-green-600 hover:bg-green-700 text-white font-bold"
-                    onClick={handleImportQuestions}
-                    disabled={isImporting}
-                  >
-                    {isImporting ? "جاري الاستيراد..." : "استيراد الأسئلة"}
-                  </Button>
-                )}
-
-                {/* Template Download */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm text-blue-900 mb-2">هل تحتاج إلى نموذج؟</p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-blue-300 text-blue-600"
-                    onClick={() => {
-                      // Create template
-                      const template = [
-                        {
-                          Question: "ما هو الفعل الصحيح؟",
-                          "Option A": "go",
-                          "Option B": "goes",
-                          "Option C": "gone",
-                          "Option D": "going",
-                          "Correct Answer": "B",
-                          Skill: "Grammar",
-                          Difficulty: "Easy",
-                        },
-                      ];
-                      const ws = XLSX.utils.json_to_sheet(template);
-                      const wb = XLSX.utils.book_new();
-                      XLSX.utils.book_append_sheet(wb, ws, "Questions");
-                      XLSX.writeFile(wb, "ALCPT_Questions_Template.xlsx");
-                      toast.success("تم تحميل النموذج");
-                    }}
-                  >
-                    تحميل نموذج
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Analytics Tab */}
-          <TabsContent value="analytics" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>التحليلات</CardTitle>
-                <CardDescription>إحصائيات الأداء والتقارير</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {classes.map((cls) => (
-                    <div
-                      key={cls.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 cursor-pointer"
-                      onClick={() => navigate(`/teacher/class/${cls.id}/analytics`)}
-                    >
-                      <div>
-                        <p className="font-semibold">{cls.name}</p>
-                        <p className="text-sm text-slate-500">{cls.code}</p>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        عرض التحليلات
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+  document.getElementById('examArea').innerHTML = `
+    <div class="card" style="text-align:center; padding:50px; margin-top:20px;">
+      <i class="fa-solid fa-${pass?'trophy':'circle-exclamation'}" style="font-size:4rem; color:${pass?'var(--success)':'var(--danger)'}; margin-bottom:16px;"></i>
+      <h2 style="font-weight:900; color:var(--navy); margin-bottom:8px;">${pass?'أحسنت! اجتزت الاختبار':'لم تجتز الاختبار'}</h2>
+      <div style="font-size:3rem; font-weight:900; color:${pass?'var(--success)':'var(--danger)'}; margin:16px 0;">${score}%</div>
+      <p style="color:var(--text-muted);">${correct} صحيحة من ${examQs.length}</p>
+      
+      <div style="display:flex; gap:10px; justify-content:center; margin-top:24px;">
+        <button class="btn btn-success" onclick="renderExamReview()"><i class="fa-solid fa-list-check"></i> مراجعة الإجابات</button>
+        <button class="btn btn-primary" onclick="goTo(currentUser.role==='student'?'myExam':'exams')"><i class="fa-solid fa-redo"></i> اختبار جديد</button>
       </div>
     </div>
-  );
+  `;
 }
-</pre>
-            </div>
-        </div>
 
-        <div class="file-section" id="client-src-pages-AdminDashboard-tsx">
-            <div class="file-header">
-                <span>لوحة الإدارة - client/src/pages/AdminDashboard.tsx</span>
-                <button class="copy-btn" onclick="copyCode('client-src-pages-AdminDashboard-tsx-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="client-src-pages-AdminDashboard-tsx-code">import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useLocation } from "wouter";
-import { Spinner } from "@/components/ui/spinner";
-
-export default function AdminDashboard() {
-  const { user, logout } = useAuth();
-  const [, navigate] = useLocation();
-
-  return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">لوحة الإدارة</h1>
-            <p className="text-slate-300 mt-1">مرحباً بك، {user?.name}</p>
-          </div>
-          <Button
-            variant="outline"
-            className="border-white text-white hover:bg-white/10"
-            onClick={() => logout()}
-          >
-            تسجيل الخروج
-          </Button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
-        {/* Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="border-l-4 border-l-yellow-500">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-slate-600">إجمالي المتدربين</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-yellow-600">--</div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-blue-500">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-slate-600">المدربون</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-blue-600">--</div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-green-500">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-slate-600">الشعب</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-green-600">--</div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-l-4 border-l-red-500">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-slate-600">الأسئلة</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-red-600">--</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Tabs */}
-        <Tabs defaultValue="users" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="users">المستخدمون</TabsTrigger>
-            <TabsTrigger value="classes">الشعب</TabsTrigger>
-            <TabsTrigger value="exams">الاختبارات</TabsTrigger>
-            <TabsTrigger value="reports">التقارير</TabsTrigger>
-          </TabsList>
-
-          {/* Users Tab */}
-          <TabsContent value="users" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>إدارة المستخدمين</CardTitle>
-                <CardDescription>إضافة وتعديل وحذف المستخدمين</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <p className="text-slate-500 mb-4">قيد التطوير</p>
-                  <Button variant="outline">إضافة مستخدم جديد</Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Classes Tab */}
-          <TabsContent value="classes" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>إدارة الشعب</CardTitle>
-                <CardDescription>عرض وإدارة جميع الشعب التدريبية</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <p className="text-slate-500 mb-4">قيد التطوير</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Exams Tab */}
-          <TabsContent value="exams" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>إدارة الاختبارات</CardTitle>
-                <CardDescription>إنشاء وتعديل الاختبارات</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <p className="text-slate-500 mb-4">قيد التطوير</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Reports Tab */}
-          <TabsContent value="reports" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>التقارير والإحصائيات</CardTitle>
-                <CardDescription>تقارير شاملة عن الأداء والتقدم</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <p className="text-slate-500 mb-4">قيد التطوير</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
-  );
-}
-</pre>
-            </div>
-        </div>
-
-        <div class="file-section" id="client-src-pages-ExamPage-tsx">
-            <div class="file-header">
-                <span>صفحة الاختبار - client/src/pages/ExamPage.tsx</span>
-                <button class="copy-btn" onclick="copyCode('client-src-pages-ExamPage-tsx-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="client-src-pages-ExamPage-tsx-code">import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
-import { trpc } from "@/lib/trpc";
-import { useLocation } from "wouter";
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
-
-export default function ExamPage() {
-  const { user } = useAuth();
-  const [, navigate] = useLocation();
+// ===== التعديل 4: بناء صفحة مراجعة الإجابات (التغذية الراجعة) =====
+function renderExamReview() {
+  let html = `<div class="card" style="padding: 30px; margin-top: 20px;">
+    <h3 style="margin-bottom: 20px; color: var(--navy); border-bottom: 2px solid #e2e8f0; padding-bottom: 15px;">
+      <i class="fa-solid fa-list-check"></i> مراجعة إجابات الاختبار
+    </h3>`;
   
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
-  const [timeLeft, setTimeLeft] = useState(3600); // 1 hour
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Fetch questions for the exam
-  const { data: questions = [], isLoading: questionsLoading } = trpc.questions.getRandomQuestions.useQuery({
-    count: 50,
-  });
-
-  // Submit exam mutation
-  const submitExamMutation = trpc.exams.submitExam.useMutation({
-    onSuccess: (data) => {
-      toast.success(`تم إرسال الاختبار! درجتك: ${data.score}`);
-      navigate("/student");
-    },
-    onError: (error) => {
-      toast.error(`خطأ: ${error.message}`);
-      setIsSubmitting(false);
-    },
-  });
-
-  // Timer effect
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 0) {
-          handleSubmitExam();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [selectedAnswers]);
-
-  const handleSelectAnswer = (questionId: number, answer: string) => {
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [questionId]: answer,
-    }));
-  };
-
-  const handleSubmitExam = async () => {
-    if (questions.length === 0) return;
-
-    setIsSubmitting(true);
-
-    const answers = questions.map((q, idx) => ({
-      questionId: q.id,
-      selectedAnswer: selectedAnswers[q.id] || "",
-      isCorrect: selectedAnswers[q.id] === q.correctAnswer,
-    }));
-
-    await submitExamMutation.mutateAsync({
-      answers,
-      totalTime: 3600 - timeLeft,
-    });
-  };
-
-  if (questionsLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (questions.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">لا توجد أسئلة متاحة</p>
-          <Button onClick={() => navigate("/student")}>العودة</Button>
-        </div>
-      </div>
-    );
-  }
-
-  const currentQuestion = questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-
-  return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold">اختبار ALCPT</h1>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="text-right">
-              <p className="text-sm text-slate-400">الوقت المتبقي</p>
-              <p className={`text-2xl font-bold ${timeLeft < 300 ? "text-red-400" : "text-yellow-400"}`}>
-                {minutes}:{seconds.toString().padStart(2, "0")}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-slate-400">السؤال</p>
-              <p className="text-2xl font-bold">{currentQuestionIndex + 1}/{questions.length}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto p-6">
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <Progress value={progress} className="h-2" />
-          <p className="text-sm text-slate-600 mt-2">{Math.round(progress)}% مكتمل</p>
-        </div>
-
-        {/* Question Card */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-lg">السؤال #{currentQuestionIndex + 1}</CardTitle>
-            <CardDescription className="text-base mt-2">{currentQuestion.questionText}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <RadioGroup
-              value={selectedAnswers[currentQuestion.id] || ""}
-              onValueChange={(value) => handleSelectAnswer(currentQuestion.id, value)}
-            >
-              {["A", "B", "C", "D"].map((option) => {
-                const optionKey = `option${option}` as keyof typeof currentQuestion;
-                const optionText = currentQuestion[optionKey];
-
-                return (
-                  <div key={option} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50">
-                    <RadioGroupItem value={option} id={`option-${option}`} />
-                    <Label htmlFor={`option-${option}`} className="flex-1 cursor-pointer">
-                      <span className="font-semibold">{option}:</span> {optionText}
-                    </Label>
-                  </div>
-                );
-              })}
-            </RadioGroup>
-          </CardContent>
-        </Card>
-
-        {/* Navigation Buttons */}
-        <div className="flex justify-between items-center">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
-            disabled={currentQuestionIndex === 0}
-          >
-            السؤال السابق
-          </Button>
-
-          <div className="flex gap-2">
-            {currentQuestionIndex === questions.length - 1 ? (
-              <Button
-                className="bg-green-600 hover:bg-green-700 text-white font-bold"
-                onClick={handleSubmitExam}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "جاري الإرسال..." : "إرسال الاختبار"}
-              </Button>
-            ) : (
-              <Button
-                className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold"
-                onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
-              >
-                السؤال التالي
-              </Button>
-            )}
-          </div>
-
-          <Button
-            variant="outline"
-            onClick={() => setCurrentQuestionIndex(Math.min(questions.length - 1, currentQuestionIndex + 1))}
-            disabled={currentQuestionIndex === questions.length - 1}
-          >
-            تخطي
-          </Button>
-        </div>
-
-        {/* Question Navigator */}
-        <div className="mt-8 p-4 bg-white rounded-lg border">
-          <p className="font-semibold mb-3">ملخص الأسئلة</p>
-          <div className="grid grid-cols-10 gap-2">
-            {questions.map((q, idx) => (
-              <button
-                key={q.id}
-                onClick={() => setCurrentQuestionIndex(idx)}
-                className={`w-8 h-8 rounded text-sm font-bold transition-colors ${
-                  idx === currentQuestionIndex
-                    ? "bg-yellow-500 text-slate-900"
-                    : selectedAnswers[q.id]
-                    ? "bg-green-500 text-white"
-                    : "bg-slate-200 text-slate-700 hover:bg-slate-300"
-                }`}
-              >
-                {idx + 1}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-</pre>
-            </div>
-        </div>
-
-        <div class="file-section" id="client-src-index-css">
-            <div class="file-header">
-                <span>التنسيقات - client/src/index.css</span>
-                <button class="copy-btn" onclick="copyCode('client-src-index-css-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="client-src-index-css-code">@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --muted: 222.2 84% 4.9%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 217.2 91.2% 59.8%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 217.2 91.2% 59.8%;
-    --radius: 0.5rem;
+  examQs.forEach((q, i) => {
+    const uAns = examAnswers[i];
+    const cAns = q.correctAnswer || q['Correct Answer'];
+    const isCorrect = uAns === cAns;
     
-    /* Military Color Scheme */
-    --military-dark: 15 23% 15%;
-    --military-gold: 45 93% 47%;
-    --military-navy: 217 32% 17%;
-  }
+    let optsHtml = ['A','B','C','D'].map(l => {
+      let text = q['option'+l] || q[l] || '';
+      let bg = '';
+      let border = 'border: 2px solid #e2e8f0;';
+      if (l === cAns) { 
+        bg = 'background: var(--success-bg); color: var(--success); border-color: var(--success);'; 
+      } else if (l === uAns && !isCorrect) { 
+        bg = 'background: var(--danger-bg); color: var(--danger); border-color: var(--danger);'; 
+      }
+      
+      return `<div style="padding: 10px; margin-bottom: 8px; border-radius: 8px; ${border} ${bg} direction:ltr; text-align:left;">
+        <strong>${l}:</strong> ${text}
+      </div>`;
+    }).join('');
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.3% 65.1%;
-    --accent: 217.2 91.2% 59.8%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 217.2 91.2% 59.8%;
-  }
-
-  body {
-    font-family: "Cairo", "Roboto", sans-serif;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-  }
-
-  /* RTL Support */
-  [dir="rtl"] {
-    direction: rtl;
-    text-align: right;
-  }
-
-  [dir="rtl"] [dir="ltr"] {
-    direction: ltr;
-    text-align: left;
-  }
-
-  /* Military Theme */
-  .military-gradient {
-    background: linear-gradient(to bottom right, rgb(15 23 42), rgb(30 41 59), rgb(15 23 42));
-  }
-
-  .military-card {
-    border-left: 4px solid rgb(234 179 8);
-    background-color: rgba(30 41 59 / 0.5);
-  }
-
-  .military-button {
-    background-color: rgb(234 179 8);
-    color: rgb(15 23 42);
-    font-weight: bold;
-  }
-
-  .military-button:hover {
-    background-color: rgb(202 138 4);
-  }
-
-  /* Utility Classes */
-  .flex {
-    display: flex;
-    min-width: 0;
-    min-height: 0;
-  }
-
-  .container {
-    max-width: 80rem;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
-
-@layer components {
-  .btn-primary {
-    padding: 0.5rem 1rem;
-    background-color: rgb(234 179 8);
-    color: rgb(15 23 42);
-    font-weight: bold;
-    border-radius: 0.5rem;
-  }
-
-  .btn-primary:hover {
-    background-color: rgb(202 138 4);
-  }
-
-  .btn-secondary {
-    padding: 0.5rem 1rem;
-    background-color: rgb(55 65 81);
-    color: white;
-    font-weight: bold;
-    border-radius: 0.5rem;
-  }
-
-  .btn-secondary:hover {
-    background-color: rgb(75 85 99);
-  }
-
-  .card-military {
-    background-color: rgb(30 41 59);
-    border: 1px solid rgb(51 65 85);
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  }
-
-  .text-military {
-    color: rgb(234 179 8);
-    font-weight: bold;
-  }
-
-  .badge-success {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background-color: rgb(220 252 231);
-    color: rgb(22 101 52);
-  }
-
-  .badge-warning {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background-color: rgb(254 243 199);
-    color: rgb(113 63 18);
-  }
-
-  .badge-danger {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background-color: rgb(254 226 226);
-    color: rgb(127 29 29);
-  }
-
-  .badge-info {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background-color: rgb(219 234 254);
-    color: rgb(30 58 138);
-  }
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.animate-slide-in-right {
-  animation: slideInRight 0.3s ease-in-out;
-}
-
-.animate-slide-in-left {
-  animation: slideInLeft 0.3s ease-in-out;
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: hsl(var(--background));
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground));
-}
-
-/* Print Styles for PDF */
-@media print {
-  body {
-    background: white;
-    color: black;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
-  .print-only {
-    display: block !important;
-  }
-
-  .military-gradient {
-    background: white;
-    border: 1px solid #ccc;
-  }
-}
-</pre>
-            </div>
+    html += `
+      <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #e2e8f0;">
+        <div style="display:flex; gap:10px; align-items:center; margin-bottom:15px;">
+          <div style="width:30px; height:30px; border-radius:50%; background:${isCorrect?'var(--success)':'var(--danger)'}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold;">${i+1}</div>
+          <div class="q-text" style="margin:0;">${q.questionText || q.Question || ''}</div>
         </div>
-
-        <div class="file-section" id="package-json">
-            <div class="file-header">
-                <span>المكتبات والإعدادات - package.json</span>
-                <button class="copy-btn" onclick="copyCode('package-json-code')">نسخ الكود</button>
-            </div>
-            <div class="file-content">
-                <pre id="package-json-code">{
-  "name": "alcpt-smart-platform",
-  "version": "1.0.0",
-  "type": "module",
-  "license": "MIT",
-  "scripts": {
-    "dev": "NODE_ENV=development tsx watch server/_core/index.ts",
-    "build": "vite build && esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
-    "check": "tsc --noEmit",
-    "format": "prettier --write .",
-    "test": "vitest run",
-    "db:push": "drizzle-kit generate && drizzle-kit migrate"
-  },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.693.0",
-    "@aws-sdk/s3-request-presigner": "^3.693.0",
-    "@hookform/resolvers": "^5.2.2",
-    "@radix-ui/react-accordion": "^1.2.12",
-    "@radix-ui/react-alert-dialog": "^1.1.15",
-    "@radix-ui/react-aspect-ratio": "^1.1.7",
-    "@radix-ui/react-avatar": "^1.1.10",
-    "@radix-ui/react-checkbox": "^1.3.3",
-    "@radix-ui/react-collapsible": "^1.1.12",
-    "@radix-ui/react-context-menu": "^2.2.16",
-    "@radix-ui/react-dialog": "^1.1.15",
-    "@radix-ui/react-dropdown-menu": "^2.1.16",
-    "@radix-ui/react-hover-card": "^1.1.15",
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-menubar": "^1.1.16",
-    "@radix-ui/react-navigation-menu": "^1.2.14",
-    "@radix-ui/react-popover": "^1.1.15",
-    "@radix-ui/react-progress": "^1.1.7",
-    "@radix-ui/react-radio-group": "^1.3.8",
-    "@radix-ui/react-scroll-area": "^1.2.10",
-    "@radix-ui/react-select": "^2.2.6",
-    "@radix-ui/react-separator": "^1.1.7",
-    "@radix-ui/react-slider": "^1.3.6",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-switch": "^1.2.6",
-    "@radix-ui/react-tabs": "^1.1.13",
-    "@radix-ui/react-toggle": "^1.1.10",
-    "@radix-ui/react-toggle-group": "^1.1.11",
-    "@radix-ui/react-tooltip": "^1.2.8",
-    "@tanstack/react-query": "^5.90.2",
-    "@trpc/client": "^11.6.0",
-    "@trpc/react-query": "^11.6.0",
-    "@trpc/server": "^11.6.0",
-    "axios": "^1.12.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "cmdk": "^1.1.1",
-    "cookie": "^1.0.2",
-    "date-fns": "^4.1.0",
-    "dotenv": "^17.2.2",
-    "drizzle-orm": "^0.44.5",
-    "embla-carousel-react": "^8.6.0",
-    "express": "^4.21.2",
-    "framer-motion": "^12.23.22",
-    "input-otp": "^1.4.2",
-    "jose": "6.1.0",
-    "lucide-react": "^0.453.0",
-    "mysql2": "^3.15.0",
-    "nanoid": "^5.1.5",
-    "next-themes": "^0.4.6",
-    "react": "^19.2.1",
-    "react-day-picker": "^9.11.1",
-    "react-dom": "^19.2.1",
-    "react-hook-form": "^7.64.0",
-    "react-resizable-panels": "^3.0.6",
-    "recharts": "^2.15.2",
-    "sonner": "^2.0.7",
-    "streamdown": "^1.4.0",
-    "superjson": "^1.13.3",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
-    "vaul": "^1.1.2",
-    "wouter": "^3.3.5",
-    "zod": "^4.1.12"
-  },
-  "devDependencies": {
-    "@builder.io/vite-plugin-jsx-loc": "^0.1.1",
-    "@tailwindcss/typography": "^0.5.15",
-    "@tailwindcss/vite": "^4.1.3",
-    "@types/express": "4.17.21",
-    "@types/google.maps": "^3.58.1",
-    "@types/node": "^24.7.0",
-    "@types/react": "^19.2.1",
-    "@types/react-dom": "^19.2.1",
-    "@vitejs/plugin-react": "^5.0.4",
-    "add": "^2.0.6",
-    "autoprefixer": "^10.4.20",
-    "chart.js": "^4.5.1",
-    "drizzle-kit": "^0.31.4",
-    "esbuild": "^0.25.0",
-    "jspdf": "^4.2.1",
-    "pnpm": "^10.15.1",
-    "postcss": "^8.4.47",
-    "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.14",
-    "tsx": "^4.19.1",
-    "tw-animate-css": "^1.4.0",
-    "typescript": "5.9.3",
-    "vite": "^7.1.7",
-    "vite-plugin-manus-runtime": "^0.0.58",
-    "vitest": "^2.1.4",
-    "xlsx": "^0.18.5"
-  },
-  "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
-  "pnpm": {
-    "patchedDependencies": {
-      "wouter@3.7.1": "patches/wouter@3.7.1.patch"
-    },
-    "overrides": {
-      "tailwindcss>nanoid": "3.3.7"
-    }
-  }
-}
-</pre>
-            </div>
+        
+        ${optsHtml}
+        
+        <div style="margin-top: 15px; padding: 15px; background: #f8fafc; border-right: 4px solid var(--info); border-radius: 8px;">
+          <strong><i class="fa-solid fa-lightbulb" style="color:var(--gold);"></i> التغذية الراجعة (الشرح):</strong>
+          <p style="margin-top: 8px; color: var(--text-muted); font-size: 0.95rem;">${q.explanation || 'لا يوجد شرح مضاف لهذا السؤال حتى الآن.'}</p>
         </div>
+      </div>
+    `;
+  });
 
-        <footer>
-            <h3>منصة ALCPT الذكية</h3>
-            <p>تم إنشاء هذا المشروع بواسطة Manus AI</p>
-            <p style="margin-top: 10px; font-size: 0.9em;">© 2026 - جميع الحقوق محفوظة</p>
-        </footer>
+  html += `
+    <div style="text-align:center; margin-top:20px;">
+      <button class="btn btn-secondary" onclick="goTo(currentUser.role==='student'?'myDash':'dashboard')">
+        <i class="fa-solid fa-home"></i> العودة للرئيسية
+      </button>
     </div>
+  </div>`;
+
+  document.getElementById('examArea').innerHTML = html;
+}
+
+function saveTeacher() {
+  const name = document.getElementById('tName').value.trim(); const username = document.getElementById('tUsername').value.trim(); const password = document.getElementById('tPassword').value.trim();
+  if (!name || !username || !password) { toast('الرجاء تعبئة الحقول المطلوبة', 'error'); return; }
+  db.ref('learn_teachers').push({ name, username, password, empId: document.getElementById('tEmpId').value.trim(), type: document.getElementById('tType').value, phone: document.getElementById('tPhone').value.trim(), createdAt: Date.now() }).then(() => { toast('تم إضافة المعلم بنجاح', 'success'); closeModal('modalAddTeacher'); clearInputs('tName','tEmpId','tPhone','tUsername','tPassword'); });
+}
+
+function saveAdmin() {
+  const name = document.getElementById('aName').value.trim(); const username = document.getElementById('aUsername').value.trim(); const password = document.getElementById('aPassword').value.trim();
+  if (!username || !password) { toast('الرجاء تعبئة الحقول المطلوبة', 'error'); return; }
+  db.ref('learn_admins/' + username).set({ name: name||username, username, password, createdAt: Date.now() }).then(() => { toast('تم إضافة حساب الإدارة', 'success'); closeModal('modalAddAdmin'); clearInputs('aName','aUsername','aPassword'); });
+}
+
+function changePassword() {
+  const old = document.getElementById('cpOld').value; const newP = document.getElementById('cpNew').value; const confirm = document.getElementById('cpConfirm').value;
+  if (!old || !newP) { toast('الرجاء تعبئة جميع الحقول', 'error'); return; } if (newP !== confirm) { toast('كلمة المرور الجديدة غير متطابقة', 'error'); return; } if (old !== currentUser.password) { toast('كلمة المرور الحالية غير صحيحة', 'error'); return; }
+  const ref = currentUser.role === 'admin' ? 'learn_admins' : 'learn_teachers';
+  db.ref(ref).once('value', snap => { const data = snap.val(); const key = Object.keys(data).find(k => data[k].username === currentUser.username); if (key) { db.ref(`${ref}/${key}/password`).set(newP).then(() => { currentUser.password = newP; toast('تم تغيير كلمة المرور بنجاح', 'success'); closeModal('modalChangePass'); clearInputs('cpOld','cpNew','cpConfirm'); }); } });
+}
+
+function saveStudent() {
+  const milId = document.getElementById('sNewMilId').value.trim(); const name = document.getElementById('sNewName').value.trim();
+  if (!milId || !name) { toast('الرجاء تعبئة الحقول المطلوبة', 'error'); return; }
+  db.ref('learn_students').push({ milId, name, mockScore: parseInt(document.getElementById('sNewScore').value)||0, target: parseInt(document.getElementById('sNewTarget').value)||60, weakness: document.getElementById('sNewWeak').value, createdAt: Date.now() }).then(() => { toast('تم إضافة المتدرب', 'success'); closeModal('modalAddStudent'); clearInputs('sNewMilId','sNewName','sNewScore'); });
+}
+
+// ===== التعديل 5: حفظ الشرح عند إضافة سؤال يدوياً =====
+function saveQuestion() {
+  const text = document.getElementById('qText').value.trim();
+  if (!text) { toast('الرجاء إدخال نص السؤال', 'error'); return; }
+  db.ref('learn_questions').push({
+    questionText: text,
+    optionA: document.getElementById('qA').value,
+    optionB: document.getElementById('qB').value,
+    optionC: document.getElementById('qC').value,
+    optionD: document.getElementById('qD').value,
+    correctAnswer: document.getElementById('qCorrect').value,
+    skill: document.getElementById('qSkill').value,
+    difficulty: document.getElementById('qDiff').value,
+    explanation: document.getElementById('qExp').value.trim(), // حفظ الشرح
+    createdAt: Date.now()
+  }).then(() => { 
+    toast('تم إضافة السؤال', 'success'); 
+    closeModal('modalAddQuestion'); 
+    clearInputs('qText','qA','qB','qC','qD','qExp'); // تنظيف حقل الشرح
+  });
+}
+
+function deleteStudent(id) { if (confirm('حذف هذا المتدرب؟')) db.ref('learn_students/'+id).remove().then(()=>toast('تم الحذف','success')); }
+function deleteTeacher(id) { if (confirm('حذف هذا المعلم؟')) db.ref('learn_teachers/'+id).remove().then(()=>toast('تم الحذف','success')); }
+function deleteAdmin(id) { if (confirm('حذف هذا الحساب؟')) db.ref('learn_admins/'+id).remove().then(()=>toast('تم الحذف','success')); }
+function deleteQuestion(id) { if (confirm('حذف هذا السؤال؟')) db.ref('learn_questions/'+id).remove().then(()=>toast('تم الحذف','success')); }
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function clearInputs(...ids) { ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
+
+function toast(msg, type='success') {
+  const wrap = document.getElementById('toastWrap'); const t = document.createElement('div'); t.className = `toast-msg ${type}`; const icons = { success:'check-circle', error:'circle-xmark', warning:'triangle-exclamation' }; t.innerHTML = `<i class="fa-solid fa-${icons[type]||'info-circle'}"></i> ${msg}`; wrap.appendChild(t); setTimeout(() => t.remove(), 4000);
+}
+</script>
 </body>
 </html>
