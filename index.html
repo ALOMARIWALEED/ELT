@@ -3,192 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام ALCPT الذكي - ELS</title>
+<title>منصة ALCPT الذكية - RSAF</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
-  --main: #14344d; 
-  --main-dark: #0a1c2a;
-  --main-light: #e6eff5;
-  --accent: #5dade2; 
-  --success: #198754;
-  --warning: #f39c12;
-  --danger: #e74c3c;
-  --bg: #f4f7f9;
-  --white: #ffffff;
-  --shadow: 0 4px 20px rgba(0,0,0,.05);
-  --radius: 12px;
+  --main-dark: #0f172a; /* لون ليلي عسكري */
+  --main: #1e293b; /* كحلي طيران */
+  --accent: #d4af37; /* ذهبي عسكري */
+  --accent-light: #fef08a;
+  --bg: #f1f5f9;
+  --text-light: #94a3b8;
+  --success: #10b981;
+  --danger: #ef4444;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); font-family: 'Cairo', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+body { background: var(--bg); font-family: 'Cairo', sans-serif; min-height: 100vh; }
 
-/* ===== NAVBAR ===== */
-.main-nav { background: linear-gradient(135deg, var(--main-dark) 0%, var(--main) 100%); color: #fff; padding: 14px 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-.brand-title { font-size: 1.3rem; font-weight: 800; margin: 0; }
-.brand-sub { font-size: 0.75rem; color: var(--accent); font-weight: 600; }
-.nav-btn { border: none; padding: 7px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.1); color: #fff; }
-.nav-btn:hover { background: rgba(255,255,255,0.2); }
-.nav-btn-danger { background: #dc3545; }
+/* NAVBAR */
+.rsaf-nav { background: var(--main-dark); border-bottom: 3px solid var(--accent); padding: 15px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+.brand-title { color: #fff; font-weight: 900; margin: 0; font-size: 1.4rem; letter-spacing: 1px; }
+.brand-sub { color: var(--text-light); font-size: 0.8rem; }
+.nav-btn { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 6px; font-weight: 700; transition: 0.3s; }
+.nav-btn:hover { background: var(--accent); color: var(--main-dark); border-color: var(--accent); }
 
-/* ===== LAYOUT & CARDS ===== */
-.portal-wrap { max-width: 1200px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; }
-.card-custom { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); border: none; padding: 24px; margin-bottom: 24px; position: relative; }
-.card-custom.blue-edge::before { content: ''; position: absolute; top: 0; right: 0; width: 5px; height: 100%; background: var(--accent); }
+/* CARDS & DASHBOARD */
+.glass-card { background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 25px; border: 1px solid #e2e8f0; }
+.stat-box { background: var(--main); color: white; padding: 20px; border-radius: 12px; text-align: center; border-bottom: 4px solid var(--accent); }
+.stat-box h2 { font-weight: 900; font-size: 2.5rem; margin: 0; color: var(--accent-light); }
+.stat-box p { margin: 0; font-size: 0.9rem; color: var(--text-light); }
 
-/* ===== HERO ===== */
-.hero-section { background: linear-gradient(135deg, var(--main) 0%, #1e4d73 100%); border-radius: 16px; padding: 40px; color: white; text-align: center; margin-bottom: 30px; }
-.hero-title { font-size: 2rem; font-weight: 900; margin-bottom: 10px; }
-.hero-title span { color: var(--accent); }
+/* EXAM ENGINE */
+.exam-header { background: var(--main-dark); color: white; padding: 15px 25px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; }
+.timer-badge { background: var(--danger); font-size: 1.2rem; padding: 5px 15px; border-radius: 30px; font-weight: 900; letter-spacing: 2px; }
+.question-block { background: #fff; padding: 25px; border: 1px solid #e2e8f0; border-top: none; margin-bottom: 20px; }
+.form-check-custom { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px 15px 15px 40px; border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+.form-check-custom:hover { border-color: var(--accent); background: #fffbeb; }
 
-/* ===== STUDENT DASHBOARD ===== */
-.student-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-.st-card { background: #fff; padding: 20px; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow); border: 1px solid #eef2f5; cursor:pointer; transition: 0.2s; }
-.st-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-.st-card i { font-size: 2rem; margin-bottom: 15px; color: var(--main); }
-.st-card h5 { font-weight: 800; font-size: 1.1rem; color: #333; }
-.score-circle { width: 100px; height: 100px; border-radius: 50%; background: var(--main-light); border: 4px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: var(--main); margin: 0 auto 15px; }
-
-/* ===== TEACHER DASHBOARD ===== */
-.xray-alert { background: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; border-radius: 8px; font-weight: 700; color: #856404; margin-bottom: 20px; }
-.table-responsive { border-radius: 10px; overflow: auto; border: 1px solid #e2eaf2; background: #fff; }
-.table thead th { background: var(--main); color: white; font-size: 0.85rem; padding: 12px; white-space: nowrap; border: none; }
-.table td { vertical-align: middle; font-size: 0.9rem; font-weight: 600; }
-.weakness-badge { padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; }
-.w-grammar { background: #ffebee; color: #c62828; }
-.w-listen { background: #e3f2fd; color: #1565c0; }
-.w-vocab { background: #e8f5e9; color: #2e7d32; }
-
-.action-btn { padding: 6px 12px; border-radius: 6px; font-weight: 700; border: none; font-size: 0.8rem; cursor: pointer; }
-.btn-primary-custom { background: var(--main); color: white; }
-.btn-success-custom { background: var(--success); color: white; }
+/* AUDIO LAB */
+.audio-player-card { background: var(--main); padding: 20px; border-radius: 12px; text-align: center; color: white; margin-bottom: 20px; }
+.audio-player-card audio { width: 100%; margin-top: 15px; }
 
 .d-none { display: none !important; }
+.action-btn { background: var(--accent); color: var(--main-dark); border: none; padding: 10px 20px; border-radius: 6px; font-weight: 900; }
 </style>
 </head>
 <body>
 
-<nav class="main-nav d-flex justify-content-between align-items-center flex-wrap gap-2">
+<nav class="rsaf-nav d-flex justify-content-between align-items-center">
   <div>
-    <h1 class="brand-title"><i class="fa-solid fa-jet-fighter-up me-2"></i>منصة ALCPT الذكية</h1>
-    <div class="brand-sub">محرك التدريب والاختبارات</div>
+    <h1 class="brand-title"><i class="fa-solid fa-plane-departure me-2" style="color:var(--accent);"></i> ALCPT-Engine</h1>
+    <div class="brand-sub">قاعدة الملك فهد الجوية - جناح الإدارة</div>
   </div>
-  <div style="display:flex;gap:8px;align-items:center;">
-    <button class="nav-btn" onclick="switchView('home')"><i class="fa-solid fa-house"></i> الرئيسية</button>
-    <button class="nav-btn" onclick="switchView('student-login')"><i class="fa-solid fa-user-graduate"></i> المتدربين</button>
-    <button class="nav-btn" style="background:var(--accent); color:var(--main-dark);" onclick="switchView('teacher-login')"><i class="fa-solid fa-chalkboard-user"></i> المعلمين</button>
+  <div style="display:flex; gap:10px;">
+    <button class="nav-btn" onclick="switchView('home')"><i class="fa-solid fa-home"></i> الرئيسية</button>
+    <button class="nav-btn" onclick="switchView('student-login')"><i class="fa-solid fa-user-shield"></i> المتدربين</button>
+    <button class="nav-btn" onclick="loadTeacherDash()"><i class="fa-solid fa-radar"></i> الإدارة</button>
   </div>
 </nav>
 
-<div class="portal-wrap">
+<div class="container mt-4">
 
-  <div id="view-home" class="view-section">
-    <div class="hero-section">
-      <h2 class="hero-title">محرك تجهيز واجتياز <span>ALCPT</span></h2>
-      <p>نظام يركز على سد فجوات الأداء اللغوي للفنيين عبر المحاكاة والتحليل الدقيق للأخطاء</p>
-    </div>
-    <div class="row g-4">
-      <div class="col-md-6">
-        <div class="card-custom text-center" style="cursor:pointer;" onclick="switchView('student-login')">
-          <i class="fa-solid fa-laptop-file" style="font-size:3rem; color:var(--accent); margin-bottom:15px;"></i>
-          <h4 class="fw-bold">بوابة المتدربين</h4>
-          <p class="text-muted small">الدخول للمحاكاة، مختبر الاستماع، وبنك المفردات المتباعد</p>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card-custom text-center" style="cursor:pointer;" onclick="switchView('teacher-login')">
-          <i class="fa-solid fa-microscope" style="font-size:3rem; color:var(--main); margin-bottom:15px;"></i>
-          <h4 class="fw-bold">لوحة المعلمين (الأشعة السينية)</h4>
-          <p class="text-muted small">تحليل أخطاء الفصول، تحديد نقاط الضعف، ومتابعة الدرجات</p>
-        </div>
-      </div>
+  <div id="view-home" class="view-section text-center">
+    <div style="background:var(--main); color:white; padding:60px 20px; border-radius:16px; margin-bottom:30px;">
+      <h2 style="font-weight:900; font-size:2.5rem; color:var(--accent);">منصة الجاهزية اللغوية التكتيكية</h2>
+      <p style="color:var(--text-light); font-size:1.1rem; max-width:600px; margin:15px auto;">نظام محاكاة متقدم لتحليل أداء الفنيين ورفع معدلات اجتياز اختبار ALCPT.</p>
     </div>
   </div>
 
   <div id="view-student-login" class="view-section d-none">
-    <div class="card-custom blue-edge" style="max-width:500px; margin:0 auto; text-align:center;">
-      <h4 class="fw-bold mb-3"><i class="fa-solid fa-id-card"></i> دخول المتدرب</h4>
-      <p class="small text-muted mb-4">أدخل رقمك العسكري للوصول لخطتك التدريبية</p>
-      <form onsubmit="event.preventDefault(); loginStudent();">
-        <input type="text" id="studentMilId" class="form-control form-control-lg mb-3 text-center fw-bold" placeholder="الرقم العسكري" required>
-        <button type="submit" class="action-btn btn-primary-custom w-100 py-2 fs-6">دخول للمنصة</button>
-      </form>
-      <div id="studentAlert" class="alert mt-3 d-none text-danger fw-bold small"></div>
+    <div class="glass-card mx-auto text-center" style="max-width: 450px;">
+      <i class="fa-solid fa-id-badge mb-3" style="font-size:3rem; color:var(--main);"></i>
+      <h4 class="fw-bold mb-4">بوابة المتدربين</h4>
+      <input type="text" id="studentMilId" class="form-control form-control-lg text-center mb-3 fw-bold" placeholder="أدخل الرقم العسكري">
+      <button class="action-btn w-100" onclick="loginStudent()">تسجيل الدخول</button>
+      <div id="studentAlert" class="text-danger mt-3 fw-bold d-none">الرقم غير مسجل</div>
     </div>
   </div>
 
   <div id="view-student-dash" class="view-section d-none">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4 class="fw-bold" style="color:var(--main);"><span id="stNameLabel"></span></h4>
-      <button class="action-btn nav-btn-danger" onclick="switchView('home')">خروج</button>
-    </div>
-    
-    <div class="card-custom text-center mb-4">
-      <p class="fw-bold text-muted mb-2">أعلى درجة محاكاة حصلت عليها</p>
-      <div class="score-circle" id="stScoreLabel">0</div>
-      <p class="small text-muted">الهدف المطلوب: <strong class="text-success" id="stTargetLabel">0</strong></p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="fw-bold" style="color:var(--main-dark);"><span id="stNameLabel"></span></h4>
+      <span class="badge bg-dark fs-6" id="stMilLabel"></span>
     </div>
 
-    <h5 class="fw-bold mb-3"><i class="fa-solid fa-bullseye text-danger"></i> مهامك التدريبية اليوم</h5>
-    <div class="student-grid">
-      <div class="st-card" onclick="alert('سيتم إطلاق المحاكي قريباً')">
-        <i class="fa-solid fa-file-signature text-danger"></i>
-        <h5>محاكي اختبار ALCPT</h5>
-        <p class="small text-muted">نموذج كامل يحاكي الاختبار الورقي (استماع وقراءة)</p>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4"><div class="stat-box"><h2><span id="stScoreLabel">0</span></h2><p>درجة آخر محاكاة</p></div></div>
+      <div class="col-md-4"><div class="stat-box" style="border-color:var(--success);"><h2><span id="stTargetLabel">0</span></h2><p>الدرجة المستهدفة</p></div></div>
+      <div class="col-md-4"><div class="stat-box" style="border-color:var(--danger);"><h2 style="font-size:1.8rem; margin-top:10px;"><span id="stWeakLabel">-</span></h2><p>نقطة الضعف الحالية</p></div></div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="glass-card text-center" style="cursor:pointer;" onclick="startMockExam()">
+          <i class="fa-solid fa-file-signature mb-3" style="font-size:2.5rem; color:var(--danger);"></i>
+          <h5 class="fw-bold">بدء اختبار المحاكاة</h5>
+          <p class="text-muted small">اختبار بمدة زمنية وتصحيح فوري (قواعد وقراءة).</p>
+        </div>
       </div>
-      <div class="st-card" onclick="alert('سيتم فتح مختبر الاستماع')">
-        <i class="fa-solid fa-headphones text-info"></i>
-        <h5>مختبر الاستماع</h5>
-        <p class="small text-muted">تطوير مهارة الفهم السمعي</p>
-      </div>
-      <div class="st-card" onclick="alert('سيتم فتح نظام البطاقات الذكية')">
-        <i class="fa-solid fa-layer-group text-success"></i>
-        <h5>بنك المفردات (SRS)</h5>
-        <p class="small text-muted">مراجعة المفردات لضمان الحفظ</p>
+      <div class="col-md-6">
+        <div class="glass-card text-center" style="cursor:pointer;" onclick="startListeningLab()">
+          <i class="fa-solid fa-headphones-simple mb-3" style="font-size:2.5rem; color:var(--main);"></i>
+          <h5 class="fw-bold">مختبر الاستماع</h5>
+          <p class="text-muted small">تدريب تكتيكي على الفهم السمعي.</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div id="view-teacher-login" class="view-section d-none">
-    <div class="card-custom text-center" style="max-width:400px; margin:0 auto;">
-      <h4 class="fw-bold mb-4">دخول المعلمين</h4>
-      <button class="action-btn btn-primary-custom w-100 py-2" onclick="loadTeacherDash()">الدخول للوحة الإدارة</button>
+  <div id="view-exam" class="view-section d-none">
+    <div class="exam-header">
+      <h5 class="m-0 fw-bold"><i class="fa-solid fa-pen-nib me-2"></i> ALCPT Mock Exam</h5>
+      <div class="timer-badge" id="examTimer">30:00</div>
+    </div>
+    <div class="question-block">
+      <form id="examForm">
+        <h6 class="fw-bold mb-3">1. The mechanic ________ the aircraft engine yesterday.</h6>
+        <div class="form-check form-check-custom">
+          <input class="form-check-input" type="radio" name="q1" value="A"> A) inspects
+        </div>
+        <div class="form-check form-check-custom">
+          <input class="form-check-input" type="radio" name="q1" value="B"> B) inspected
+        </div>
+        <div class="form-check form-check-custom">
+          <input class="form-check-input" type="radio" name="q1" value="C"> C) will inspect
+        </div>
+        
+        <hr class="my-4">
+        
+        <h6 class="fw-bold mb-3">2. "Flammable" means the material will ________ easily.</h6>
+        <div class="form-check form-check-custom">
+          <input class="form-check-input" type="radio" name="q2" value="A"> A) break
+        </div>
+        <div class="form-check form-check-custom">
+          <input class="form-check-input" type="radio" name="q2" value="B"> B) catch fire
+        </div>
+        <div class="form-check form-check-custom">
+          <input class="form-check-input" type="radio" name="q2" value="C"> C) freeze
+        </div>
+
+        <button type="button" class="action-btn w-100 mt-4" onclick="submitExam()">إنهاء الاختبار واعتماد الدرجة</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="view-listening" class="view-section d-none">
+    <div class="glass-card">
+      <h4 class="fw-bold mb-3"><i class="fa-solid fa-headphones"></i> تمرين الاستماع التكتيكي</h4>
+      <div class="audio-player-card">
+        <i class="fa-solid fa-tower-observation fs-1 mb-2 text-warning"></i>
+        <h6>Tower Communication - Track 01</h6>
+        <audio controls controlsList="nodownload">
+          <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+          متصفحك لا يدعم مشغل الصوت.
+        </audio>
+      </div>
+      <h6 class="fw-bold mt-4">Q1: Based on the audio, what is the pilot reporting?</h6>
+      <select class="form-select mb-3">
+        <option>-- اختر الإجابة --</option>
+        <option>A) Engine failure</option>
+        <option>B) Normal landing</option>
+      </select>
+      <button class="btn btn-secondary w-100" onclick="switchView('student-dash')">عودة للوحة</button>
     </div>
   </div>
 
   <div id="view-teacher-dash" class="view-section d-none">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h4 class="fw-bold" style="color:var(--main);"><i class="fa-solid fa-microscope text-primary"></i> لوحة الأشعة السينية</h4>
-      <div>
-        <button class="action-btn btn-success-custom" onclick="openAddStudentModal()"><i class="fa-solid fa-plus"></i> إضافة متدرب</button>
-        <button class="action-btn nav-btn-danger" onclick="switchView('home')">خروج</button>
+      <h4 class="fw-bold" style="color:var(--main-dark);"><i class="fa-solid fa-chart-pie me-2"></i> مركز القيادة والتحليل</h4>
+      <button class="action-btn" data-bs-toggle="modal" data-bs-target="#studentModal"><i class="fa-solid fa-plus"></i> إضافة متدرب</button>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <div class="glass-card h-100">
+          <h6 class="fw-bold text-muted mb-3">منحنى درجات المحاكاة للفصل</h6>
+          <canvas id="classChart" height="100"></canvas>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="glass-card h-100 text-center d-flex flex-column justify-content-center">
+          <i class="fa-solid fa-triangle-exclamation text-warning fs-1 mb-2"></i>
+          <h6 class="fw-bold">الضعف العام للفصل:</h6>
+          <h4 class="text-danger fw-bold" id="dashWeakness">-</h4>
+          <p class="small text-muted">وجه تدريبك اليوم لمعالجة هذه النقطة.</p>
+        </div>
       </div>
     </div>
 
-    <div class="xray-alert" id="classInsight">
-      <i class="fa-solid fa-lightbulb me-2"></i> <strong>تحليل النظام:</strong> جاري تحميل البيانات...
-    </div>
-
-    <div class="card-custom p-0 border-0">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle text-center mb-0">
-          <thead>
-            <tr>
-              <th>الرقم العسكري</th>
-              <th>اسم المتدرب</th>
-              <th>الدرجة التشخيصية</th>
-              <th>درجة آخر محاكاة</th>
-              <th>الدرجة المطلوبة</th>
-              <th>نقطة الضعف الأبرز</th>
-              <th>تحديث البيانات</th>
-            </tr>
-          </thead>
-          <tbody id="studentsTbody"></tbody>
-        </table>
-      </div>
+    <div class="glass-card p-0 overflow-hidden">
+      <table class="table table-hover text-center mb-0">
+        <thead style="background:var(--main); color:white;">
+          <tr><th>الرقم</th><th>الاسم</th><th>الدرجة</th><th>الهدف</th><th>الضعف</th></tr>
+        </thead>
+        <tbody id="studentsTbody"></tbody>
+      </table>
     </div>
   </div>
 
@@ -197,44 +209,32 @@ body { background: var(--bg); font-family: 'Cairo', sans-serif; min-height: 100v
 <div class="modal fade" id="studentModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header" style="background:var(--main);color:white;">
-        <h5 class="modal-title fw-bold">بيانات أداء المتدرب</h5>
+      <div class="modal-header" style="background:var(--main); color:white;">
+        <h5 class="modal-title fw-bold">إدارة المتدرب</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
-      <form onsubmit="event.preventDefault(); saveStudent();">
-        <div class="modal-body p-4">
-          <div class="mb-3"><label class="small fw-bold">الرقم العسكري</label><input type="text" id="sMilId" class="form-control" required></div>
-          <div class="mb-3"><label class="small fw-bold">الاسم</label><input type="text" id="sName" class="form-control" required></div>
-          <div class="row g-2 mb-3">
-            <div class="col"><label class="small fw-bold">الدرجة التشخيصية</label><input type="number" id="sBase" class="form-control" required></div>
-            <div class="col"><label class="small fw-bold">درجة المحاكاة</label><input type="number" id="sMock" class="form-control" required></div>
-            <div class="col"><label class="small fw-bold">الهدف المطلوب</label><input type="number" id="sTarget" class="form-control" required></div>
-          </div>
-          <div class="mb-3">
-            <label class="small fw-bold">نقطة الضعف الأبرز بناءً على آخر اختبار</label>
-            <select id="sWeakness" class="form-select">
-              <option value="القواعد (Grammar)">القواعد (Grammar)</option>
-              <option value="الاستماع (Listening)">الاستماع (Listening)</option>
-              <option value="المفردات (Vocabulary)">المفردات (Vocabulary)</option>
-              <option value="القراءة (Reading)">القراءة (Reading)</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer bg-light">
-          <button type="submit" class="action-btn btn-primary-custom w-100">حفظ التحديثات</button>
-        </div>
-      </form>
+      <div class="modal-body p-4">
+        <input type="text" id="sMilId" class="form-control mb-2" placeholder="الرقم العسكري">
+        <input type="text" id="sName" class="form-control mb-2" placeholder="الاسم الكامل">
+        <input type="number" id="sMock" class="form-control mb-2" placeholder="درجة المحاكاة (الحالية)">
+        <input type="number" id="sTarget" class="form-control mb-2" placeholder="الدرجة المطلوبة">
+        <select id="sWeakness" class="form-select mb-3">
+          <option>القواعد (Grammar)</option>
+          <option>الاستماع (Listening)</option>
+          <option>المفردات (Vocabulary)</option>
+        </select>
+        <button class="action-btn w-100" onclick="saveStudent()">حفظ البيانات</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <script>
-// Firebase Configuration - ELS Project
+// Firebase Config (Your specific credentials)
 const firebaseConfig = {
   apiKey: "AIzaSyCl2fsg_54wwc79LQtEGkQfMRLaTBC8Czk",
   authDomain: "waleed2-fb7de.firebaseapp.com",
@@ -249,121 +249,154 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 let alcptStudents = [];
-let studentModalInst = null;
+let currentStudent = null;
+let chartInstance = null;
+let timerInterval;
 
+// On Load
 window.addEventListener('DOMContentLoaded', () => {
-  studentModalInst = new bootstrap.Modal(document.getElementById('studentModal'));
-  
   db.ref('alcpt_students').on('value', snap => {
     const data = snap.val();
     alcptStudents = data ? Object.values(data) : [];
-    
-    if(!document.getElementById('view-teacher-dash').classList.contains('d-none')) {
-      renderTeacherTable();
-      analyzeClassData();
-    }
+    if(!document.getElementById('view-teacher-dash').classList.contains('d-none')) updateTeacherDash();
   });
+  switchView('home');
 });
 
+// Navigation
 function switchView(viewId) {
   document.querySelectorAll('.view-section').forEach(s => s.classList.add('d-none'));
   document.getElementById('view-' + viewId).classList.remove('d-none');
+  clearInterval(timerInterval); // Stop timer if switching away
 }
 
+// Student Logic
 function loginStudent() {
   const id = document.getElementById('studentMilId').value.trim();
-  const student = alcptStudents.find(s => s.milId === id);
-  const alertBox = document.getElementById('studentAlert');
-  
-  if(student) {
-    document.getElementById('stNameLabel').textContent = "مرحباً، " + student.name;
-    document.getElementById('stScoreLabel').textContent = student.mockScore;
-    document.getElementById('stTargetLabel').textContent = student.target;
-    alertBox.classList.add('d-none');
+  currentStudent = alcptStudents.find(s => s.milId === id);
+  if(currentStudent) {
+    document.getElementById('stNameLabel').textContent = currentStudent.name;
+    document.getElementById('stMilLabel').textContent = currentStudent.milId;
+    document.getElementById('stScoreLabel').textContent = currentStudent.mockScore;
+    document.getElementById('stTargetLabel').textContent = currentStudent.target;
+    document.getElementById('stWeakLabel').textContent = currentStudent.weakness;
+    document.getElementById('studentAlert').classList.add('d-none');
     switchView('student-dash');
   } else {
-    alertBox.textContent = "الرقم العسكري غير مسجل بالمنصة.";
-    alertBox.classList.remove('d-none');
+    document.getElementById('studentAlert').classList.remove('d-none');
   }
 }
 
+// Exam Engine Logic
+function startMockExam() {
+  switchView('exam');
+  document.getElementById('examForm').reset();
+  let timeLeft = 30 * 60; // 30 minutes
+  document.getElementById('examTimer').textContent = "30:00";
+  
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    let m = Math.floor(timeLeft / 60);
+    let s = timeLeft % 60;
+    document.getElementById('examTimer').textContent = `${m < 10 ? '0':''}${m}:${s < 10 ? '0':''}${s}`;
+    if(timeLeft <= 0) {
+      clearInterval(timerInterval);
+      submitExam(); // Auto submit
+    }
+  }, 1000);
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  // Correct Answers: Q1: B, Q2: B
+  let score = 0;
+  const q1 = document.querySelector('input[name="q1"]:checked')?.value;
+  const q2 = document.querySelector('input[name="q2"]:checked')?.value;
+  
+  if(q1 === 'B') score += 50;
+  if(q2 === 'B') score += 50;
+
+  // Update Firebase
+  if(currentStudent) {
+    db.ref('alcpt_students/' + currentStudent.milId).update({
+      mockScore: score
+    }).then(() => {
+      alert(`انتهى الاختبار! درجتك هي: ${score}`);
+      currentStudent.mockScore = score;
+      document.getElementById('stScoreLabel').textContent = score;
+      switchView('student-dash');
+    });
+  }
+}
+
+// Listening Lab Logic
+function startListeningLab() {
+  switchView('listening');
+}
+
+// Teacher Dashboard Logic
 function loadTeacherDash() {
-  renderTeacherTable();
-  analyzeClassData();
   switchView('teacher-dash');
+  updateTeacherDash();
 }
 
-function analyzeClassData() {
-  const alertEl = document.getElementById('classInsight');
-  if(alcptStudents.length === 0) {
-      alertEl.innerHTML = `لا توجد بيانات متدربين حتى الآن.`;
-      return;
+function updateTeacherDash() {
+  // Table
+  const tbody = document.getElementById('studentsTbody');
+  tbody.innerHTML = alcptStudents.map(s => `
+    <tr>
+      <td>${s.milId}</td>
+      <td class="fw-bold">${s.name}</td>
+      <td style="color:var(--main); font-weight:900;">${s.mockScore}</td>
+      <td class="text-success">${s.target}</td>
+      <td><span class="badge bg-secondary">${s.weakness}</span></td>
+    </tr>
+  `).join('');
+
+  // Find overall weakness
+  if(alcptStudents.length > 0) {
+    const weaknesses = {};
+    alcptStudents.forEach(s => { weaknesses[s.weakness] = (weaknesses[s.weakness] || 0) + 1; });
+    document.getElementById('dashWeakness').textContent = Object.keys(weaknesses).reduce((a, b) => weaknesses[a] > weaknesses[b] ? a : b);
   }
 
-  const weaknesses = {};
-  alcptStudents.forEach(s => { weaknesses[s.weakness] = (weaknesses[s.weakness] || 0) + 1; });
-  const maxWeakness = Object.keys(weaknesses).reduce((a, b) => weaknesses[a] > weaknesses[b] ? a : b);
-  const avgMock = Math.round(alcptStudents.reduce((sum, s) => sum + parseInt(s.mockScore), 0) / alcptStudents.length);
+  // Chart Update
+  const ctx = document.getElementById('classChart');
+  const labels = alcptStudents.map(s => s.name);
+  const data = alcptStudents.map(s => s.mockScore);
 
-  alertEl.innerHTML = `<i class="fa-solid fa-bolt text-danger me-2"></i> <strong>تحليل النظام (الأشعة السينية):</strong> 
-  متوسط درجات الفصل حالياً <strong>${avgMock}</strong>. أغلب المتدربين يعانون من ضعف في <strong>[${maxWeakness}]</strong>، يُنصح بالتركيز عليه في تدريب اليوم!`;
+  if(chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'درجة المحاكاة',
+        data: data,
+        backgroundColor: '#d4af37',
+        borderRadius: 5
+      }]
+    },
+    options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }
+  });
 }
 
-function renderTeacherTable() {
-  const tbody = document.getElementById('studentsTbody');
-  tbody.innerHTML = alcptStudents.map(s => {
-    let wClass = "w-grammar";
-    if(s.weakness.includes("الاستماع")) wClass = "w-listen";
-    if(s.weakness.includes("المفردات")) wClass = "w-vocab";
-
-    return `<tr>
-      <td><strong>${s.milId}</strong></td>
-      <td>${s.name}</td>
-      <td class="text-muted">${s.baseline}</td>
-      <td><strong style="color:var(--main); font-size:1.1rem;">${s.mockScore}</strong></td>
-      <td class="text-success fw-bold">${s.target}</td>
-      <td><span class="weakness-badge ${wClass}">${s.weakness}</span></td>
-      <td><button class="action-btn btn-primary-custom" onclick="editStudent('${s.milId}')"><i class="fa-solid fa-pen"></i></button></td>
-    </tr>`;
-  }).join('');
-}
-
-function openAddStudentModal() {
-  document.getElementById('sMilId').value = '';
-  document.getElementById('sMilId').removeAttribute('readonly');
-  document.getElementById('sName').value = '';
-  document.getElementById('sBase').value = '';
-  document.getElementById('sMock').value = '';
-  document.getElementById('sTarget').value = '';
-  studentModalInst.show();
-}
-
-function editStudent(milId) {
-  const s = alcptStudents.find(x => x.milId === milId);
-  if(!s) return;
-  document.getElementById('sMilId').value = s.milId;
-  document.getElementById('sMilId').setAttribute('readonly', 'true');
-  document.getElementById('sName').value = s.name;
-  document.getElementById('sBase').value = s.baseline;
-  document.getElementById('sMock').value = s.mockScore;
-  document.getElementById('sTarget').value = s.target;
-  document.getElementById('sWeakness').value = s.weakness;
-  studentModalInst.show();
-}
-
-async function saveStudent() {
+function saveStudent() {
   const milId = document.getElementById('sMilId').value.trim();
   const data = {
     milId: milId,
     name: document.getElementById('sName').value,
-    baseline: document.getElementById('sBase').value,
-    mockScore: document.getElementById('sMock').value,
-    target: document.getElementById('sTarget').value,
+    mockScore: document.getElementById('sMock').value || 0,
+    target: document.getElementById('sTarget').value || 65,
     weakness: document.getElementById('sWeakness').value
   };
-
-  await db.ref('alcpt_students/' + milId).set(data);
-  studentModalInst.hide();
+  
+  db.ref('alcpt_students/' + milId).set(data).then(() => {
+    document.getElementById('sMilId').value = '';
+    document.getElementById('sName').value = '';
+    const modal = bootstrap.Modal.getInstance(document.getElementById('studentModal'));
+    modal.hide();
+  });
 }
 </script>
 </body>
