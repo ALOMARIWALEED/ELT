@@ -32,7 +32,7 @@
     .login-left {
       background: linear-gradient(160deg, var(--navy) 0%, #1a2744 60%, #0f2040 100%);
       padding: 60px 56px; display: flex; flex-direction: column; justify-content: center;
-      position: relative; overflow: hidden;
+      position: relative; overflow: hidden; z-index: 1;
     }
     .login-left::before {
       content: ''; position: absolute; width: 600px; height: 600px;
@@ -67,11 +67,12 @@
     /* Right Panel */
     .login-right {
       background: #fff; padding: 60px 56px; display: flex; flex-direction: column;
-      justify-content: center; overflow-y: auto;
+      justify-content: center; overflow-y: auto; position: relative; z-index: 2;
+      box-shadow: -20px 0 50px rgba(10, 22, 40, 0.4);
     }
     .lr-heading h3 { font-size: 1.5rem; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
     .lr-heading p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 32px; }
-    .lr-role-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 28px; }
+    .lr-role-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 28px; }
     .lr-rtab {
       padding: 14px 8px; border-radius: 12px; border: 2px solid #e2e8f0;
       background: #f8fafc; cursor: pointer; text-align: center; transition: all 0.25s;
@@ -84,13 +85,12 @@
     .lr-rtab.active span { color: var(--navy); }
     .lr-rtab:hover:not(.active) { border-color: #cbd5e1; }
 
-    /* Form elements inside right panel */
-    .lr-form-group { margin-bottom: 18px; }
+    .lr-form-group { margin-bottom: 18px; text-align: right; }
     .lr-label { display: block; font-weight: 700; font-size: 0.83rem; color: var(--navy); margin-bottom: 7px; }
     .lr-input {
       width: 100%; padding: 13px 16px; border: 2px solid #e2e8f0; border-radius: 11px;
       font-family: 'Cairo', sans-serif; font-size: 0.92rem; background: #f8fafc; color: var(--text);
-      outline: none; transition: all 0.3s; direction: rtl;
+      outline: none; transition: all 0.3s;
     }
     .lr-input:focus { border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(200,164,21,0.08); }
     .lr-btn {
@@ -101,51 +101,34 @@
     }
     .lr-btn:hover { box-shadow: 0 8px 25px rgba(200,164,21,0.35); transform: translateY(-1px); }
     .lr-btn:active { transform: scale(0.98); }
-    .lr-divider { display: flex; align-items: center; gap: 12px; margin: 4px 0 16px; color: #94a3b8; font-size: 0.8rem; }
-    .lr-divider::before, .lr-divider::after { content: ''; flex: 1; height: 1px; background: #e2e8f0; }
-    .lr-self-btn {
-      width: 100%; padding: 12px; border-radius: 11px; border: 2px solid #e2e8f0;
-      background: transparent; cursor: pointer; font-family: 'Cairo', sans-serif;
-      font-weight: 700; font-size: 0.88rem; color: #64748b; transition: all 0.3s;
-    }
-    .lr-self-btn:hover { border-color: var(--navy); color: var(--navy); }
     .lr-lb-btn {
       width: 100%; padding: 12px; border-radius: 11px; border: 2px solid rgba(200,164,21,0.3);
       background: rgba(200,164,21,0.05); cursor: pointer; font-family: 'Cairo', sans-serif;
       font-weight: 700; font-size: 0.88rem; color: var(--gold); transition: all 0.3s; margin-top: 10px;
     }
     .lr-lb-btn:hover { background: rgba(200,164,21,0.12); border-color: var(--gold); }
-    .lr-error {
-      margin-top: 14px; padding: 12px 16px; background: var(--danger-bg);
-      border-radius: 9px; color: #991b1b; font-size: 0.83rem; text-align: center; display: none;
-    }
-    .lr-back { background: transparent; border: none; color: var(--text-muted); font-family: 'Cairo', sans-serif;
-      font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center;
-      gap: 6px; transition: color 0.3s; font-size: 0.88rem; padding: 0; }
-    .lr-back:hover { color: var(--navy); }
-    /* Forms wrap - collapsed by default, expands on role select */
-    .lr-forms-wrap {
-      overflow: hidden; max-height: 0;
-      transition: max-height 0.45s cubic-bezier(0.23,1,0.32,1), opacity 0.35s ease;
-      opacity: 0; margin-bottom: 0;
-    }
-    .lr-forms-wrap.open {
-      max-height: 600px; opacity: 1; margin-bottom: 16px;
-    }
-    .lr-form-panel { display: none; padding-top: 20px; }
+    .lr-error { margin-top: 14px; padding: 12px 16px; background: var(--danger-bg); border-radius: 9px; color: #991b1b; font-size: 0.83rem; text-align: center; display: none; }
+    
+    .lr-forms-wrap { overflow: hidden; max-height: 0; transition: max-height 0.45s var(--ease), opacity 0.35s ease; opacity: 0; margin-bottom: 0; }
+    .lr-forms-wrap.open { max-height: 600px; opacity: 1; margin-bottom: 16px; }
+    .lr-form-panel { display: none; padding-top: 10px; }
     .lr-form-panel.active { display: block; animation: slideUp 0.35s var(--ease); }
     @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    /* 4-column tabs */
-    .lr-role-tabs { grid-template-columns: repeat(4, 1fr); }
 
-    /* Legacy back-btn kept for any remaining usage */
-    .back-btn { background: transparent; border: none; color: var(--text-muted); font-family: inherit; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 6px; transition: color 0.3s; }
-    .back-btn:hover { color: var(--navy); }
-    .form-group { margin-bottom: 18px; text-align: right; }
-    .form-label { display: block; font-weight: 700; font-size: 0.85rem; color: var(--navy); margin-bottom: 7px; }
-    .form-control { width: 100%; padding: 13px 16px; border: 2px solid #e2e8f0; border-radius: 11px; font-family: inherit; font-size: 0.92rem; transition: all 0.3s var(--ease); background: #f8fafc; color: var(--text); }
-    .form-control:focus { outline: none; border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px var(--gold-glow); }
-    
+    /* Login Screen Oval Suggestion Button */
+    .login-sugg-btn {
+      position: fixed; bottom: 30px; left: 30px;
+      background: rgba(10, 22, 40, 0.75); border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px); color: #fff; padding: 14px 28px; border-radius: 30px;
+      display: flex; align-items: center; gap: 12px; font-family: 'Cairo', sans-serif;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer; z-index: 1000; transition: all 0.3s;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .login-sugg-btn:hover { background: rgba(10, 22, 40, 0.95); transform: translateY(-4px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); border-color: var(--gold); }
+    .login-sugg-btn i { color: var(--gold); font-size: 1.2rem; }
+    @media (max-width: 768px) { .login-sugg-btn { background: var(--navy); color: #fff; bottom: 20px; left: 20px; padding: 12px 20px; font-size: 0.85rem;} }
+
+    /* Buttons & standard Elements */
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 28px; border-radius: 11px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.3s var(--ease); border: none; font-family: inherit; white-space: nowrap; }
     .btn:active { transform: scale(0.97); }
     .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); box-shadow: 0 4px 15px rgba(200, 164, 21, 0.25); }
@@ -157,8 +140,8 @@
     .btn-success { background: var(--success); color: #fff; }
     .btn-info { background: var(--info); color: #fff; } .btn-info:hover { background: #026ca3; }
     .btn-sm { padding: 9px 16px; font-size: 0.8rem; border-radius: 8px; }
-    .btn-block { width: 100%; }
     
+    /* Layout */
     .app-layout { display: flex; min-height: 100vh; }
     .sidebar { width: 260px; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%); position: fixed; right: 0; top: 0; height: 100vh; z-index: 100; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.04); transition: all 0.4s var(--ease); }
     .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -182,13 +165,11 @@
     .user-card-info .user-role { color: var(--gold); font-size: 0.72rem; font-weight: 600; }
     
     .main-area { flex: 1; margin-right: 260px; padding: 28px; min-height: 100vh; transition: all 0.4s var(--ease); position: relative; }
-    
     .page-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 15px; position: relative; z-index: 1;}
     .page-title { font-size: 1.6rem; font-weight: 800; color: var(--navy); }
     .page-desc { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
     
-    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.04); transition: all 0.3s var(--ease); overflow: hidden; position: relative; z-index: 1; }
-    .card:hover { box-shadow: var(--shadow-md); }
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.04); transition: all 0.3s var(--ease); overflow: hidden; position: relative; z-index: 1; margin-bottom:20px; }
     .card-header { padding: 16px 22px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
     .card-header h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 8px; }
     .card-body { padding: 22px; }
@@ -260,6 +241,11 @@
     .mob-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: rgba(255,255,255,0.4); font-size: 0.65rem; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: all 0.2s; font-weight: 600; }
     .mob-item.active { color: var(--gold); } .mob-item i { font-size: 1.1rem; }
     
+    /* الأيقونة الدائرية العائمة (داخل النظام) */
+    .fab-btn { position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 10px 25px rgba(200,164,21,0.4); cursor: pointer; z-index: 1000; transition: all 0.3s; border: none; }
+    .fab-btn:hover { transform: scale(1.1) translateY(-5px); box-shadow: 0 15px 30px rgba(200,164,21,0.5); }
+    @media (max-width: 768px) { .fab-btn { bottom: 85px; left: 15px; width: 50px; height: 50px; font-size: 1.3rem; } }
+
     .hidden { display: none !important; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
@@ -275,8 +261,7 @@
 <div class="toast-wrap" id="toastWrap"></div>
 
 <div id="loginScreen" class="login-screen">
-
-  <!-- LEFT PANEL: Brand & Stats -->
+  
   <div class="login-left">
     <div class="ll-content">
       <div class="ll-logo">
@@ -303,50 +288,44 @@
     </div>
   </div>
 
-  <!-- RIGHT PANEL: Login Form -->
   <div class="login-right">
     <div class="lr-heading">
       <h3>مرحباً بك</h3>
       <p>اختر دورك للدخول إلى المنصة</p>
     </div>
 
-    <!-- 4 Role Tabs -->
     <div class="lr-role-tabs" id="lrRoleTabs">
-      <button class="lr-rtab" onclick="lrSelectRole(this,'admin')">
-        <i class="fa-solid fa-shield-halved"></i>
-        <span>إدارة</span>
-      </button>
-      <button class="lr-rtab" onclick="lrSelectRole(this,'teacher')">
-        <i class="fa-solid fa-chalkboard-user"></i>
-        <span>مدرب</span>
+      <button class="lr-rtab" onclick="lrSelectRole(this,'self')">
+        <i class="fa-solid fa-person-rifle"></i>
+        <span>تدريب ذاتي</span>
       </button>
       <button class="lr-rtab" onclick="lrSelectRole(this,'student')">
         <i class="fa-solid fa-user-graduate"></i>
         <span>متدرب</span>
       </button>
-      <button class="lr-rtab" onclick="lrSelectRole(this,'self')">
-        <i class="fa-solid fa-person-rifle"></i>
-        <span>ذاتي</span>
+      <button class="lr-rtab" onclick="lrSelectRole(this,'teacher')">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <span>معلم</span>
+      </button>
+      <button class="lr-rtab" onclick="lrSelectRole(this,'admin')">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>إدارة</span>
       </button>
     </div>
 
-    <!-- Dropdown Forms Container (hidden until role selected) -->
     <div class="lr-forms-wrap" id="lrFormsWrap">
-
-      <!-- Staff Form (admin/teacher) -->
       <div class="lr-form-panel" id="lrStaffForm">
         <div class="lr-form-group">
           <label class="lr-label">اسم المستخدم</label>
-          <input type="text" class="lr-input" id="loginUsername" placeholder="أدخل اسم المستخدم" autocomplete="username">
+          <input type="text" class="lr-input" id="loginUsername" placeholder="أدخل اسم المستخدم">
         </div>
         <div class="lr-form-group">
           <label class="lr-label">كلمة المرور</label>
-          <input type="password" class="lr-input" id="loginPassword" placeholder="أدخل كلمة المرور" autocomplete="current-password">
+          <input type="password" class="lr-input" id="loginPassword" placeholder="أدخل كلمة المرور">
         </div>
         <button class="lr-btn" onclick="doLogin()"><i class="fa-solid fa-right-to-bracket"></i> دخول</button>
       </div>
 
-      <!-- Student Form -->
       <div class="lr-form-panel" id="lrStudentForm">
         <div class="lr-form-group">
           <label class="lr-label">الرقم العسكري</label>
@@ -355,7 +334,6 @@
         <button class="lr-btn" onclick="doStudentLogin()"><i class="fa-solid fa-right-to-bracket"></i> دخول</button>
       </div>
 
-      <!-- Self Training Form -->
       <div class="lr-form-panel" id="lrSelfForm">
         <div class="lr-form-group">
           <label class="lr-label">الاسم</label>
@@ -366,27 +344,27 @@
           <input type="text" class="lr-input" id="selfRank" placeholder="أدخل الرتبة">
         </div>
         <div class="lr-form-group">
-          <label class="lr-label">الرقم العسكري</label>
+          <label class="lr-label">الرقم العسكري / المعرف</label>
           <input type="text" class="lr-input" id="selfId" placeholder="أدخل رقمك العسكري">
         </div>
         <button class="lr-btn" style="background:linear-gradient(135deg,#0284c7,#38bdf8); color:#fff;" onclick="doSelfLogin()">
           <i class="fa-solid fa-rocket"></i> بدء التدريب الذاتي
         </button>
       </div>
+    </div>
 
-    </div><!-- /lr-forms-wrap -->
-
-    <!-- Leaderboard Button (always visible) -->
     <button class="lr-lb-btn" onclick="showLeaderboard()">
       <i class="fa-solid fa-trophy"></i> لوحة الصدارة
     </button>
 
-    <!-- Error -->
     <div class="lr-error" id="loginError">
       <i class="fa-solid fa-circle-exclamation"></i> <span id="loginErrorText">بيانات الدخول غير صحيحة</span>
     </div>
   </div>
 
+  <button id="loginSuggestionBtn" class="login-sugg-btn" onclick="openModal('modalSuggestion')">
+    <i class="fa-solid fa-comment-dots"></i> المقترحات والملاحظات
+  </button>
 </div>
 
 <div id="appMain" class="hidden">
@@ -417,6 +395,10 @@
     </aside>
     <main class="main-area" id="mainArea"></main>
   </div>
+  
+  <button class="fab-btn" onclick="openModal('modalSuggestion')" title="إرسال مقترح / ملاحظة">
+    <i class="fa-solid fa-comment-dots"></i>
+  </button>
 </div>
 <div class="mobile-bar" id="mobileBar"></div>
 
@@ -427,6 +409,34 @@
     <div class="table-wrap" id="leaderboardContent"></div>
     <div style="text-align:center; margin-top:20px;">
       <button class="btn btn-outline" onclick="closeModal('modalLeaderboard')">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalSuggestion">
+  <div class="modal-box">
+    <div class="modal-title"><i class="fa-solid fa-comment-dots" style="color:var(--info);"></i> إرسال مقترح أو ملاحظة</div>
+    <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:15px;">رأيك يهمنا لتطوير المنصة، يرجى كتابة ملاحظتك بالأسفل وسيتم إرسالها للإدارة مباشرة.</p>
+    <div class="form-group">
+      <textarea class="form-control" id="suggText" rows="4" placeholder="اكتب مقترحك هنا..."></textarea>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="submitSuggestion()"><i class="fa-solid fa-paper-plane"></i> إرسال</button>
+      <button class="btn btn-outline" onclick="closeModal('modalSuggestion')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalReportQ">
+  <div class="modal-box">
+    <div class="modal-title"><i class="fa-solid fa-flag" style="color:var(--danger);"></i> الإبلاغ عن خطأ بالسؤال</div>
+    <div class="form-group">
+      <label class="form-label">سبب الإبلاغ</label>
+      <textarea class="form-control" id="reportReason" rows="3" placeholder="مثال: الخيارات متكررة، أو الإجابة الصحيحة غير موجودة..."></textarea>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-danger" style="flex:1;" onclick="submitReportQ()"><i class="fa-solid fa-check"></i> تأكيد الإرسال</button>
+      <button class="btn btn-outline" onclick="closeModal('modalReportQ')">إلغاء</button>
     </div>
   </div>
 </div>
@@ -575,13 +585,11 @@ firebase.initializeApp({
 });
 const db = firebase.database();
 
-// Load live stats for login screen left panel
 function loadLoginStats() {
   db.ref('learn_students').once('value', snap => {
     const count = snap.val() ? Object.keys(snap.val()).length : 0;
     const el = document.getElementById('llStatStudents');
     if (el) el.textContent = count;
-    // Compute MRI
     if (snap.val()) {
       const arr = Object.values(snap.val());
       const avg = arr.length > 0 ? Math.round(arr.reduce((a,s)=>a+(s.mockScore||0),0)/arr.length) : 0;
@@ -601,12 +609,14 @@ function loadLoginStats() {
 loadLoginStats();
 
 let currentUser = null;
-let loginRole = 'student';
+let loginRole = 'self';
 let students = []; let questions = []; let results = []; let teachers = []; let admins = []; let analytics = {};
+let suggestions = []; let reportedQs = []; let auditLogs = [];
 let examQs = []; let examIdx = 0; let examAnswers = {}; let examTimer = null;
 let currentEditQId = null; 
 let currentEditTeacherId = null;
 let currentEditStudentId = null;
+let currentReportQId = null;
 let studyTimerInterval = null; 
 
 function initDefaultAdmin() {
@@ -623,45 +633,45 @@ function loadAllData() {
   db.ref('learn_teachers').on('value', s => { teachers = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
   db.ref('learn_admins').on('value', s => { admins = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
   db.ref('learn_analytics').on('value', s => { analytics = s.val() || {}; refreshUI(); });
+  db.ref('learn_suggestions').on('value', s => { suggestions = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
+  db.ref('learn_reported_questions').on('value', s => { reportedQs = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
+  db.ref('learn_audit_log').on('value', s => { auditLogs = s.val() ? Object.entries(s.val()).map(([k,v])=>({id:k,...v})) : []; refreshUI(); });
+}
+
+function logAction(actionType, details) {
+  if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'teacher')) return;
+  db.ref('learn_audit_log').push({
+    user: currentUser.name || currentUser.username,
+    role: currentUser.role === 'admin' ? 'الإدارة' : 'المعلم',
+    action: actionType,
+    details: details,
+    timestamp: Date.now()
+  });
 }
 
 function showForm(formId) {
-  // Legacy showForm kept for compatibility - now delegates to lrSelectRole
-  const lrTabMap = { admin: 0, teacher: 1, student: 2 };
-  if (formId === 'self') { lrShowSelf(); return; }
-  if (formId === 'main') { lrHideSelf(); return; }
+  // ترتيب التبويبات الجديد: ذاتي (0)، متدرب (1)، معلم (2)، إدارة (3)
+  const tabsMap = { self: 0, student: 1, teacher: 2, admin: 3 };
+  if (formId === 'main') {
+    const wrap = document.getElementById('lrFormsWrap');
+    wrap.classList.remove('open');
+    document.querySelectorAll('.lr-rtab').forEach(t => t.classList.remove('active'));
+    return;
+  }
   const tabs = document.querySelectorAll('.lr-rtab');
-  if (tabs[lrTabMap[formId]] !== undefined) {
-    lrSelectRole(tabs[lrTabMap[formId]], formId);
+  if (tabs[tabsMap[formId]] !== undefined) {
+    lrSelectRole(tabs[tabsMap[formId]], formId);
   }
 }
 
 function lrSelectRole(el, role) {
-  // Highlight selected tab
   document.querySelectorAll('.lr-rtab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  loginRole = role;
-
-  // Open the forms container
-  const wrap = document.getElementById('lrFormsWrap');
-  wrap.classList.add('open');
-
-  // Show the correct form panel
+  el.classList.add('active'); loginRole = role;
+  const wrap = document.getElementById('lrFormsWrap'); wrap.classList.add('open');
   const panels = { admin: 'lrStaffForm', teacher: 'lrStaffForm', student: 'lrStudentForm', self: 'lrSelfForm' };
   document.querySelectorAll('.lr-form-panel').forEach(p => p.classList.remove('active'));
-  const target = document.getElementById(panels[role]);
-  if (target) target.classList.add('active');
-
-  // Hide error
-  const err = document.getElementById('loginError');
-  if (err) err.style.display = 'none';
-}
-
-function lrShowSelf() { lrSelectRole(document.querySelectorAll('.lr-rtab')[3], 'self'); }
-function lrHideSelf() {
-  const wrap = document.getElementById('lrFormsWrap');
-  wrap.classList.remove('open');
-  document.querySelectorAll('.lr-rtab').forEach(t => t.classList.remove('active'));
+  const target = document.getElementById(panels[role]); if (target) target.classList.add('active');
+  const err = document.getElementById('loginError'); if (err) err.style.display = 'none';
 }
 
 function startStudyTimer() {
@@ -672,9 +682,7 @@ function startStudyTimer() {
     db.ref('learn_students/' + currentUser.id + '/studyMinutes').set(currentUser.studyMinutes);
   }, 60000); 
 }
-function stopStudyTimer() {
-  if (studyTimerInterval) { clearInterval(studyTimerInterval); studyTimerInterval = null; }
-}
+function stopStudyTimer() { if (studyTimerInterval) { clearInterval(studyTimerInterval); studyTimerInterval = null; } }
 
 function doLogin() {
   const username = document.getElementById('loginUsername').value.trim(); const password = document.getElementById('loginPassword').value.trim();
@@ -683,7 +691,7 @@ function doLogin() {
   db.ref(ref).once('value', snap => {
     const data = snap.val(); if (!data) { showLoginError('بيانات الدخول غير صحيحة'); return; }
     const found = Object.values(data).find(u => u.username === username && u.password === password);
-    if (found) { currentUser = { ...found, role: loginRole }; enterApp(); } else { showLoginError('اسم المستخدم أو كلمة المرور غير صحيحة'); }
+    if (found) { currentUser = { ...found, role: loginRole }; logAction('تسجيل دخول', 'النظام'); enterApp(); } else { showLoginError('اسم المستخدم أو كلمة المرور غير صحيحة'); }
   });
 }
 
@@ -706,21 +714,11 @@ function doSelfLogin() {
   const milId = document.getElementById('selfId').value.trim();
   const name = document.getElementById('selfName').value.trim();
   const rank = document.getElementById('selfRank').value.trim();
-  
   if (!milId || !name || !rank) { showLoginError('الرجاء إدخال الاسم، الرتبة، والرقم العسكري'); return; }
-  
-  currentUser = { milId: milId, name: name, rank: rank, role: 'self' }; 
-  enterApp();
+  currentUser = { milId: milId, name: name, rank: rank, role: 'self' }; enterApp();
 }
 
-function showLoginError(msg) {
-  const el = document.getElementById('loginError');
-  const txt = document.getElementById('loginErrorText');
-  if (!el || !txt) return;
-  txt.textContent = msg;
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 4000);
-}
+function showLoginError(msg) { const el = document.getElementById('loginError'); const txt = document.getElementById('loginErrorText'); if (!el || !txt) return; txt.textContent = msg; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 4000); }
 
 function enterApp() {
   document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('appMain').classList.remove('hidden');
@@ -733,40 +731,29 @@ function enterApp() {
 }
 
 function doLogout() {
+  if(currentUser && (currentUser.role === 'admin' || currentUser.role === 'teacher')) logAction('تسجيل خروج', 'النظام');
   stopStudyTimer(); currentUser = null;
   document.getElementById('appMain').classList.add('hidden'); document.getElementById('loginScreen').classList.remove('hidden');
   clearInputs('loginUsername','loginPassword','loginMilId','selfId','selfName', 'selfRank'); showForm('main');
 }
 
 function showLeaderboard() {
-  if (results.length === 0) {
-    db.ref('learn_results').once('value', snap => {
-      results = snap.val() ? Object.entries(snap.val()).map(([k,v])=>({id:k,...v})) : [];
-      buildLeaderboard();
-    });
-  } else { buildLeaderboard(); }
+  if (results.length === 0) { db.ref('learn_results').once('value', snap => { results = snap.val() ? Object.entries(snap.val()).map(([k,v])=>({id:k,...v})) : []; buildLeaderboard(); }); } else { buildLeaderboard(); }
 }
 
 function buildLeaderboard() {
   const now = new Date(); const cMonth = now.getMonth(); const cYear = now.getFullYear();
   let lbResults = results.filter(r => { const d = new Date(r.timestamp); return r.role === 'self' && r.total === 100 && d.getMonth() === cMonth && d.getFullYear() === cYear; });
   lbResults.sort((a,b) => b.score - a.score); lbResults = lbResults.slice(0, 10);
-  
   let html = `<table class="data-table"><thead><tr><th style="width:50px;">#</th><th>الاسم</th><th>الدرجة</th><th>التاريخ</th></tr></thead><tbody>`;
   if(lbResults.length === 0) { html += `<tr><td colspan="4" style="text-align:center; color:#999; padding:20px;">لا يوجد اختبارات 100 سؤال مسجلة هذا الشهر</td></tr>`; } 
-  else {
-    lbResults.forEach((r, i) => {
-      let bClass = i===0 ? 'badge-warning' : (i===1 ? 'badge-info' : (i===2 ? 'badge-success' : 'badge-navy'));
-      html += `<tr><td><span class="badge ${bClass}">${i+1}</span></td><td><strong>${r.studentName}</strong> <small style="color:#999;">(${r.studentId})</small></td><td><strong style="color:var(--navy);">${r.score}%</strong></td><td>${new Date(r.timestamp).toLocaleDateString('ar')}</td></tr>`;
-    });
-  }
-  html += `</tbody></table>`;
-  document.getElementById('leaderboardContent').innerHTML = html; openModal('modalLeaderboard');
+  else { lbResults.forEach((r, i) => { let bClass = i===0 ? 'badge-warning' : (i===1 ? 'badge-info' : (i===2 ? 'badge-success' : 'badge-navy')); html += `<tr><td><span class="badge ${bClass}">${i+1}</span></td><td><strong>${r.studentName}</strong> <small style="color:#999;">(${r.studentId})</small></td><td><strong style="color:var(--navy);">${r.score}%</strong></td><td>${new Date(r.timestamp).toLocaleDateString('ar')}</td></tr>`; }); }
+  html += `</tbody></table>`; document.getElementById('leaderboardContent').innerHTML = html; openModal('modalLeaderboard');
 }
 
 function buildSidebar() {
   const nav = document.getElementById('sidebarNav'); const mob = document.getElementById('mobileBar'); let items = [];
-  if (currentUser.role === 'admin') items = [{ id:'dashboard', icon:'fa-grid-2', label:'لوحة التحكم' },{ id:'users', icon:'fa-users-gear', label:'المستخدمين', section:'الإدارة' },{ id:'students', icon:'fa-user-graduate', label:'المتدربين' },{ id:'questions', icon:'fa-database', label:'بنك الأسئلة', section:'التعليم' },{ id:'exams', icon:'fa-pen-to-square', label:'الاختبارات' },{ id:'kpi', icon:'fa-chart-line', label:'مؤشرات الأداء', section:'التحليلات' },{ id:'reports', icon:'fa-file-pdf', label:'التقارير' },{ id:'import', icon:'fa-file-excel', label:'استيراد وتصدير', section:'أدوات' },{ id:'settings', icon:'fa-gear', label:'الإعدادات' }];
+  if (currentUser.role === 'admin') items = [{ id:'dashboard', icon:'fa-grid-2', label:'لوحة التحكم' },{ id:'users', icon:'fa-users-gear', label:'المستخدمين', section:'الإدارة' },{ id:'audit', icon:'fa-list-check', label:'سجل النظام' },{ id:'suggestions', icon:'fa-lightbulb', label:'المقترحات' },{ id:'students', icon:'fa-user-graduate', label:'المتدربين' },{ id:'questions', icon:'fa-database', label:'بنك الأسئلة', section:'التعليم' },{ id:'exams', icon:'fa-pen-to-square', label:'الاختبارات' },{ id:'kpi', icon:'fa-chart-line', label:'مؤشرات الأداء', section:'التحليلات' },{ id:'reports', icon:'fa-file-pdf', label:'التقارير' },{ id:'import', icon:'fa-file-excel', label:'استيراد وتصدير', section:'أدوات' },{ id:'settings', icon:'fa-gear', label:'الإعدادات' }];
   else if (currentUser.role === 'teacher') items = [{ id:'dashboard', icon:'fa-grid-2', label:'لوحة التحكم' },{ id:'students', icon:'fa-user-graduate', label:'المتدربين', section:'التعليم' },{ id:'questions', icon:'fa-database', label:'بنك الأسئلة' },{ id:'exams', icon:'fa-pen-to-square', label:'الاختبارات' },{ id:'kpi', icon:'fa-chart-line', label:'مؤشرات الأداء', section:'التحليلات' },{ id:'reports', icon:'fa-file-pdf', label:'التقارير' }];
   else if (currentUser.role === 'self') items = [{ id:'myExam', icon:'fa-pen-to-square', label:'اختبارات المحاكاة' },{ id:'myResults', icon:'fa-chart-simple', label:'سجل النتائج' }];
   else items = [{ id:'myDash', icon:'fa-grid-2', label:'لوحتي' },{ id:'myExam', icon:'fa-pen-to-square', label:'الاختبارات' },{ id:'myResults', icon:'fa-chart-simple', label:'نتائجي' }];
@@ -776,8 +763,38 @@ function buildSidebar() {
 }
 
 function goTo(page) { document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.querySelectorAll('.mob-item').forEach(n => n.classList.remove('active')); document.querySelectorAll(`[data-page="${page}"]`).forEach(n => n.classList.add('active')); renderPage(page); }
-function renderPage(page) { const main = document.getElementById('mainArea'); const renderers = { dashboard: renderDashboard, users: renderUsers, students: renderStudents, questions: renderQuestions, exams: renderExams, kpi: renderKPI, reports: renderReports, import: renderImport, settings: renderSettings, myDash: renderStudentDash, myExam: renderStudentExam, myResults: renderStudentResults }; if (renderers[page]) renderers[page](main); }
+function renderPage(page) { const main = document.getElementById('mainArea'); const renderers = { dashboard: renderDashboard, users: renderUsers, audit: renderAuditLog, suggestions: renderSuggestions, students: renderStudents, questions: renderQuestions, exams: renderExams, kpi: renderKPI, reports: renderReports, import: renderImport, settings: renderSettings, myDash: renderStudentDash, myExam: renderStudentExam, myResults: renderStudentResults }; if (renderers[page]) renderers[page](main); }
 function refreshUI() { const active = document.querySelector('.nav-item.active'); if (active) renderPage(active.dataset.page); }
+
+function renderAuditLog(el) {
+  let logs = [...auditLogs].sort((a,b) => b.timestamp - a.timestamp).slice(0, 100);
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">سجل عمليات النظام</h1><p class="page-desc">مراقبة ورصد جميع الأنشطة التي يقوم بها المعلمون والإدارة</p></div></div>
+    <div class="card"><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>المستخدم</th><th>الدور</th><th>العملية</th><th>التفاصيل</th><th>الوقت والتاريخ</th></tr></thead>
+    <tbody>${logs.length===0 ? `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-list-check"></i><p>لا توجد عمليات مسجلة</p></div></td></tr>` : 
+    logs.map((l) => `<tr><td><strong>${l.user}</strong></td><td><span class="badge ${l.role==='الإدارة'?'badge-danger':'badge-info'}">${l.role}</span></td><td><strong style="color:var(--navy);">${l.action}</strong></td><td>${l.details}</td><td style="direction:ltr;text-align:right;">${new Date(l.timestamp).toLocaleString('ar')}</td></tr>`).join('')}</tbody></table></div></div>
+  `;
+}
+
+function renderSuggestions(el) {
+  let suggs = [...suggestions].sort((a,b) => b.timestamp - a.timestamp);
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">صندوق المقترحات</h1><p class="page-desc">ملاحظات ومقترحات المتدربين والمعلمين</p></div></div>
+    <div class="card"><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>المرسل</th><th>الدور</th><th>المقترح / الملاحظة</th><th>التاريخ</th><th>إجراء</th></tr></thead>
+    <tbody>${suggs.length===0 ? `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-envelope-open-text"></i><p>صندوق المقترحات فارغ</p></div></td></tr>` : 
+    suggs.map((s) => `<tr><td><strong>${s.by}</strong></td><td><span class="badge badge-navy">${s.role==='student'?'متدرب':(s.role==='self'?'تدريب ذاتي':'معلم/إدارة')}</span></td><td style="max-width:300px; white-space:normal; line-height:1.5;">${s.text}</td><td>${new Date(s.timestamp).toLocaleDateString('ar')}</td><td><button class="btn btn-sm btn-danger" onclick="deleteSuggestion('${s.id}')"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('')}</tbody></table></div></div>
+  `;
+}
+
+function deleteSuggestion(id) { if (confirm('حذف هذا المقترح؟')) { db.ref('learn_suggestions/'+id).remove().then(()=>toast('تم الحذف','success')); logAction('حذف مقترح', 'حذف رسالة مقترح'); } }
+function submitSuggestion() {
+  let text = document.getElementById('suggText').value.trim();
+  if(!text) { toast('الرجاء كتابة المقترح أولاً', 'error'); return; }
+  let senderName = currentUser ? (currentUser.name || currentUser.milId || currentUser.username) : 'زائر (من الشاشة الرئيسية)';
+  let senderRole = currentUser ? currentUser.role : 'visitor';
+  db.ref('learn_suggestions').push({ text: text, by: senderName, role: senderRole, timestamp: Date.now() });
+  toast('شكرا لمقترحك! تم الإرسال للإدارة', 'success'); closeModal('modalSuggestion'); document.getElementById('suggText').value = '';
+}
 
 function renderDashboard(el) {
   const total = students.length; const avg = total > 0 ? Math.round(students.reduce((a,s) => a + (s.mockScore||0), 0) / total) : 0; const passed = students.filter(s => (s.mockScore||0) >= (s.target||60)).length; const passRate = total > 0 ? Math.round(passed/total*100) : 0; const mri = Math.round((passRate + avg) / 2);
@@ -818,75 +835,43 @@ function renderUsers(el) {
 
 function editTeacher(id) {
   const t = teachers.find(x => x.id === id); if(!t) return;
-  currentEditTeacherId = id;
-  document.getElementById('etName').value = t.name || '';
-  document.getElementById('etEmpId').value = t.empId || '';
-  document.getElementById('etType').value = t.type || 'عسكري';
-  document.getElementById('etPhone').value = t.phone || '';
-  document.getElementById('etUsername').value = t.username || '';
-  document.getElementById('etPassword').value = t.password || '';
-  openModal('modalEditTeacher');
+  currentEditTeacherId = id; document.getElementById('etName').value = t.name || ''; document.getElementById('etEmpId').value = t.empId || ''; document.getElementById('etType').value = t.type || 'عسكري'; document.getElementById('etPhone').value = t.phone || ''; document.getElementById('etUsername').value = t.username || ''; document.getElementById('etPassword').value = t.password || ''; openModal('modalEditTeacher');
 }
 
 function updateTeacher() {
   if(!currentEditTeacherId) return;
-  const name = document.getElementById('etName').value.trim();
-  const username = document.getElementById('etUsername').value.trim();
-  const password = document.getElementById('etPassword').value.trim();
+  const name = document.getElementById('etName').value.trim(); const username = document.getElementById('etUsername').value.trim(); const password = document.getElementById('etPassword').value.trim();
   if (!name || !username || !password) { toast('الرجاء تعبئة الحقول المطلوبة', 'error'); return; }
-  db.ref('learn_teachers/' + currentEditTeacherId).update({
-    name, username, password,
-    empId: document.getElementById('etEmpId').value.trim(),
-    type: document.getElementById('etType').value,
-    phone: document.getElementById('etPhone').value.trim()
-  }).then(() => { toast('تم تحديث بيانات المعلم', 'success'); closeModal('modalEditTeacher'); });
+  db.ref('learn_teachers/' + currentEditTeacherId).update({ name, username, password, empId: document.getElementById('etEmpId').value.trim(), type: document.getElementById('etType').value, phone: document.getElementById('etPhone').value.trim() }).then(() => { toast('تم تحديث بيانات المعلم', 'success'); logAction('تعديل معلم', `تعديل بيانات المعلم: ${name}`); closeModal('modalEditTeacher'); });
 }
 
 function editStudent(id) {
   const s = students.find(x => x.id === id); if(!s) return;
-  currentEditStudentId = id;
-  document.getElementById('esMilId').value = s.milId || '';
-  document.getElementById('esName').value = s.name || '';
-  document.getElementById('esScore').value = s.mockScore || 0;
-  document.getElementById('esTarget').value = s.target || 60;
-  openModal('modalEditStudent');
+  currentEditStudentId = id; document.getElementById('esMilId').value = s.milId || ''; document.getElementById('esName').value = s.name || ''; document.getElementById('esScore').value = s.mockScore || 0; document.getElementById('esTarget').value = s.target || 60; openModal('modalEditStudent');
 }
 
 function updateStudent() {
   if(!currentEditStudentId) return;
-  const milId = document.getElementById('esMilId').value.trim();
-  const name = document.getElementById('esName').value.trim();
+  const milId = document.getElementById('esMilId').value.trim(); const name = document.getElementById('esName').value.trim();
   if (!milId || !name) { toast('الرجاء تعبئة الحقول المطلوبة', 'error'); return; }
-  db.ref('learn_students/' + currentEditStudentId).update({
-    milId, name,
-    mockScore: parseInt(document.getElementById('esScore').value)||0,
-    target: parseInt(document.getElementById('esTarget').value)||60
-  }).then(() => { toast('تم تحديث بيانات المتدرب', 'success'); closeModal('modalEditStudent'); });
+  db.ref('learn_students/' + currentEditStudentId).update({ milId, name, mockScore: parseInt(document.getElementById('esScore').value)||0, target: parseInt(document.getElementById('esTarget').value)||60 }).then(() => { toast('تم تحديث بيانات المتدرب', 'success'); logAction('تعديل متدرب', `تعديل المتدرب: ${milId}`); closeModal('modalEditStudent'); });
 }
 
-function exportStudentTemplate() {
-  const ws_data = [ ["Military ID", "Name", "Current Score", "Target Score"], ["123456", "Ahmed Ali", "40", "60"] ];
-  const ws = XLSX.utils.aoa_to_sheet(ws_data); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Students"); XLSX.writeFile(wb, "Learn_Students_Template.xlsx");
-}
+function exportStudentTemplate() { const ws_data = [ ["Military ID", "Name", "Current Score", "Target Score"], ["123456", "Ahmed Ali", "40", "60"] ]; const ws = XLSX.utils.aoa_to_sheet(ws_data); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Students"); XLSX.writeFile(wb, "Learn_Students_Template.xlsx"); logAction('تصدير', 'تصدير عينة المتدربين'); }
 
 let xlStudentData = [];
 function readStudentExcel(e) {
   const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
   reader.onload = function(ev) {
     const wb = XLSX.read(ev.target.result, { type: 'binary' }); const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-    xlStudentData = data.map(r => ({ 
-      milId: String(r['Military ID']||r['الرقم العسكري']||''), name: r['Name']||r['الاسم']||'', 
-      mockScore: parseInt(r['Current Score']||r['الدرجة الحالية'])||0, target: parseInt(r['Target Score']||r['الدرجة المستهدفة'])||60, weakness: '', createdAt: Date.now()
-    })).filter(s => s.milId && s.name);
-    if(xlStudentData.length > 0) { if(confirm(`تم العثور على ${xlStudentData.length} متدرب. هل تريد استيرادهم؟`)) { doStudentImport(); } } 
-    else { toast('لم يتم العثور على بيانات صالحة', 'error'); }
-    e.target.value = ''; 
+    xlStudentData = data.map(r => ({ milId: String(r['Military ID']||r['الرقم العسكري']||''), name: r['Name']||r['الاسم']||'', mockScore: parseInt(r['Current Score']||r['الدرجة الحالية'])||0, target: parseInt(r['Target Score']||r['الدرجة المستهدفة'])||60, weakness: '', createdAt: Date.now() })).filter(s => s.milId && s.name);
+    if(xlStudentData.length > 0) { if(confirm(`تم العثور على ${xlStudentData.length} متدرب. هل تريد استيرادهم؟`)) { doStudentImport(); } } else { toast('لم يتم العثور على بيانات صالحة', 'error'); } e.target.value = ''; 
   }; reader.readAsBinaryString(file);
 }
 
 function doStudentImport() {
   const updates = {}; xlStudentData.forEach(s => { updates[db.ref('learn_students').push().key] = s; });
-  db.ref('learn_students').update(updates).then(() => { toast(`تم استيراد ${xlStudentData.length} متدرب بنجاح!`, 'success'); xlStudentData = []; });
+  db.ref('learn_students').update(updates).then(() => { toast(`تم استيراد ${xlStudentData.length} متدرب بنجاح!`, 'success'); logAction('استيراد متدربين', `استيراد ${xlStudentData.length} متدرب من Excel`); xlStudentData = []; });
 }
 
 function renderStudents(el) {
@@ -907,7 +892,7 @@ function renderStudents(el) {
 function renderQuestions(el) {
   const sk = { Grammar:0, Listening:0, Vocabulary:0, Reading:0 }; questions.forEach(q => { const s = q.skill||q.Skill; if (sk[s]!==undefined) sk[s]++; });
   const isAdmin = currentUser.role === 'admin';
-  const actionsHtml = isAdmin ? `<div style="display:flex; gap:10px;"><button class="btn btn-primary" onclick="openModal('modalAddQuestion')"><i class="fa-solid fa-plus"></i> إضافة سؤال</button><button class="btn btn-secondary" onclick="goTo('import')"><i class="fa-solid fa-file-excel"></i> استيراد</button></div>` : '';
+  const actionsHtml = isAdmin ? `<div style="display:flex; gap:10px;"><button class="btn btn-danger" onclick="renderReportedQs()"><i class="fa-solid fa-flag"></i> مراجعة البلاغات (${reportedQs.length})</button><button class="btn btn-primary" onclick="openModal('modalAddQuestion')"><i class="fa-solid fa-plus"></i> إضافة سؤال</button><button class="btn btn-secondary" onclick="goTo('import')"><i class="fa-solid fa-file-excel"></i> استيراد</button></div>` : '';
   const thDelete = isAdmin ? `<th>إجراءات</th>` : '';
   
   el.innerHTML = `
@@ -919,25 +904,39 @@ function renderQuestions(el) {
   `;
 }
 
+function renderReportedQs() {
+  const el = document.getElementById('mainArea');
+  el.innerHTML = `
+    <div class="page-top"><div><h1 class="page-title">البلاغات عن الأسئلة</h1><p class="page-desc">مراجعة أخطاء الأسئلة المبلغ عنها من المتدربين</p></div><button class="btn btn-secondary" onclick="goTo('questions')"><i class="fa-solid fa-arrow-right"></i> عودة لبنك الأسئلة</button></div>
+    <div class="card"><div class="card-body table-wrap"><table class="data-table"><thead><tr><th>المُبلّغ</th><th>السؤال</th><th>سبب الإبلاغ</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+    <tbody>${reportedQs.length===0 ? `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-check-double"></i><p>لا توجد بلاغات مسجلة</p></div></td></tr>` : 
+    reportedQs.map((r) => {
+      let q = questions.find(x => x.id === r.qId); let qText = q ? (q.questionText || q.Question) : '<span style="color:red">سؤال محذوف</span>';
+      return `<tr><td><strong>${r.by}</strong></td><td style="direction:ltr; text-align:left; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${qText}</td><td>${r.reason}</td><td>${new Date(r.timestamp).toLocaleDateString('ar')}</td><td style="display:flex; gap:5px;"><button class="btn btn-sm btn-info" onclick="editQuestion('${r.qId}')" title="تعديل السؤال"><i class="fa-solid fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="dismissReport('${r.id}')" title="حذف البلاغ"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+    }).join('')}</tbody></table></div></div>
+  `;
+}
+
+function dismissReport(id) { if (confirm('إخفاء هذا البلاغ؟')) { db.ref('learn_reported_questions/'+id).remove().then(()=>toast('تم الإخفاء','success')); logAction('تجاهل بلاغ', 'تجاهل إبلاغ عن سؤال'); renderReportedQs(); } }
+function submitReportQ() {
+  let reason = document.getElementById('reportReason').value.trim(); if(!reason) { toast('يرجى كتابة السبب', 'error'); return; }
+  db.ref('learn_reported_questions').push({ qId: currentReportQId, reason: reason, by: currentUser.name || currentUser.milId, timestamp: Date.now() });
+  toast('تم الإرسال للإدارة للمراجعة', 'success'); closeModal('modalReportQ'); document.getElementById('reportReason').value = '';
+}
+
 function editQuestion(id) {
   const q = questions.find(x => x.id === id); if(!q) return;
   currentEditQId = id;
   document.getElementById('eqText').value = q.questionText || q.Question || '';
-  document.getElementById('eqA').value = q.optionA || q.A || ''; document.getElementById('eqB').value = q.optionB || q.B || '';
-  document.getElementById('eqC').value = q.optionC || q.C || ''; document.getElementById('eqD').value = q.optionD || q.D || '';
-  document.getElementById('eqCorrect').value = q.correctAnswer || q['Correct Answer'] || 'A';
-  document.getElementById('eqSkill').value = q.skill || q.Skill || 'Grammar';
-  document.getElementById('eqDiff').value = q.difficulty || q.Difficulty || 'Medium';
-  document.getElementById('eqExp').value = q.explanation || q['شرح'] || '';
+  document.getElementById('eqA').value = q.optionA || q.A || ''; document.getElementById('eqB').value = q.optionB || q.B || ''; document.getElementById('eqC').value = q.optionC || q.C || ''; document.getElementById('eqD').value = q.optionD || q.D || '';
+  document.getElementById('eqCorrect').value = q.correctAnswer || q['Correct Answer'] || 'A'; document.getElementById('eqSkill').value = q.skill || q.Skill || 'Grammar'; document.getElementById('eqDiff').value = q.difficulty || q.Difficulty || 'Medium'; document.getElementById('eqExp').value = q.explanation || q['شرح'] || '';
   openModal('modalEditQuestion');
 }
 
 function updateQuestion() {
   if(!currentEditQId) return;
   const text = document.getElementById('eqText').value.trim(); if (!text) { toast('الرجاء إدخال نص السؤال', 'error'); return; }
-  db.ref('learn_questions/' + currentEditQId).update({
-    questionText: text, optionA: document.getElementById('eqA').value, optionB: document.getElementById('eqB').value, optionC: document.getElementById('eqC').value, optionD: document.getElementById('eqD').value, correctAnswer: document.getElementById('eqCorrect').value, skill: document.getElementById('eqSkill').value, difficulty: document.getElementById('eqDiff').value, explanation: document.getElementById('eqExp').value.trim()
-  }).then(() => { toast('تم تحديث السؤال بنجاح', 'success'); closeModal('modalEditQuestion'); });
+  db.ref('learn_questions/' + currentEditQId).update({ questionText: text, optionA: document.getElementById('eqA').value, optionB: document.getElementById('eqB').value, optionC: document.getElementById('eqC').value, optionD: document.getElementById('eqD').value, correctAnswer: document.getElementById('eqCorrect').value, skill: document.getElementById('eqSkill').value, difficulty: document.getElementById('eqDiff').value, explanation: document.getElementById('eqExp').value.trim() }).then(() => { toast('تم تحديث السؤال بنجاح', 'success'); logAction('تعديل سؤال', `تعديل سؤال مهارة: ${document.getElementById('eqSkill').value}`); closeModal('modalEditQuestion'); });
 }
 
 function renderExams(el) { renderStudentExam(el); }
@@ -979,7 +978,7 @@ function genReport() {
   const id = document.getElementById('rptSelect').value; if (!id) { toast('اختر متدرب أولاً', 'warning'); return; } 
   const s = students.find(x => x.id === id); if (!s) return; const pass = (s.mockScore||0) >= (s.target||60);
   const stdMins = s.studyMinutes || 0; const stdHours = Math.floor(stdMins / 60); const stdRemMins = stdMins % 60; const timeStr = stdHours > 0 ? `${stdHours} ساعة و ${stdRemMins} دقيقة` : `${stdRemMins} دقيقة`; const lc = s.loginCount || 0;
-  
+  logAction('إنشاء تقرير', `إصدار تقرير للمتدرب: ${s.milId}`);
   document.getElementById('rptOutput').innerHTML = `
     <div class="card"><div class="card-body" id="printArea" style="direction:rtl;">
       <div style="text-align:center; border-bottom:3px solid var(--gold); padding-bottom:20px; margin-bottom:20px;"><h2 style="color:var(--navy); font-weight:900;">تقرير الأداء اللغوي - منصة تعلم</h2><p style="color:var(--text-muted);">ALCPT Performance Report</p></div>
@@ -1021,7 +1020,7 @@ function readExcel(e) {
 function doImport() {
   if (!xlData.length) return; const updates = {};
   xlData.forEach(q => { updates[db.ref('learn_questions').push().key] = { ...q, createdAt: Date.now() }; });
-  db.ref('learn_questions').update(updates).then(() => { toast(`تم استيراد ${xlData.length} سؤال بنجاح!`, 'success'); xlData = []; goTo('questions'); });
+  db.ref('learn_questions').update(updates).then(() => { toast(`تم استيراد ${xlData.length} سؤال بنجاح!`, 'success'); logAction('استيراد أسئلة', `استيراد ${xlData.length} سؤال للبنك`); xlData = []; goTo('questions'); });
 }
 
 function setupDrop() {
@@ -1034,6 +1033,7 @@ function setupDrop() {
 function exportTemplate() {
   const ws_data = [ ["Question", "A", "B", "C", "D", "Correct Answer", "Skill", "Difficulty", "Explanation"], ["The pilot _____ the aircraft.", "flies", "flew", "flying", "will fly", "A", "Grammar", "Medium", "The subject 'pilot' is singular, so we use 'flies' in present simple."] ];
   const ws = XLSX.utils.aoa_to_sheet(ws_data); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Template"); XLSX.writeFile(wb, "Learn_Questions_Template.xlsx");
+  logAction('تصدير', 'تصدير عينة أسئلة');
 }
 
 function renderSettings(el) { el.innerHTML = `<div class="page-top"><div><h1 class="page-title">الإعدادات</h1><p class="page-desc">إعدادات الحساب والنظام</p></div></div><div class="card"><div class="card-header"><h3><i class="fa-solid fa-key"></i> تغيير كلمة المرور</h3></div><div class="card-body"><p style="color:var(--text-muted); margin-bottom:16px;">يمكنك تغيير كلمة المرور الخاصة بحسابك</p><button class="btn btn-primary" onclick="openModal('modalChangePass')"><i class="fa-solid fa-key"></i> تغيير كلمة المرور</button></div></div>`; }
@@ -1090,14 +1090,7 @@ function endExam() {
   const score = Math.round(correct/examQs.length*100); const pass = score >= 60;
   db.ref().update(analyticsUpdates); 
   
-  // حفظ بيانات التدريب الذاتي (الرتبة) أيضاً
-  db.ref('learn_results').push({ 
-    studentId: currentUser.milId||currentUser.username, 
-    studentName: currentUser.name||'', 
-    rank: currentUser.rank || '',
-    score, correct, total: examQs.length, timestamp: Date.now(), role: currentUser.role 
-  });
-  
+  db.ref('learn_results').push({ studentId: currentUser.milId||currentUser.username, studentName: currentUser.name||'', rank: currentUser.rank || '', score, correct, total: examQs.length, timestamp: Date.now(), role: currentUser.role });
   if (currentUser.role === 'student' && currentUser.id) { db.ref('learn_students/' + currentUser.id + '/mockScore').set(score); currentUser.mockScore = score; }
   
   document.getElementById('examArea').innerHTML = `
@@ -1121,7 +1114,16 @@ function renderExamReview() {
       else if (l === uAns && !isCorrect) { bg = 'background: var(--danger-bg); color: var(--danger); border-color: var(--danger);'; }
       return `<div style="padding: 10px; margin-bottom: 8px; border-radius: 8px; ${border} ${bg} direction:ltr; text-align:left;"><strong>${l}:</strong> ${text}</div>`;
     }).join('');
-    html += `<div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #e2e8f0;"><div style="display:flex; gap:10px; align-items:center; margin-bottom:15px;"><div style="width:30px; height:30px; border-radius:50%; background:${isCorrect?'var(--success)':'var(--danger)'}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold;">${i+1}</div><div class="q-text" style="margin:0;">${q.questionText || q.Question || ''}</div></div>${optsHtml}<div style="margin-top: 15px; padding: 15px; background: #f8fafc; border-right: 4px solid var(--info); border-radius: 8px;"><strong><i class="fa-solid fa-lightbulb" style="color:var(--gold);"></i> التغذية الراجعة (الشرح):</strong><p style="margin-top: 8px; color: var(--text-muted); font-size: 0.95rem;">${q.explanation || 'لا يوجد شرح مضاف لهذا السؤال حتى الآن.'}</p></div></div>`;
+    
+    // إخفاء صندوق التغذية الراجعة إذا كانت الإجابة صحيحة (تظهر فقط للخاطئة)
+    let feedbackBox = '';
+    if (!isCorrect) {
+      feedbackBox = `<div style="margin-top: 15px; padding: 15px; background: #f8fafc; border-right: 4px solid var(--info); border-radius: 8px;"><strong><i class="fa-solid fa-lightbulb" style="color:var(--gold);"></i> التغذية الراجعة (الشرح):</strong><p style="margin-top: 8px; color: var(--text-muted); font-size: 0.95rem;">${q.explanation || 'لا يوجد شرح مضاف لهذا السؤال حتى الآن.'}</p></div>`;
+    }
+
+    let reportBtn = `<button class="btn btn-sm btn-outline" style="color:var(--danger); border-color:var(--danger); margin-right:auto;" onclick="currentReportQId='${q.id}'; openModal('modalReportQ');"><i class="fa-solid fa-flag"></i> إبلاغ عن خطأ بالسؤال</button>`;
+
+    html += `<div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #e2e8f0;"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px;"><div style="display:flex; gap:10px; align-items:center;"><div style="width:30px; height:30px; border-radius:50%; background:${isCorrect?'var(--success)':'var(--danger)'}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">${i+1}</div><div class="q-text" style="margin:0;">${q.questionText || q.Question || ''}</div></div>${reportBtn}</div>${optsHtml}${feedbackBox}</div>`;
   });
   html += `<div style="text-align:center; margin-top:20px;"><button class="btn btn-secondary" onclick="goTo((currentUser.role==='student' || currentUser.role==='self')?'myDash':'dashboard')"><i class="fa-solid fa-home"></i> العودة للرئيسية</button></div></div>`;
   document.getElementById('examArea').innerHTML = html;
@@ -1130,37 +1132,37 @@ function renderExamReview() {
 function saveTeacher() {
   const name = document.getElementById('tName').value.trim(); const username = document.getElementById('tUsername').value.trim(); const password = document.getElementById('tPassword').value.trim();
   if (!name || !username || !password) { toast('الرجاء تعبئة الحقول المطلوبة', 'error'); return; }
-  db.ref('learn_teachers').push({ name, username, password, empId: document.getElementById('tEmpId').value.trim(), type: document.getElementById('tType').value, phone: document.getElementById('tPhone').value.trim(), createdAt: Date.now() }).then(() => { toast('تم إضافة المعلم بنجاح', 'success'); closeModal('modalAddTeacher'); clearInputs('tName','tEmpId','tPhone','tUsername','tPassword'); });
+  db.ref('learn_teachers').push({ name, username, password, empId: document.getElementById('tEmpId').value.trim(), type: document.getElementById('tType').value, phone: document.getElementById('tPhone').value.trim(), createdAt: Date.now() }).then(() => { toast('تم إضافة المعلم بنجاح', 'success'); logAction('إضافة معلم', `إضافة معلم جديد: ${name}`); closeModal('modalAddTeacher'); clearInputs('tName','tEmpId','tPhone','tUsername','tPassword'); });
 }
 
 function saveAdmin() {
   const name = document.getElementById('aName').value.trim(); const username = document.getElementById('aUsername').value.trim(); const password = document.getElementById('aPassword').value.trim();
   if (!username || !password) { toast('الرجاء تعبئة الحقول المطلوبة', 'error'); return; }
-  db.ref('learn_admins/' + username).set({ name: name||username, username, password, createdAt: Date.now() }).then(() => { toast('تم إضافة حساب الإدارة', 'success'); closeModal('modalAddAdmin'); clearInputs('aName','aUsername','aPassword'); });
+  db.ref('learn_admins/' + username).set({ name: name||username, username, password, createdAt: Date.now() }).then(() => { toast('تم إضافة حساب الإدارة', 'success'); logAction('إضافة إدارة', `إضافة حساب إدارة: ${username}`); closeModal('modalAddAdmin'); clearInputs('aName','aUsername','aPassword'); });
 }
 
 function changePassword() {
   const old = document.getElementById('cpOld').value; const newP = document.getElementById('cpNew').value; const confirm = document.getElementById('cpConfirm').value;
   if (!old || !newP) { toast('الرجاء تعبئة جميع الحقول', 'error'); return; } if (newP !== confirm) { toast('كلمة المرور الجديدة غير متطابقة', 'error'); return; } if (old !== currentUser.password) { toast('كلمة المرور الحالية غير صحيحة', 'error'); return; }
   const ref = currentUser.role === 'admin' ? 'learn_admins' : 'learn_teachers';
-  db.ref(ref).once('value', snap => { const data = snap.val(); const key = Object.keys(data).find(k => data[k].username === currentUser.username); if (key) { db.ref(`${ref}/${key}/password`).set(newP).then(() => { currentUser.password = newP; toast('تم تغيير كلمة المرور بنجاح', 'success'); closeModal('modalChangePass'); clearInputs('cpOld','cpNew','cpConfirm'); }); } });
+  db.ref(ref).once('value', snap => { const data = snap.val(); const key = Object.keys(data).find(k => data[k].username === currentUser.username); if (key) { db.ref(`${ref}/${key}/password`).set(newP).then(() => { currentUser.password = newP; toast('تم تغيير كلمة المرور بنجاح', 'success'); logAction('تغيير كلمة المرور', 'تغيير كلمة مرور الحساب الشخصي'); closeModal('modalChangePass'); clearInputs('cpOld','cpNew','cpConfirm'); }); } });
 }
 
 function saveStudent() {
   const milId = document.getElementById('sNewMilId').value.trim(); const name = document.getElementById('sNewName').value.trim();
   if (!milId || !name) { toast('الرجاء تعبئة الحقول المطلوبة', 'error'); return; }
-  db.ref('learn_students').push({ milId, name, mockScore: parseInt(document.getElementById('sNewScore').value)||0, target: parseInt(document.getElementById('sNewTarget').value)||60, weakness: '', createdAt: Date.now() }).then(() => { toast('تم إضافة المتدرب', 'success'); closeModal('modalAddStudent'); clearInputs('sNewMilId','sNewName','sNewScore'); });
+  db.ref('learn_students').push({ milId, name, mockScore: parseInt(document.getElementById('sNewScore').value)||0, target: parseInt(document.getElementById('sNewTarget').value)||60, weakness: '', createdAt: Date.now() }).then(() => { toast('تم إضافة المتدرب', 'success'); logAction('إضافة متدرب', `إضافة متدرب برقم عسكري: ${milId}`); closeModal('modalAddStudent'); clearInputs('sNewMilId','sNewName','sNewScore'); });
 }
 
 function saveQuestion() {
   const text = document.getElementById('qText').value.trim(); if (!text) { toast('الرجاء إدخال نص السؤال', 'error'); return; }
-  db.ref('learn_questions').push({ questionText: text, optionA: document.getElementById('qA').value, optionB: document.getElementById('qB').value, optionC: document.getElementById('qC').value, optionD: document.getElementById('qD').value, correctAnswer: document.getElementById('qCorrect').value, skill: document.getElementById('qSkill').value, difficulty: document.getElementById('qDiff').value, explanation: document.getElementById('qExp').value.trim(), createdAt: Date.now() }).then(() => { toast('تم إضافة السؤال', 'success'); closeModal('modalAddQuestion'); clearInputs('qText','qA','qB','qC','qD','qExp'); });
+  db.ref('learn_questions').push({ questionText: text, optionA: document.getElementById('qA').value, optionB: document.getElementById('qB').value, optionC: document.getElementById('qC').value, optionD: document.getElementById('qD').value, correctAnswer: document.getElementById('qCorrect').value, skill: document.getElementById('qSkill').value, difficulty: document.getElementById('qDiff').value, explanation: document.getElementById('qExp').value.trim(), createdAt: Date.now() }).then(() => { toast('تم إضافة السؤال', 'success'); logAction('إضافة سؤال', `إضافة سؤال جديد لمهارة: ${document.getElementById('qSkill').value}`); closeModal('modalAddQuestion'); clearInputs('qText','qA','qB','qC','qD','qExp'); });
 }
 
-function deleteStudent(id) { if (confirm('حذف هذا المتدرب؟')) db.ref('learn_students/'+id).remove().then(()=>toast('تم الحذف','success')); }
-function deleteTeacher(id) { if (confirm('حذف هذا المعلم؟')) db.ref('learn_teachers/'+id).remove().then(()=>toast('تم الحذف','success')); }
-function deleteAdmin(id) { if (confirm('حذف هذا الحساب؟')) db.ref('learn_admins/'+id).remove().then(()=>toast('تم الحذف','success')); }
-function deleteQuestion(id) { if (confirm('حذف هذا السؤال؟')) db.ref('learn_questions/'+id).remove().then(()=>toast('تم الحذف','success')); }
+function deleteStudent(id) { if (confirm('حذف هذا المتدرب؟')) db.ref('learn_students/'+id).remove().then(()=>{ toast('تم الحذف','success'); logAction('حذف متدرب', 'حذف حساب متدرب من النظام'); }); }
+function deleteTeacher(id) { if (confirm('حذف هذا المعلم؟')) db.ref('learn_teachers/'+id).remove().then(()=>{ toast('تم الحذف','success'); logAction('حذف معلم', 'حذف حساب معلم من النظام'); }); }
+function deleteAdmin(id) { if (confirm('حذف هذا الحساب؟')) db.ref('learn_admins/'+id).remove().then(()=>{ toast('تم الحذف','success'); logAction('حذف إدارة', 'حذف حساب إدارة من النظام'); }); }
+function deleteQuestion(id) { if (confirm('حذف هذا السؤال؟')) db.ref('learn_questions/'+id).remove().then(()=>{ toast('تم الحذف','success'); logAction('حذف سؤال', 'حذف سؤال من بنك الأسئلة'); }); }
 
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
